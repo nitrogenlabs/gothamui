@@ -424,6 +424,21 @@ import {Markdown} from '@nlabs/gothamjs';
 />
 ```
 
+### Code Editor
+
+`CodeEditor` is GothamJS's shared Monaco editor integration. Import it from the dedicated editor entry point so applications that do not use Monaco keep it out of their normal component imports:
+
+```tsx
+import {CodeEditor} from '@nlabs/gothamjs/editor';
+
+<CodeEditor
+  height="400px"
+  language="json"
+  options={{minimap: {enabled: false}, wordWrap: 'on'}}
+  value="{}"
+/>
+```
+
 ### Public Views
 
 Every GothamJS view is part of the public package API. Import views from the package root or from the dedicated `views` entry point:

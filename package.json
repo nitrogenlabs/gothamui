@@ -25,6 +25,11 @@
       "import": "./lib/components/index.js",
       "default": "./lib/components/index.js"
     },
+    "./editor": {
+      "types": "./lib/editor/index.d.ts",
+      "import": "./lib/editor/index.js",
+      "default": "./lib/editor/index.js"
+    },
     "./icons": {
       "types": "./lib/icons/index.d.ts",
       "import": "./lib/icons/index.js",
@@ -62,6 +67,7 @@
   "keywords": [
     "accessibility",
     "arkhamjs",
+    "code-editor",
     "component-library",
     "design-system",
     "documentation",
@@ -119,6 +125,7 @@
   ],
   "dependencies": {
     "@headlessui/react": "^2.2.10",
+    "@monaco-editor/react": "^4.8.0-rc.3",
     "@nlabs/rip-hunter": "^3.1.2",
     "@nlabs/utils": "^2.10.7",
     "autosuggest-highlight": "^3.3.4",
@@ -128,6 +135,7 @@
     "history": "^5.3.0",
     "i18next": "^26.4.1",
     "lucide-react": "^1.39.0",
+    "monaco-editor": "^0.56.0",
     "progressbar.js": "^1.1.1",
     "react-autosuggest": "^10.1.0",
     "react-cropper": "^2.3.3",
