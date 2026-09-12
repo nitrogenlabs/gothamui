@@ -15,8 +15,8 @@ const awsRum = createAwsRumDebugClient();
 
 const config: GothamConfiguration = {
   app: {
-    name: 'gothamjs',
-    title: 'GothamJS'
+    name: 'gothamui',
+    title: 'GothamUI'
   },
   awsRum,
   translations: {
@@ -72,7 +72,7 @@ const config: GothamConfiguration = {
                 {
                   label: 'More',
                   menu: [
-                    {label: 'NPM', url: 'https://npmjs.com/@nlabs/gothamjs'},
+                    {label: 'NPM', url: 'https://npmjs.com/@nlabs/gothamui'},
                     {label: 'Git', url: 'https://github.com/nitrogenlabs/gotham'}
                   ]
                 }

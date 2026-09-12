@@ -33,9 +33,24 @@ describe('DatePicker', () => {
     expect(screen.getByRole('button', {name: '18'})).not.toBeDisabled();
 
     fireEvent.click(screen.getByRole('button', {name: '>'}));
+
     expect(screen.getByDisplayValue('June')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', {name: '<'}));
+
     expect(screen.getByDisplayValue('May')).toBeInTheDocument();
   });
+});
+
+test('keeps calendar navigation when no initial date is supplied', () => {
+  const {rerender} = render(<DatePicker />);
+  const month = (screen.getAllByRole('combobox')[0] as HTMLSelectElement).value;
+  fireEvent.click(screen.getByRole('button', {name: '>'}));
+  const nextMonth = (Number(month) + 1) % 12;
+
+  expect(screen.getAllByRole('combobox')[0]).toHaveValue(String(nextMonth));
+
+  rerender(<DatePicker />);
+
+  expect(screen.getAllByRole('combobox')[0]).toHaveValue(String(nextMonth));
 });

@@ -3,11 +3,11 @@
 import {Label, Listbox, ListboxButton, ListboxOptions} from '@headlessui/react';
 import {cn} from '@nlabs/utils';
 import {ChevronDown} from 'lucide-react';
-import {useEffect, useMemo, useState} from 'react';
+import {memo, useMemo, useState} from 'react';
 
 import {useIsMobile} from '../../hooks/useIsMobile.js';
 import {getBackgroundClasses, getOutlineClasses, getTextClasses} from '../../utils/colorUtils.js';
-import {useGothamFormContext} from '../Form/FormContext.js';
+import {useGothamFormField} from '../Form/FormContext.js';
 import {InputBorderType, getInputBorderClass} from '../InputField/InputField.js';
 import {Svg} from '../Svg/Svg.js';
 import {SelectFieldOption, SelectOption} from './SelectOption.js';
@@ -30,7 +30,7 @@ export type SelectFieldProps = {
   readonly showChevron?: boolean;
 };
 
-export const SelectField: FC<SelectFieldProps> = ({
+const SelectFieldComponent: FC<SelectFieldProps> = ({
   backgroundColor = 'transparent',
   borderColor = 'black',
   borderType = 'solid',
@@ -45,10 +45,9 @@ export const SelectField: FC<SelectFieldProps> = ({
   showChevron = true
 }) => {
   const isMobile = useIsMobile();
-  const form = useGothamFormContext();
+  const form = useGothamFormField(name);
   const [localValue, setLocalValue] = useState(defaultValue ?? '');
-  const [selected, setSelected] = useState<SelectFieldOption>(options?.find((option) => option?.value === defaultValue) as SelectFieldOption);
-  const fieldValue = form?.values[name] ?? localValue;
+  const fieldValue = form?.value ?? localValue;
   const normalizedFieldValue = fieldValue === undefined || fieldValue === null ? '' : String(fieldValue);
   const selectClasses = useMemo(() => cn(
     'flex relative w-full',
@@ -73,14 +72,15 @@ export const SelectField: FC<SelectFieldProps> = ({
     'col-start-1 row-start-1 mr-3 size-5 self-center justify-self-end sm:size-4',
     getTextClasses(color)
   ), [color]);
-  useEffect(() => {
-    setSelected(options?.find((option) => String(option?.value) === normalizedFieldValue) as SelectFieldOption);
-  }, [normalizedFieldValue, options]);
+  const selected = useMemo(
+    () => options.find((option) => String(option?.value) === normalizedFieldValue),
+    [normalizedFieldValue, options]
+  );
 
   const onChange = (value: string) => {
-    const nextSelected = options?.find((option) => String(option?.value) === String(value)) as SelectFieldOption;
-    setLocalValue(String(value));
-    setSelected(nextSelected);
+    if(!form) {
+      setLocalValue(String(value));
+    }
     form?.setValue(name, String(value));
     form?.clearError(name);
   };
@@ -105,7 +105,7 @@ export const SelectField: FC<SelectFieldProps> = ({
     </div>
   ) : (
     <div className="flex flex-col w-full">
-      <Listbox value={selected} onChange={(value) => onChange(value as unknown as string)}>
+      <Listbox onChange={onChange} value={normalizedFieldValue}>
         <Label className={labelClasses}>
           {label}
         </Label>
@@ -117,7 +117,7 @@ export const SelectField: FC<SelectFieldProps> = ({
         <div className={cn('flex flex-col relative w-full', {'mt-2': label})}>
           <ListboxButton className={selectClasses}>
             <span className="col-start-1 row-start-1 flex items-center gap-3 pr-6">
-              {selected?.image && <img alt="" src={selected.image} className="size-5 shrink-0 rounded-full" />}
+              {selected?.image && <img alt="" className="size-5 shrink-0 rounded-full" src={selected.image} />}
               {selected?.icon && <Svg className="size-5 shrink-0 rounded-full" name={selected.icon} />}
               <span className="block truncate">{selected?.label}&nbsp;</span>
             </span>
@@ -130,8 +130,8 @@ export const SelectField: FC<SelectFieldProps> = ({
           </ListboxButton>
 
           <ListboxOptions
-            transition
             className={optionsClasses}
+            transition
           >
             {options.map((option) => option && (
               <SelectOption key={option?.id || option?.label} option={option} />
@@ -142,3 +142,6 @@ export const SelectField: FC<SelectFieldProps> = ({
     </div>
   );
 };
+
+export const SelectField = memo(SelectFieldComponent);
+SelectField.displayName = 'SelectField';

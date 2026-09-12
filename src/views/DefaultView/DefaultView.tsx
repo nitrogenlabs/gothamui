@@ -2,13 +2,13 @@
  * Copyright (c) 2018-Present, Nitrogen Labs, Inc.
  * Copyrights licensed under the MIT License. See the accompanying LICENSE file for terms.
  */
-import {useState} from 'react';
+import {memo, useState} from 'react';
 import {useNavigate} from 'react-router';
 
 const navItems = [
-  { label: 'Home', path: '/' },
-  { label: 'About', path: '/about' },
-  { label: 'Contact', path: '/contact' }
+  {label: 'Home', path: '/'},
+  {label: 'About', path: '/about'},
+  {label: 'Contact', path: '/contact'}
 ];
 
 export interface DefaultViewProps {
@@ -16,9 +16,9 @@ export interface DefaultViewProps {
   title?: string;
 }
 
-export const DefaultView: React.FC<DefaultViewProps> = ({
+const DefaultViewComponent: React.FC<DefaultViewProps> = ({
   children,
-  title = 'GothamJS'
+  title = 'GothamUI'
 }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
@@ -41,43 +41,43 @@ export const DefaultView: React.FC<DefaultViewProps> = ({
             {/* Mobile menu button */}
             <div className="flex items-center sm:hidden">
               <button
-                type="button"
-                className="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                 aria-controls="mobile-menu"
                 aria-expanded={mobileOpen}
+                className="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                 onClick={handleDrawerToggle}
+                type="button"
               >
                 <span className="sr-only">Open main menu</span>
                 {/* Icon when menu is closed */}
                 <svg
-                  className={`${mobileOpen ? 'hidden' : 'block'} h-6 w-6`}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
                   aria-hidden="true"
+                  className={`${mobileOpen ? 'hidden' : 'block'} h-6 w-6`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
+                    d="M4 6h16M4 12h16M4 18h16"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
                   />
                 </svg>
                 {/* Icon when menu is open */}
                 <svg
-                  className={`${mobileOpen ? 'block' : 'hidden'} h-6 w-6`}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
                   aria-hidden="true"
+                  className={`${mobileOpen ? 'block' : 'hidden'} h-6 w-6`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
+                    d="M6 18L18 6M6 6l12 12"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
               </button>
@@ -95,9 +95,9 @@ export const DefaultView: React.FC<DefaultViewProps> = ({
               <div className="flex space-x-4">
                 {navItems.map(({label, path}) => (
                   <button
+                    className="text-white hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium"
                     key={path}
                     onClick={() => handleNavigation(path)}
-                    className="text-white hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium"
                   >
                     {label}
                   </button>
@@ -115,9 +115,9 @@ export const DefaultView: React.FC<DefaultViewProps> = ({
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navItems.map(({label, path}) => (
               <button
+                className="text-white hover:bg-indigo-500 block px-3 py-2 rounded-md text-base font-medium w-full text-left"
                 key={path}
                 onClick={() => handleNavigation(path)}
-                className="text-white hover:bg-indigo-500 block px-3 py-2 rounded-md text-base font-medium w-full text-left"
               >
                 {label}
               </button>
@@ -133,3 +133,6 @@ export const DefaultView: React.FC<DefaultViewProps> = ({
     </div>
   );
 };
+
+export const DefaultView = memo(DefaultViewComponent);
+DefaultView.displayName = 'DefaultView';

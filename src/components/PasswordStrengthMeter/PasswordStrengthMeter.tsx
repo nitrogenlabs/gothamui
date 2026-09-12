@@ -1,4 +1,5 @@
 import {cn} from '@nlabs/utils';
+import {memo} from 'react';
 
 import type {HTMLAttributes} from 'react';
 
@@ -54,7 +55,7 @@ const getSegmentClass = (score: number, segment: number) => {
   return 'bg-emerald-600';
 };
 
-export const PasswordStrengthMeter = ({
+const PasswordStrengthMeterComponent = ({
   className,
   password,
   ...props
@@ -88,3 +89,6 @@ export const PasswordStrengthMeter = ({
     </div>
   );
 };
+
+export const PasswordStrengthMeter = memo(PasswordStrengthMeterComponent);
+PasswordStrengthMeter.displayName = 'PasswordStrengthMeter';

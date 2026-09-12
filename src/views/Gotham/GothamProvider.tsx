@@ -71,7 +71,7 @@ export const defaultGothamConfig: GothamConfiguration = {
   },
   app: {
     name: 'gotham',
-    title: 'GothamJS'
+    title: 'GothamUI'
   },
   authRoute: '/',
   baseUrl: '',
@@ -106,7 +106,13 @@ export const signOut = (flux: FluxFramework) => async () => {
 /* eslint-disable react-hooks/rules-of-hooks -- The compatibility rule does not recognize arrow-function components. */
 export const GothamProvider: FC<GothamProviderProps> = ({config: appConfig}) => {
   const flux = useFlux();
-  const config: GothamConfiguration = merge(defaultGothamConfig, appConfig);
+  const config: GothamConfiguration = useMemo(() => merge({
+    ...defaultGothamConfig,
+    analytics: {...defaultGothamConfig.analytics},
+    app: {...defaultGothamConfig.app},
+    theme: {},
+    translations: {translation: {}}
+  }, appConfig), [appConfig]);
   const {
     isAuth,
     middleware,
@@ -220,6 +226,8 @@ export const GothamProvider: FC<GothamProviderProps> = ({config: appConfig}) => 
     return () => unregister?.();
   }, [awsRum, config.analytics?.interactions]);
 
+  const contextValue = useMemo(() => ({Flux: flux, awsRum, isAuth, session}), [flux, awsRum, isAuth, session]);
+
   if(!isFluxReady) {
     return null;
   }
@@ -227,7 +235,7 @@ export const GothamProvider: FC<GothamProviderProps> = ({config: appConfig}) => 
   if(i18nInstance) {
     return (
       <I18nextProvider i18n={i18nInstance}>
-        <GothamContext.Provider value={{Flux: flux, awsRum, isAuth, session}}>
+        <GothamContext.Provider value={contextValue}>
           <div>
             <RouterProvider router={router}/>
           </div>
@@ -237,7 +245,7 @@ export const GothamProvider: FC<GothamProviderProps> = ({config: appConfig}) => 
   }
 
   return (
-    <GothamContext.Provider value={{Flux: flux, awsRum, isAuth, session}}>
+    <GothamContext.Provider value={contextValue}>
       <div>
         <RouterProvider router={router}/>
       </div>

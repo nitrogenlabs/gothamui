@@ -3,7 +3,7 @@
  * Copyrights licensed under the MIT License. See the accompanying LICENSE file for terms.
  */
 import {throttle} from '@nlabs/utils';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 
 const getCurrentBreakpoint = (setBreakpoint) => (): void => {
   const breakpoints = {
@@ -30,8 +30,9 @@ const getCurrentBreakpoint = (setBreakpoint) => (): void => {
   }
 };
 
+const breakpointValues = ['xs', 'sm', 'md', 'lg', 'xl'];
+
 export const useBreakpoint = () => {
-  const breakpointValues = ['xs', 'sm', 'md', 'lg', 'xl'];
   const [breakpoint, setBreakpoint] = useState(0);
 
   useEffect(() => {
@@ -46,10 +47,10 @@ export const useBreakpoint = () => {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  return {
+  return useMemo(() => ({
     at: (size: string): boolean => size === breakpointValues[breakpoint],
     down: (size: string): boolean => breakpointValues.indexOf(size) >= breakpoint,
     up: (size: string): boolean => breakpointValues.indexOf(size) <= breakpoint,
     value: (): string => breakpointValues[breakpoint]
-  };
+  }), [breakpoint]);
 };

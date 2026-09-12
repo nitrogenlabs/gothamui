@@ -1,5 +1,5 @@
 {
-  "name": "@nlabs/gothamjs",
+  "name": "@nlabs/gothamui",
   "version": "1.8.0",
   "description": "React 19 UI framework with accessible components, routing, forms, i18n, responsive navigation, and Tailwind CSS v4 theming.",
   "type": "module",
@@ -12,7 +12,10 @@
     "lib",
     "styles",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "MIGRATION.md",
+    "docs/assets",
+    "docs/render-performance.md"
   ],
   "exports": {
     ".": {
@@ -73,7 +76,7 @@
     "documentation",
     "flux",
     "forms",
-    "gothamjs",
+    "gothamui",
     "i18n",
     "markdown",
     "nitrogenlabs",
@@ -93,11 +96,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nitrogenlabs/gothamjs.git"
+    "url": "git+https://github.com/nitrogenlabs/gothamui.git"
   },
-  "homepage": "https://gothamjs.nitrogenx.co",
+  "homepage": "https://gothamui.nitrogenx.co",
   "bugs": {
-    "url": "https://github.com/nitrogenlabs/gothamjs/issues"
+    "url": "https://github.com/nitrogenlabs/gothamui/issues"
   },
   "scripts": {
     "build": "npm run tailwind:build && lex compile --remove --config ./tsconfig.build.json && npm run sync:tailwind-lib",
@@ -117,7 +120,8 @@
     "storybook": "npm run tailwind:build && npm run sync:tailwind-lib && lex storybook",
     "sync:tailwind-lib": "node -e \"const fs=require('fs'); fs.mkdirSync('./lib/styles',{recursive:true}); fs.writeFileSync('./lib/styles/tailwind.css','@import \\\"./index.css\\\";\\n');\"",
     "tailwind:build": "npx @tailwindcss/cli -i ./src/styles/tailwind.css -o ./src/styles/index.css",
-    "tailwind:watch": "npx @tailwindcss/cli -i ./src/styles/tailwind.css -o ./src/styles/index.css --watch"
+    "tailwind:watch": "npx @tailwindcss/cli -i ./src/styles/tailwind.css -o ./src/styles/index.css --watch",
+    "deprecate:gothamjs": "node scripts/deprecate-gothamjs.mjs"
   },
   "browserslist": [
     "> 5%",
@@ -159,6 +163,7 @@
     "@storybook/addon-links": "10.6.0",
     "@storybook/addon-themes": "10.6.0",
     "@storybook/react-vite": "10.6.0",
+    "@tailwindcss/cli": "^4.3.3",
     "@types/history": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.4.1",
@@ -190,5 +195,8 @@
     "semver-regex": "^4.0.5",
     "tmp": "^0.2.7",
     "uuid": "^11.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

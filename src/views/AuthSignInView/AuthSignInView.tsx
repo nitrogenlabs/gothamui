@@ -1,3 +1,4 @@
+import {memo} from 'react';
 import {z} from 'zod';
 
 import {Button} from '../../components/Button/Button.js';
@@ -33,7 +34,7 @@ const authSignInSchema = z.object({
   rememberEmail: z.boolean()
 });
 
-export const AuthSignInView = ({
+const AuthSignInViewComponent = ({
   cardDescription = 'Use your email and password to continue.',
   cardTitle = 'Sign in',
   defaultEmail = '',
@@ -105,3 +106,6 @@ export const AuthSignInView = ({
     </p>
   </AuthView>
 );
+
+export const AuthSignInView = memo(AuthSignInViewComponent);
+AuthSignInView.displayName = 'AuthSignInView';

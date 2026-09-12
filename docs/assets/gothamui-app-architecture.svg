@@ -1,6 +1,6 @@
 <svg width="1600" height="880" viewBox="0 0 1600 880" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">How GothamJS works with a React application</title>
-  <desc id="desc">A clean three-column diagram showing app inputs flowing into the GothamJS presentation framework and producing a complete user experience.</desc>
+  <title id="title">How GothamUI works with a React application</title>
+  <desc id="desc">A clean three-column diagram showing app inputs flowing into the GothamUI presentation framework and producing a complete user experience.</desc>
   <defs>
     <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#8167EE"/>
@@ -20,7 +20,7 @@
   <rect width="1600" height="880" fill="#FFFFFF"/>
 
   <text class="heading" x="78" y="76">Your app</text>
-  <text class="heading" x="548" y="76">GothamJS framework</text>
+  <text class="heading" x="548" y="76">GothamUI framework</text>
   <text class="heading" x="1120" y="76">App experience</text>
 
   <!-- App inputs -->
@@ -62,15 +62,15 @@
     <path d="M416 420H500M490 410L500 420L490 430"/>
   </g>
 
-  <!-- GothamJS mark -->
+  <!-- GothamUI mark -->
   <g transform="translate(724 164)">
     <path d="M0 -63L55 -31V31L0 63L-55 31V-31L0 -63Z" fill="url(#brand)"/>
     <path d="M-29 -18L0 -35L29 -18V-3H13V-9L0 -17L-13 -9V9L0 17L14 9H2V-7H31V19L0 37L-29 20V-18Z" fill="#FFFFFF"/>
   </g>
-  <text x="724" y="259" text-anchor="middle" fill="#8167EE" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="35" font-weight="750">GothamJS</text>
+  <text x="724" y="259" text-anchor="middle" fill="#8167EE" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="35" font-weight="750">GothamUI</text>
   <text x="724" y="288" text-anchor="middle" fill="#69707D" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="16">The complete presentation layer</text>
 
-  <!-- GothamJS services -->
+  <!-- GothamUI services -->
   <g transform="translate(550 340)">
     <g transform="translate(0 0)">
       <rect class="purple-icon" x="1" y="3" width="31" height="25" rx="4"/>

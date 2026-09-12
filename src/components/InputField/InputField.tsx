@@ -3,7 +3,7 @@
  * Copyrights licensed under the MIT License. See the accompanying LICENSE file for terms.
  */
 import {cn} from '@nlabs/utils';
-import {useMemo} from 'react';
+import {memo, useMemo} from 'react';
 
 import {
   getBorderClasses,
@@ -54,7 +54,7 @@ export const getInputBorderClass = (
   getPlaceholderClasses(placeholderColor, {hasFocus: true, hasHover: true})
 );
 
-export const InputField = ({
+const InputFieldComponent = ({
   borderColor = 'neutral',
   borderType = 'solid',
   className,
@@ -113,3 +113,6 @@ export const InputField = ({
     />
   );
 };
+
+export const InputField = memo(InputFieldComponent);
+InputField.displayName = 'InputField';

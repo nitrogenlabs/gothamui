@@ -1,4 +1,5 @@
 import {cn} from '@nlabs/utils';
+import {memo} from 'react';
 
 import type {HTMLAttributes, ReactNode} from 'react';
 
@@ -15,7 +16,7 @@ export interface CategoryGridProps extends HTMLAttributes<HTMLDivElement> {
   readonly categories: CategoryItem[];
 }
 
-export const CategoryGrid = ({
+const CategoryGridComponent = ({
   categories,
   className,
   ...props
@@ -45,3 +46,6 @@ export const CategoryGrid = ({
     })}
   </div>
 );
+
+export const CategoryGrid = memo(CategoryGridComponent);
+CategoryGrid.displayName = 'CategoryGrid';

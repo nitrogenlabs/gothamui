@@ -1,12 +1,12 @@
-# GothamJS API Reference
+# GothamUI API Reference
 
-This document provides detailed information about the components and APIs available in GothamJS.
+This document provides detailed information about the components and APIs available in GothamUI.
 
 ## Core Components
 
 ### `<Gotham>`
 
-The main component that bootstraps your GothamJS application.
+The main component that bootstraps your GothamUI application.
 
 **Props:**
 
@@ -20,7 +20,7 @@ The main component that bootstraps your GothamJS application.
 **Example:**
 
 ```jsx
-import { Gotham } from '@nlabs/gothamjs';
+import { Gotham } from '@nlabs/gothamui';
 
 const config = {
   app: {
@@ -39,7 +39,7 @@ const App = () => (
 
 ### `<GothamProvider>`
 
-Provider component that sets up the GothamJS context.
+Provider component that sets up the GothamUI context.
 
 **Props:**
 
@@ -51,7 +51,7 @@ Provider component that sets up the GothamJS context.
 
 ## Public Views
 
-All GothamJS views are public from both `@nlabs/gothamjs` and `@nlabs/gothamjs/views`.
+All GothamUI views are public from both `@nlabs/gothamui` and `@nlabs/gothamui/views`.
 
 | View | Purpose |
 |------|---------|
@@ -59,7 +59,7 @@ All GothamJS views are public from both `@nlabs/gothamjs` and `@nlabs/gothamjs/v
 | `AuthSignUpView` | Complete account-registration screen built on `AuthView` |
 | `AuthView` | Shared authentication layout |
 | `DefaultView` | Responsive application shell with standard navigation |
-| `Gotham` | GothamJS application bootstrap component |
+| `Gotham` | GothamUI application bootstrap component |
 | `GothamProvider` | Configuration, session, and Flux provider |
 | `GothamRoot` | Root route outlet with notifications, loading state, and analytics |
 | `HomeView` | Responsive home-page shell |
@@ -91,7 +91,7 @@ Form component with built-in validation using Zod.
 **Example:**
 
 ```jsx
-import { Form, TextField, Button } from '@nlabs/gothamjs';
+import { Form, TextField, Button } from '@nlabs/gothamui';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -194,10 +194,10 @@ Date picker component.
 
 ### `<Markdown>`
 
-Renders Markdown through `react-markdown` while providing GothamJS container styling, remote content loading, and template values.
+Renders Markdown through `react-markdown` while providing GothamUI container styling, remote content loading, and template values.
 
 ```tsx
-import {Markdown} from '@nlabs/gothamjs';
+import {Markdown} from '@nlabs/gothamui';
 
 <Markdown
   className="prose"
@@ -325,11 +325,11 @@ Route component that handles authentication redirects.
 
 ### `GothamConfiguration`
 
-Configuration object for GothamJS applications.
+Configuration object for GothamUI applications.
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `app` | `{ logo?: string; name?: string; title?: string; titleBarSeparator?: string; }` | `{ name: 'gotham', title: 'GothamJS' }` | Application metadata |
+| `app` | `{ logo?: string; name?: string; title?: string; titleBarSeparator?: string; }` | `{ name: 'gotham', title: 'GothamUI' }` | Application metadata |
 | `baseUrl` | `string` | `''` | Base URL for the application |
 | `config` | `FluxOptions` | - | Flux configuration options |
 | `displayMode` | `'light'` \| `'dark'` | - | Theme display mode |

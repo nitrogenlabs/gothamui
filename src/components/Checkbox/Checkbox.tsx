@@ -1,8 +1,8 @@
 import {cn} from '@nlabs/utils';
-import {useMemo, useState} from 'react';
+import {memo, useMemo, useState} from 'react';
 
 import {getCheckedClasses} from '../../utils/colorUtils.js';
-import {useGothamFormContext} from '../Form/FormContext.js';
+import {useGothamFormField} from '../Form/FormContext.js';
 
 import type {ChangeEvent, InputHTMLAttributes} from 'react';
 
@@ -18,7 +18,7 @@ export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
   optionClass?: string;
 }
 
-export const Checkbox = ({
+const CheckboxComponent = ({
   color = 'primary',
   label,
   defaultValue = false,
@@ -31,7 +31,7 @@ export const Checkbox = ({
   id,
   ...props
 }: CheckboxProps) => {
-  const form = useGothamFormContext();
+  const form = useGothamFormField(name);
   const [localChecked, setLocalChecked] = useState(defaultValue);
   const optionClasses = useMemo(
     () => cn(optionClass, getCheckedClasses(color)),
@@ -39,14 +39,13 @@ export const Checkbox = ({
   );
   const checkboxId = id || name || label.toLowerCase().replace(/\s+/g, '-');
   const descriptionId = description ? `${checkboxId}-description` : undefined;
-  const currentValue = form?.values[name];
-  const checked = typeof props.checked === 'boolean'
-    ? props.checked
-    : typeof currentValue === 'boolean'
-      ? currentValue
-      : localChecked;
+  const currentValue = form?.value;
+  const uncontrolledChecked = typeof currentValue === 'boolean' ? currentValue : localChecked;
+  const checked = typeof props.checked === 'boolean' ? props.checked : uncontrolledChecked;
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setLocalChecked(event.target.checked);
+    if(!form) {
+      setLocalChecked(event.target.checked);
+    }
     form?.setValue(name, event.target.checked);
     form?.clearError(name);
     props.onChange?.(event);
@@ -69,7 +68,7 @@ export const Checkbox = ({
               aria-describedby={descriptionId}
               checked={checked}
               className={`${baseCheckboxClasses} ${optionClasses}`}
-              defaultChecked={checked === undefined ? Boolean(form?.defaultValues[name] ?? defaultValue) : undefined}
+              defaultChecked={checked === undefined ? Boolean(form?.defaultValue ?? defaultValue) : undefined}
               id={checkboxId}
               name={name}
               onChange={handleChange}
@@ -77,23 +76,23 @@ export const Checkbox = ({
               value="true"
             />
             <svg
+              className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"
               fill="none"
               viewBox="0 0 14 14"
-              className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"
             >
               <path
+                className="opacity-0 group-has-checked:opacity-100"
                 d="M3 8L6 11L11 3.5"
-                strokeWidth={2}
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="opacity-0 group-has-checked:opacity-100"
+                strokeWidth={2}
               />
               <path
+                className="opacity-0 group-has-indeterminate:opacity-100"
                 d="M3 7H11"
-                strokeWidth={2}
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="opacity-0 group-has-indeterminate:opacity-100"
+                strokeWidth={2}
               />
             </svg>
           </div>
@@ -101,13 +100,13 @@ export const Checkbox = ({
 
         <div className="text-sm/6">
           <label
-            htmlFor={checkboxId}
             className={`font-medium text-gray-900 ${labelClass}`}
+            htmlFor={checkboxId}
           >
             {label}
           </label>
           {description && (
-            <p id={descriptionId} className="text-gray-500">
+            <p className="text-gray-500" id={descriptionId}>
               {description}
             </p>
           )}
@@ -119,3 +118,6 @@ export const Checkbox = ({
     </fieldset>
   );
 };
+
+export const Checkbox = memo(CheckboxComponent);
+Checkbox.displayName = 'Checkbox';

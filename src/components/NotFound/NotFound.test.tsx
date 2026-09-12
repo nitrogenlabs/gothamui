@@ -56,13 +56,13 @@ describe('NotFound', () => {
   it('renders popular footer content and social links', () => {
     render(
       <NotFound
-        copyright="Copyright GothamJS"
+        copyright="Copyright GothamUI"
         socialLinks={[{href: '/feed', icon: Rss, label: 'RSS'}]}
         variant="popular"
       />
     );
 
-    expect(screen.getByText('Copyright GothamJS')).toBeInTheDocument();
+    expect(screen.getByText('Copyright GothamUI')).toBeInTheDocument();
     expect(screen.getByRole('link', {name: 'RSS'})).toHaveAttribute('href', '/feed');
   });
 });

@@ -1,6 +1,6 @@
 import {cn} from '@nlabs/utils';
 import {FileImage, UploadCloud, X} from 'lucide-react';
-import {
+import {memo,
   useCallback,
   useEffect,
   useId,
@@ -163,7 +163,7 @@ const filesToItems = (files: readonly File[]): DropUploadItem[] => files.map((fi
   previewUrl: createImagePreview(file)
 }));
 
-export const DropUpload = ({
+const DropUploadComponent = ({
   accept,
   browseLabel = 'browse',
   className,
@@ -344,8 +344,8 @@ export const DropUpload = ({
         onClick={() => inputRef.current?.click()}
         onDragLeave={onDragLeave}
         onDragOver={onDragOver}
-        onKeyDown={onKeyDown}
         onDrop={onDrop}
+        onKeyDown={onKeyDown}
         role="button"
         tabIndex={disabled ? -1 : 0}>
         <input
@@ -358,7 +358,7 @@ export const DropUpload = ({
           ref={inputRef}
           type="file"
         />
-        <UploadCloud className="mb-4 size-10 text-muted-foreground transition-colors group-hover:text-primary" aria-hidden="true" />
+        <UploadCloud aria-hidden="true" className="mb-4 size-10 text-muted-foreground transition-colors group-hover:text-primary" />
         <div className="text-sm font-medium text-foreground">
           <span>{label} </span>
           <label className="cursor-pointer text-primary underline-offset-4 hover:underline" htmlFor={inputId}>
@@ -389,7 +389,7 @@ export const DropUpload = ({
                     src={item.previewUrl}
                   />
                 ) : (
-                  <FileImage className="size-9 text-muted-foreground" aria-hidden="true" />
+                  <FileImage aria-hidden="true" className="size-9 text-muted-foreground" />
                 )}
               </div>
               <div className="flex items-center justify-between gap-3 px-3 py-2">
@@ -406,7 +406,7 @@ export const DropUpload = ({
                     removeItem(item.id);
                   }}
                   type="button">
-                  <X className="size-4" aria-hidden="true" />
+                  <X aria-hidden="true" className="size-4" />
                 </button>
               </div>
             </div>
@@ -416,3 +416,6 @@ export const DropUpload = ({
     </div>
   );
 };
+
+export const DropUpload = memo(DropUploadComponent);
+DropUpload.displayName = 'DropUpload';

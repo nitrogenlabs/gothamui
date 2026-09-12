@@ -1,15 +1,15 @@
 # Gotham Chat Components
 
-This folder contains GothamJS chat UI components vendored from `react-chat-elements`.
+This folder contains GothamUI chat UI components vendored from `react-chat-elements`.
 
 ## Import Options
 
 ```ts
-import {Chat} from '@nlabs/gothamjs';
+import {Chat} from '@nlabs/gothamui';
 ```
 
 ```ts
-import {MessageBox, MessageList, ChatList} from '@nlabs/gothamjs/chat';
+import {MessageBox, MessageList, ChatList} from '@nlabs/gothamui/chat';
 ```
 
 ## Migration From `react-chat-elements`
@@ -19,7 +19,7 @@ import {MessageBox, MessageList, ChatList} from '@nlabs/gothamjs/chat';
 import {MessageBox, MessageList, ChatList} from 'react-chat-elements';
 
 // After
-import {MessageBox, MessageList, ChatList} from '@nlabs/gothamjs/chat';
+import {MessageBox, MessageList, ChatList} from '@nlabs/gothamui/chat';
 ```
 
 ## Exported Components

@@ -1,10 +1,10 @@
-# GothamJS vs Other Frameworks
+# GothamUI vs Other Frameworks
 
-This comparison highlights the key differences between GothamJS and other popular React frameworks.
+This comparison highlights the key differences between GothamUI and other popular React frameworks.
 
 ## Feature Comparison
 
-| Feature | GothamJS | Next.js | Create React App | Gatsby |
+| Feature | GothamUI | Next.js | Create React App | Gatsby |
 |---------|----------|---------|-----------------|--------|
 | **Setup Complexity** | Low | Medium | Low | Medium |
 | **Routing** | Built-in (React Router) | Built-in (File-based) | Requires react-router | Built-in (Gatsby Router) |
@@ -21,9 +21,9 @@ This comparison highlights the key differences between GothamJS and other popula
 | **Customization** | High | High | Medium | Medium |
 | **Community Size** | Small | Very Large | Very Large | Large |
 
-## When to Choose GothamJS
+## When to Choose GothamUI
 
-### Choose GothamJS when:
+### Choose GothamUI when:
 
 - You want a complete, ready-to-use React framework with minimal configuration
 - You prefer a Flux-based state management approach
@@ -57,27 +57,27 @@ This comparison highlights the key differences between GothamJS and other popula
 
 ## Migration Path
 
-If you're considering migrating to GothamJS from another framework, here's what you need to know:
+If you're considering migrating to GothamUI from another framework, here's what you need to know:
 
-### From Create React App to GothamJS
+### From Create React App to GothamUI
 
-1. Install GothamJS and its dependencies
+1. Install GothamUI and its dependencies
 2. Replace your root component with `<Gotham>`
-3. Configure your routes in the GothamJS config object
+3. Configure your routes in the GothamUI config object
 4. Migrate your state management to ArkhamJS
-5. Replace form components with GothamJS form components
-6. Replace UI components with GothamJS components
+5. Replace form components with GothamUI form components
+6. Replace UI components with GothamUI components
 
-### From Next.js to GothamJS
+### From Next.js to GothamUI
 
-1. Install GothamJS and its dependencies
-2. Convert file-based routing to GothamJS route configuration
+1. Install GothamUI and its dependencies
+2. Convert file-based routing to GothamUI route configuration
 3. Migrate server-side logic to API endpoints or serverless functions
 4. Migrate state management to ArkhamJS
-5. Replace UI components with GothamJS components
+5. Replace UI components with GothamUI components
 
 ## Conclusion
 
-GothamJS offers a comprehensive solution for React applications with a focus on developer experience and productivity. While it may not have the large ecosystem of Next.js or the SSR capabilities of Gatsby, it excels at providing a complete, ready-to-use framework for client-side applications with minimal configuration.
+GothamUI offers a comprehensive solution for React applications with a focus on developer experience and productivity. While it may not have the large ecosystem of Next.js or the SSR capabilities of Gatsby, it excels at providing a complete, ready-to-use framework for client-side applications with minimal configuration.
 
-By combining routing, state management, form handling, and UI components in a single package, GothamJS allows developers to focus on building features rather than configuring tools and libraries.
+By combining routing, state management, form handling, and UI components in a single package, GothamUI allows developers to focus on building features rather than configuring tools and libraries.

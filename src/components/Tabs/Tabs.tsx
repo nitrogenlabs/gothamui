@@ -1,5 +1,6 @@
 import {cn} from '@nlabs/utils';
 import {ChevronDown} from 'lucide-react';
+import {memo} from 'react';
 
 import type {HTMLAttributes, SelectHTMLAttributes} from 'react';
 
@@ -30,7 +31,7 @@ const getTabClasses = (current: boolean, variant: TabsProps['variant']) => {
     : 'border-transparent text-muted-foreground hover:border-border hover:text-foreground dark:text-muted-foreground-dark dark:hover:border-border-dark dark:hover:text-foreground-dark';
 };
 
-export const Tabs = ({
+const TabsComponent = ({
   ariaLabel = 'Tabs',
   className,
   items,
@@ -128,3 +129,6 @@ const MobileTabSelect = ({
     />
   </div>
 );
+
+export const Tabs = memo(TabsComponent);
+Tabs.displayName = 'Tabs';

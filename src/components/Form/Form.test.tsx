@@ -75,7 +75,7 @@ describe('Form', () => {
       >
         {(methods) => (
           <>
-            <input {...methods.register('email')} defaultValue="team@gothamjs.dev" />
+            <input {...methods.register('email')} defaultValue="team@gothamui.dev" />
             <input {...methods.register('password')} defaultValue="password123" />
             <button type="submit">Submit</button>
           </>
@@ -87,7 +87,7 @@ describe('Form', () => {
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalledWith(
       {
-        email: 'team@gothamjs.dev',
+        email: 'team@gothamui.dev',
         password: 'password123'
       },
       expect.any(Object),
@@ -101,7 +101,7 @@ describe('Form', () => {
 
     render(
       <Form
-        defaultValues={{email: 'team@gothamjs.dev'}}
+        defaultValues={{email: 'team@gothamui.dev'}}
         disabled
         onSubmit={onSubmit}
       >
@@ -115,7 +115,7 @@ describe('Form', () => {
       </Form>
     );
 
-    expect(screen.getByText('team@gothamjs.dev')).toBeInTheDocument();
+    expect(screen.getByText('team@gothamui.dev')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', {name: 'Submit'}));
 

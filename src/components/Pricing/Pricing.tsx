@@ -1,6 +1,7 @@
 import {cn} from '@nlabs/utils';
+import {memo, useMemo, useState} from 'react';
+
 import {Check, Minus, Plus, X} from '../../icons/index.js';
-import {useMemo, useState} from 'react';
 
 import type {HTMLAttributes, ReactNode} from 'react';
 
@@ -263,17 +264,17 @@ const getDefaultFrequency = (
   tiers: readonly PricingTier[] | undefined,
   defaultFrequency?: string
 ) => {
-  if (defaultFrequency) {
+  if(defaultFrequency) {
     return defaultFrequency;
   }
 
-  if (frequencies?.[0]?.value) {
+  if(frequencies?.[0]?.value) {
     return frequencies[0].value;
   }
 
   const firstPrice = tiers?.find((tier) => typeof tier.price !== 'string' && Object.keys(tier.price).length > 0)?.price;
 
-  if (firstPrice && typeof firstPrice !== 'string') {
+  if(firstPrice && typeof firstPrice !== 'string') {
     return Object.keys(firstPrice)[0] ?? 'monthly';
   }
 
@@ -281,7 +282,7 @@ const getDefaultFrequency = (
 };
 
 const getPriceForTier = (tier: PricingTier, activeFrequency: string) => {
-  if (typeof tier.price === 'string') {
+  if(typeof tier.price === 'string') {
     return tier.price;
   }
 
@@ -293,11 +294,11 @@ const getPriceSuffixForTier = (
   frequencies: readonly PricingFrequency[] | undefined,
   activeFrequency: string
 ) => {
-  if (typeof tier.price === 'string' && typeof tier.priceSuffix === 'string') {
+  if(typeof tier.price === 'string' && typeof tier.priceSuffix === 'string') {
     return tier.priceSuffix;
   }
 
-  if (tier.priceSuffix && typeof tier.priceSuffix !== 'string') {
+  if(tier.priceSuffix && typeof tier.priceSuffix !== 'string') {
     return tier.priceSuffix[activeFrequency] ?? Object.values(tier.priceSuffix)[0] ?? '';
   }
 
@@ -309,7 +310,7 @@ const renderTierList = (
   featured: boolean,
   featuredText: ReturnType<typeof featuredTextClasses>
 ) => {
-  if (tier.highlights?.length) {
+  if(tier.highlights?.length) {
     return (
       <ul className="mt-8 space-y-3 text-sm/6" role="list">
         {tier.highlights.map((highlight) => (
@@ -334,7 +335,7 @@ const renderTierList = (
     );
   }
 
-  if (!tier.features?.length) {
+  if(!tier.features?.length) {
     return null;
   }
 
@@ -362,7 +363,7 @@ const PricingHeader = ({
   title,
   tone
 }: Pick<PricingProps, 'description' | 'eyebrow' | 'title' | 'tone'>) => {
-  if (!eyebrow && !title && !description) {
+  if(!eyebrow && !title && !description) {
     return null;
   }
 
@@ -575,7 +576,7 @@ const SinglePricing = ({
         <>
           <div className="mt-10 flex items-center gap-x-4">
             <h4 className="flex-none text-sm/6 font-semibold text-primary dark:text-primary-dark-300">
-              {singleOffer.featureLabel ?? `What's included`}
+              {singleOffer.featureLabel ?? 'What\'s included'}
             </h4>
             <div className="h-px flex-auto bg-gray-100 dark:bg-white/10" />
           </div>
@@ -623,11 +624,11 @@ const SinglePricing = ({
 );
 
 const ComparisonValue = ({value}: {readonly value: PricingTierValue | undefined}) => {
-  if (typeof value === 'string') {
+  if(typeof value === 'string') {
     return <span className="text-sm/6 text-gray-900 dark:text-white">{value}</span>;
   }
 
-  if (value === true) {
+  if(value === true) {
     return <Check aria-hidden="true" className="inline-block size-4 text-green-600 dark:text-green-500" />;
   }
 
@@ -835,7 +836,7 @@ const ComparisonPricing = ({
   );
 };
 
-export const Pricing = ({
+const PricingComponent = ({
   cardStyle = 'default',
   className,
   comparisonSections,
@@ -890,8 +891,8 @@ export const Pricing = ({
             cardStyle={cardStyle}
             extraOffer={extraOffer}
             frequencies={frequencies}
-            tone={tone}
             tiers={tiers}
+            tone={tone}
           />
         ) : null}
         {variant === 'comparison' ? (
@@ -901,11 +902,14 @@ export const Pricing = ({
             comparisonSections={comparisonSections}
             frequencies={frequencies}
             logos={logos}
-            tone={tone}
             tiers={tiers}
+            tone={tone}
           />
         ) : null}
       </div>
     </section>
   );
 };
+
+export const Pricing = memo(PricingComponent);
+Pricing.displayName = 'Pricing';

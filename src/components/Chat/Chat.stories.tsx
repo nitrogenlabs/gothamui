@@ -60,7 +60,7 @@ const chatItem = {
   showVideoCall: true,
   statusColor: '#22c55e',
   subtitle: 'Stories now cover the chat components.',
-  title: 'GothamJS'
+  title: 'GothamUI'
 };
 
 const meetingItem = {
@@ -151,7 +151,7 @@ export const ChatNavbar: Story = {
   },
   args: {
     center: 'Messages',
-    left: 'GothamJS',
+    left: 'GothamUI',
     right: <Video size={18} />,
     type: 'light'
   },

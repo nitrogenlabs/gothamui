@@ -1,17 +1,17 @@
-# Getting Started with GothamJS
+# Getting Started with GothamUI
 
-This guide will help you quickly set up a new project with GothamJS and understand its core concepts.
+This guide will help you quickly set up a new project with GothamUI and understand its core concepts.
 
 ## Installation
 
-Start by installing GothamJS and its peer dependencies:
+Start by installing GothamUI and its peer dependencies:
 
 ```bash
 # Using npm
-npm install @nlabs/gothamjs @nlabs/arkhamjs @nlabs/arkhamjs-middleware-logger @nlabs/arkhamjs-storage-browser @nlabs/arkhamjs-utils-react zod react-i18next i18next
+npm install @nlabs/gothamui @nlabs/arkhamjs @nlabs/arkhamjs-middleware-logger @nlabs/arkhamjs-storage-browser @nlabs/arkhamjs-utils-react zod react-i18next i18next
 
 # Using yarn
-yarn add @nlabs/gothamjs @nlabs/arkhamjs @nlabs/arkhamjs-middleware-logger @nlabs/arkhamjs-storage-browser @nlabs/arkhamjs-utils-react zod react-i18next i18next
+yarn add @nlabs/gothamui @nlabs/arkhamjs @nlabs/arkhamjs-middleware-logger @nlabs/arkhamjs-storage-browser @nlabs/arkhamjs-utils-react zod react-i18next i18next
 ```
 
 ## Creating Your First App
@@ -22,14 +22,14 @@ Create an `index.tsx` (or `index.jsx`) file:
 
 ```jsx
 import { createRoot } from 'react-dom/client';
-import { Gotham } from '@nlabs/gothamjs';
+import { Gotham } from '@nlabs/gothamui';
 import { HomeView } from './views/HomeView';
 
 // Define your application configuration
 const config = {
   app: {
     name: 'my-app',
-    title: 'My First GothamJS App'
+    title: 'My First GothamUI App'
   },
   routes: [
     {
@@ -50,21 +50,21 @@ root.render(<Gotham config={config} />);
 Create `views/HomeView.tsx`:
 
 ```jsx
-import { Button } from '@nlabs/gothamjs';
-import { GothamActions } from '@nlabs/gothamjs';
+import { Button } from '@nlabs/gothamui';
+import { GothamActions } from '@nlabs/gothamui';
 
 export const HomeView = () => {
   const handleClick = () => {
     GothamActions.notify({
-      message: 'Welcome to GothamJS!',
+      message: 'Welcome to GothamUI!',
       severity: 'success'
     });
   };
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-4">Welcome to GothamJS</h1>
-      <p className="mb-4">This is your first GothamJS application.</p>
+      <h1 className="text-3xl font-bold mb-4">Welcome to GothamUI</h1>
+      <p className="mb-4">This is your first GothamUI application.</p>
       <Button
         variant="contained"
         color="primary"
@@ -115,10 +115,10 @@ const config = {
   // Internationalization
   translations: {
     en: {
-      welcome: 'Welcome to GothamJS'
+      welcome: 'Welcome to GothamUI'
     },
     es: {
-      welcome: 'Bienvenido a GothamJS'
+      welcome: 'Bienvenido a GothamUI'
     }
   }
 };
@@ -126,7 +126,7 @@ const config = {
 
 ### Routing
 
-GothamJS uses React Router under the hood. Define your routes in the config object:
+GothamUI uses React Router under the hood. Define your routes in the config object:
 
 ```jsx
 const config = {
@@ -157,7 +157,7 @@ const config = {
 Navigate programmatically using `GothamActions`:
 
 ```jsx
-import { GothamActions } from '@nlabs/gothamjs';
+import { GothamActions } from '@nlabs/gothamui';
 
 // Navigate to a new route
 GothamActions.navGoto('/dashboard');
@@ -174,10 +174,10 @@ GothamActions.navBack();
 
 ### Forms
 
-GothamJS provides a powerful form system built on React Hook Form and Zod:
+GothamUI provides a powerful form system built on React Hook Form and Zod:
 
 ```jsx
-import { Form, TextField, Button } from '@nlabs/gothamjs';
+import { Form, TextField, Button } from '@nlabs/gothamui';
 import { z } from 'zod';
 
 // Define validation schema
@@ -223,7 +223,7 @@ const LoginForm = () => {
 
 ### State Management
 
-GothamJS uses ArkhamJS for state management, a Flux implementation:
+GothamUI uses ArkhamJS for state management, a Flux implementation:
 
 ```jsx
 import { useFlux } from '@nlabs/arkhamjs-utils-react';
@@ -256,7 +256,7 @@ const MyComponent = () => {
 Show notifications using `GothamActions`:
 
 ```jsx
-import { GothamActions } from '@nlabs/gothamjs';
+import { GothamActions } from '@nlabs/gothamui';
 
 // Show a success notification
 GothamActions.notify({
@@ -292,10 +292,10 @@ GothamActions.notifyClose();
 
 ### Internationalization
 
-GothamJS includes i18next for internationalization. You can import i18n utilities directly from GothamJS:
+GothamUI includes i18next for internationalization. You can import i18n utilities directly from GothamUI:
 
 ```jsx
-import { useTranslation } from '@nlabs/gothamjs';
+import { useTranslation } from '@nlabs/gothamui';
 
 const MyComponent = () => {
   const { t, i18n } = useTranslation();
@@ -318,7 +318,7 @@ const MyComponent = () => {
 You can also import other i18n utilities:
 
 ```jsx
-import { useTranslation, Trans, i18n } from '@nlabs/gothamjs';
+import { useTranslation, Trans, i18n } from '@nlabs/gothamui';
 
 // useTranslation - Hook for translation
 // Trans - Component for complex translations
@@ -327,7 +327,7 @@ import { useTranslation, Trans, i18n } from '@nlabs/gothamjs';
 
 ## Next Steps
 
-Now that you have a basic understanding of GothamJS, explore the following:
+Now that you have a basic understanding of GothamUI, explore the following:
 
 1. **Component Library** - Discover all the available UI components
 2. **Advanced Routing** - Learn about nested routes and route guards
@@ -335,4 +335,4 @@ Now that you have a basic understanding of GothamJS, explore the following:
 4. **Middleware** - Add custom middleware for logging, analytics, etc.
 5. **Theming** - Customize the look and feel of your application
 
-For more detailed information, check out the [API Reference](./api-reference.md) and [official documentation](http://gothamjs.io).
+For more detailed information, check out the [API Reference](./api-reference.md) and [official documentation](http://gothamui.io).

@@ -32,8 +32,8 @@ export const Default: Story = {
         </TableRow>
       </TableHead>
       <TableBody>
-        <TableRow href="#" title="Open GothamJS">
-          <TableCell>GothamJS</TableCell>
+        <TableRow href="#" title="Open GothamUI">
+          <TableCell>GothamUI</TableCell>
           <TableCell><Badge variant="secondary">Ready</Badge></TableCell>
           <TableCell>1.1.0</TableCell>
         </TableRow>

@@ -7,7 +7,7 @@ Use a hosted payment-provider flow in `onAdd`, then pass only display-safe value
 ## Empty state
 
 ```tsx
-import {PaymentMethodPanel} from '@nlabs/gothamjs';
+import {PaymentMethodPanel} from '@nlabs/gothamui';
 
 export const BillingSettings = () => (
   <PaymentMethodPanel
@@ -21,7 +21,7 @@ export const BillingSettings = () => (
 ## Saved payment method
 
 ```tsx
-import {PaymentMethodPanel} from '@nlabs/gothamjs';
+import {PaymentMethodPanel} from '@nlabs/gothamui';
 
 export const BillingSettings = () => (
   <PaymentMethodPanel

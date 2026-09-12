@@ -28,7 +28,7 @@ describe('Notify', () => {
 
   it('opens notifications dispatched through the Flux provider', async () => {
     if (!(Flux as any).isInit) {
-      await Flux.init({name: 'gothamjs-test'});
+      await Flux.init({name: 'gothamui-test'});
     }
 
     render(
@@ -49,7 +49,7 @@ describe('Notify', () => {
     const onUndo = vi.fn();
 
     if (!(Flux as any).isInit) {
-      await Flux.init({name: 'gothamjs-test'});
+      await Flux.init({name: 'gothamui-test'});
     }
 
     render(
@@ -76,7 +76,7 @@ describe('Notify', () => {
 
   it('renders severity alerts and dismisses them', async () => {
     if (!(Flux as any).isInit) {
-      await Flux.init({name: 'gothamjs-test'});
+      await Flux.init({name: 'gothamui-test'});
     }
 
     render(

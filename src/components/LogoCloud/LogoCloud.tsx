@@ -1,4 +1,5 @@
 import {cn} from '@nlabs/utils';
+import {memo} from 'react';
 
 import {Container} from '../Container/Container.js';
 
@@ -17,7 +18,7 @@ export interface LogoCloudProps extends HTMLAttributes<HTMLElement> {
   readonly title?: string;
 }
 
-export const LogoCloud = ({
+const LogoCloudComponent = ({
   className,
   logos,
   title,
@@ -53,3 +54,6 @@ export const LogoCloud = ({
     </Container>
   </section>
 );
+
+export const LogoCloud = memo(LogoCloudComponent);
+LogoCloud.displayName = 'LogoCloud';

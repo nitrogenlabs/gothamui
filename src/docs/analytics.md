@@ -1,11 +1,11 @@
 # AWS RUM Analytics
 
-GothamJS emits analytics through its browser analytics channel by default. When an application is wrapped by both Gotham and Metropolis, Metropolis automatically receives these events and delivers them to Reaktor. Gotham does not load an analytics SDK or send network requests by itself.
+GothamUI emits analytics through its browser analytics channel by default. When an application is wrapped by both Gotham and Metropolis, Metropolis automatically receives these events and delivers them to Reaktor. Gotham does not load an analytics SDK or send network requests by itself.
 
 For local demos or troubleshooting, use the debug adapter to inspect the exact event passed to the analytics client:
 
 ```tsx
-import {createAwsRumDebugClient} from '@nlabs/gothamjs';
+import {createAwsRumDebugClient} from '@nlabs/gothamui';
 
 const awsRum = createAwsRumDebugClient({
   enabled: import.meta.env.DEV,
@@ -13,12 +13,12 @@ const awsRum = createAwsRumDebugClient({
 });
 ```
 
-When enabled, the adapter logs `[GothamJS] awsRum.track` and the event object. If a `target` is supplied, the same object is then forwarded for Metropolis delivery. Omitting `target` is useful for a console-only component demo.
+When enabled, the adapter logs `[GothamUI] awsRum.track` and the event object. If a `target` is supplied, the same object is then forwarded for Metropolis delivery. Omitting `target` is useful for a console-only component demo.
 
 ## Plug-and-play configuration
 
 ```tsx
-import {Gotham} from '@nlabs/gothamjs';
+import {Gotham} from '@nlabs/gothamui';
 import {Metropolis} from '@nlabs/metropolisjs';
 
 root.render(
@@ -69,7 +69,7 @@ Use one terminal measurement instead of separate start/end beacons. A measuremen
 Call `useViewPerformance()` inside the view being measured. Keep its status `pending` while required content is loading, then change it to `success` or `failure` when the view reaches a terminal state.
 
 ```tsx
-import {useViewPerformance} from '@nlabs/gothamjs';
+import {useViewPerformance} from '@nlabs/gothamui';
 
 interface StoryViewProps {
   readonly error?: Error;
@@ -115,7 +115,7 @@ import {
   createAwsRumBrowserClient,
   reportViewPerformance,
   startView
-} from '@nlabs/gothamjs';
+} from '@nlabs/gothamui';
 
 const awsRum = createAwsRumBrowserClient();
 
@@ -196,7 +196,7 @@ Automatic interaction tracking is enabled by default. It can be disabled applica
 Use `useAwsRum()` for domain events that need additional stable properties:
 
 ```tsx
-import {useAwsRum} from '@nlabs/gothamjs';
+import {useAwsRum} from '@nlabs/gothamui';
 
 export const SignupButton = () => {
   const awsRum = useAwsRum();

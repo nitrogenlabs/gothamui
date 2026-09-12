@@ -1,6 +1,6 @@
 <svg width="1400" height="420" viewBox="0 0 1400 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">GothamJS Logo Concept</title>
-  <desc id="desc">A metallic geometric G icon with GothamJS wordmark.</desc>
+  <title id="title">GothamUI Logo Concept</title>
+  <desc id="desc">A metallic geometric G icon with GothamUI wordmark.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#05070B"/>
@@ -14,7 +14,7 @@
       <stop offset="0.78" stop-color="#AAB4C0"/>
       <stop offset="1" stop-color="#FFFFFF"/>
     </linearGradient>
-    <linearGradient id="js" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="ui" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#7B61FF"/>
       <stop offset="1" stop-color="#00A7FF"/>
     </linearGradient>
@@ -36,7 +36,7 @@
 
   <g transform="translate(700 345)" text-anchor="middle">
     <text x="0" y="0" font-family="Montserrat, Avenir Next, Arial, sans-serif" font-size="62" font-weight="700" letter-spacing="34" fill="#F7F9FC">
-      GOTHAM<tspan fill="url(#js)">JS</tspan>
+      GOTHAM<tspan fill="url(#ui)">UI</tspan>
     </text>
   </g>
 </svg>

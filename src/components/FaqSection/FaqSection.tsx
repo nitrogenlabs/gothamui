@@ -1,4 +1,5 @@
 import {cn} from '@nlabs/utils';
+import {memo} from 'react';
 
 import {Container} from '../Container/Container.js';
 import {SectionHeader} from '../SectionHeader/SectionHeader.js';
@@ -17,7 +18,7 @@ export interface FaqSectionProps extends Omit<HTMLAttributes<HTMLElement>, 'titl
   readonly title: ReactNode;
 }
 
-export const FaqSection = ({
+const FaqSectionComponent = ({
   className,
   description,
   faqs,
@@ -38,3 +39,6 @@ export const FaqSection = ({
     </Container>
   </section>
 );
+
+export const FaqSection = memo(FaqSectionComponent);
+FaqSection.displayName = 'FaqSection';

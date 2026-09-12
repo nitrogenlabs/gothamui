@@ -1,6 +1,6 @@
 export default {
   entryJs: 'app.tsx',
-  gitUrl: 'https://github.com/nitrogenlabs/gothamjs',
+  gitUrl: 'https://github.com/nitrogenlabs/gothamui',
   jest: {
     collectCoverage: false,
     coverageThreshold: {

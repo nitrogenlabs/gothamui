@@ -28,7 +28,7 @@ describe('createAwsRumDebugClient', () => {
   const event = {
     name: 'page_view',
     path: '/home',
-    properties: {title: 'GothamJS'},
+    properties: {title: 'GothamUI'},
     type: 'page_view' as const
   };
 
@@ -39,7 +39,7 @@ describe('createAwsRumDebugClient', () => {
 
     awsRum.track(event);
 
-    expect(logger).toHaveBeenCalledWith('[GothamJS] awsRum.track', event);
+    expect(logger).toHaveBeenCalledWith('[GothamUI] awsRum.track', event);
     expect(target.track).toHaveBeenCalledWith(event);
   });
 

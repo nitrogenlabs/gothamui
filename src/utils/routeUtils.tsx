@@ -43,7 +43,12 @@ export const parseRoutes = (routes: CustomRouteProps[] = [], parentPath = ''): R
 
   if(React.isValidElement(element)) {
     routeElement = React.cloneElement(element, {route} as any);
-  } else if(typeof element === 'function') {
+  } else if(typeof element === 'function' || (
+    element !== null
+    && typeof element === 'object'
+    && '$$typeof' in element
+    && element.$$typeof === Symbol.for('react.memo')
+  )) {
     routeElement = React.createElement(element as any, {route});
   }
 

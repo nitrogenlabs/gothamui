@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {memo, useEffect, useMemo, useState} from 'react';
 import ReactMarkdown from 'react-markdown';
 
 import {fetchJsonFromUrl, parseTemplate} from '../../utils/contentUtils.js';
@@ -17,31 +17,43 @@ const defaultStyles: React.CSSProperties = {
   width: '100%'
 };
 
-export const Markdown: React.FC<MarkdownProps> = ({
+const emptyValues: Record<string, unknown> = {};
+
+const MarkdownComponent: React.FC<MarkdownProps> = ({
   className = '',
   content,
   url,
-  values = {}
+  values = emptyValues
 }) => {
-  const [markdown, setMarkdown] = useState<string>('');
+  const [remoteContent, setRemoteContent] = useState({content: '', url: ''});
 
   useEffect(() => {
+    if(!url) {
+      return undefined;
+    }
+    let active = true;
     const loadContent = async () => {
       try {
-        if(url) {
-          const data = await fetchJsonFromUrl(url);
-          setMarkdown(parseTemplate(data as string, values));
-        } else if(content) {
-          setMarkdown(parseTemplate(content, values));
+        const data = await fetchJsonFromUrl<string>(url);
+        if(active) {
+          setRemoteContent({content: data, url});
         }
-      } catch(error) {
-        console.error('Failed to load markdown content:', error);
-        setMarkdown('Error loading content');
+      } catch{
+        if(active) {
+          setRemoteContent({content: 'Error loading content', url});
+        }
       }
     };
 
-    loadContent();
-  }, [url, content, values]);
+    void loadContent();
+    return () => {
+      active = false;
+    };
+  }, [url]);
+
+  const remoteSource = remoteContent.url === url ? remoteContent.content : '';
+  const source = url ? remoteSource : content ?? '';
+  const markdown = useMemo(() => parseTemplate(source, values), [source, values]);
 
   return (
     <div className={`markdown-container ${className}`.trim()} style={defaultStyles}>
@@ -49,3 +61,6 @@ export const Markdown: React.FC<MarkdownProps> = ({
     </div>
   );
 };
+
+export const Markdown = memo(MarkdownComponent);
+Markdown.displayName = 'Markdown';

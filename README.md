@@ -1,26 +1,28 @@
-# GothamJS: The Complete Front-End UI Framework
+# GothamUI: The Complete Front-End UI Framework
 
-![GothamJS lowercase g logo](docs/assets/gothamjs-logo.png)
+> **GothamJS is now GothamUI.** Install `@nlabs/gothamui`. Existing component APIs and subpath exports are preserved. See the [migration guide](MIGRATION.md).
+
+![GothamUI lowercase g logo](docs/assets/gothamui-logo.png)
 
 ## Seamlessly integrating components, routing, state management, and transitions
 
 > A comprehensive front-end UI framework that handles everything from component rendering to routing and smooth transitions with minimal configuration.
 
-[![npm version](https://img.shields.io/npm/v/@nlabs/gothamjs.svg?style=flat-square)](https://www.npmjs.com/package/@nlabs/gothamjs)
-[![npm downloads](https://img.shields.io/npm/dm/@nlabs/gothamjs.svg?style=flat-square)](https://www.npmjs.com/package/@nlabs/gothamjs)
-[![Documentation](https://img.shields.io/badge/docs-gothamjs.nitrogenx.co-6d28d9?style=flat-square)](https://gothamjs.nitrogenx.co)
-[![Issues](http://img.shields.io/github/issues/nitrogenlabs/gothamjs.svg?style=flat-square)](https://github.com/nitrogenlabs/gothamjs/issues)
+[![npm version](https://img.shields.io/npm/v/@nlabs/gothamui.svg?style=flat-square)](https://www.npmjs.com/package/@nlabs/gothamui)
+[![npm downloads](https://img.shields.io/npm/dm/@nlabs/gothamui.svg?style=flat-square)](https://www.npmjs.com/package/@nlabs/gothamui)
+[![Documentation](https://img.shields.io/badge/docs-gothamui.nitrogenx.co-6d28d9?style=flat-square)](https://gothamui.nitrogenx.co)
+[![Issues](http://img.shields.io/github/issues/nitrogenlabs/gothamui.svg?style=flat-square)](https://github.com/nitrogenlabs/gothamui/issues)
 [![TypeScript](https://badges.frapsoft.com/typescript/version/typescript-next.svg?v=101)](https://github.com/ellerbrock/typescript-badges/)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 [![Chat](https://img.shields.io/discord/446122412715802649.svg)](https://discord.gg/Ttgev58)
 
-GothamJS is an all-inclusive React framework that unifies UI components, navigation, state management, and transitions into one cohesive system. Built by Nitrogen Labs, GothamJS eliminates the need to piece together multiple libraries, providing developers with a consistent, integrated solution for all front-end UI needs.
+GothamUI is an all-inclusive React framework that unifies UI components, navigation, state management, and transitions into one cohesive system. Built by Nitrogen Labs, GothamUI eliminates the need to piece together multiple libraries, providing developers with a consistent, integrated solution for all front-end UI needs.
 
-## How GothamJS fits into your app
+## How GothamUI fits into your app
 
-Your application keeps ownership of its routes, configuration, domain logic, and data. GothamJS turns those inputs into a cohesive presentation layer with components, navigation, state, forms, responsive styling, localization, and telemetry built in.
+Your application keeps ownership of its routes, configuration, domain logic, and data. GothamUI turns those inputs into a cohesive presentation layer with components, navigation, state, forms, responsive styling, localization, and telemetry built in.
 
-![GothamJS architecture showing how a React app flows through the GothamJS presentation layer into a complete user experience](docs/assets/gothamjs-app-architecture.svg)
+![GothamUI architecture showing how a React app flows through the GothamUI presentation layer into a complete user experience](docs/assets/gothamui-app-architecture.svg)
 
 ## Key Features
 
@@ -37,18 +39,18 @@ Your application keeps ownership of its routes, configuration, domain logic, and
 ## Getting Started
 
 ```bash
-# Install GothamJS
-npm install @nlabs/gothamjs
+# Install GothamUI
+npm install @nlabs/gothamui
 
 # Or with yarn
-yarn add @nlabs/gothamjs
+yarn add @nlabs/gothamui
 ```
 
-Create your first GothamJS application:
+Create your first GothamUI application:
 
 ```jsx
 import {createRoot} from 'react-dom/client';
-import {Gotham} from '@nlabs/gothamjs';
+import {Gotham} from '@nlabs/gothamui';
 
 // Define your application configuration
 const config = {
@@ -80,26 +82,26 @@ root.render(<Gotham config={config} />);
 
 ## CSS and Styling
 
-GothamJS uses Tailwind CSS with custom theme variables for consistent styling. To use GothamJS components with proper styling in your project, you need to import the GothamJS theme CSS.
+GothamUI uses Tailwind CSS with custom theme variables for consistent styling. To use GothamUI components with proper styling in your project, you need to import the GothamUI theme CSS.
 
-### Importing GothamJS Styles
+### Importing GothamUI Styles
 
 ```css
-/* Import GothamJS theme CSS in your main CSS file */
-@import '@nlabs/gothamjs/styles/tailwind.css';
+/* Import GothamUI theme CSS in your main CSS file */
+@import '@nlabs/gothamui/styles/tailwind.css';
 ```
 
 ### Tailwind CSS v4 Configuration
 
-Since GothamJS uses Tailwind CSS v4, configuration is done via CSS custom properties instead of a `tailwind.config.js` file. The GothamJS theme CSS already includes all the necessary color variables.
+Since GothamUI uses Tailwind CSS v4, configuration is done via CSS custom properties instead of a `tailwind.config.js` file. The GothamUI theme CSS already includes all the necessary color variables.
 
 If you need to customize the theme further, you can override the CSS custom properties in your own CSS:
 
 ```css
-/* In your main CSS file, after importing GothamJS styles */
-@import '@nlabs/gothamjs/styles/tailwind.css';
+/* In your main CSS file, after importing GothamUI styles */
+@import '@nlabs/gothamui/styles/tailwind.css';
 
-/* Override GothamJS theme variables */
+/* Override GothamUI theme variables */
 @theme {
   --color-primary: #your-custom-primary;
   --color-secondary: #your-custom-secondary;
@@ -109,11 +111,11 @@ If you need to customize the theme further, you can override the CSS custom prop
 ### Source Detection (Tailwind v4.2)
 
 Tailwind v4.2 uses source detection instead of `content` arrays in JavaScript config.
-GothamJS already includes `@source` for its own components, and your app can add sources in CSS when needed:
+GothamUI already includes `@source` for its own components, and your app can add sources in CSS when needed:
 
 ```css
 /* src/styles/main.css */
-@import '@nlabs/gothamjs/styles/tailwind.css';
+@import '@nlabs/gothamui/styles/tailwind.css';
 
 /* Optional: explicit app source paths (useful in monorepos/non-standard layouts) */
 @source "../**/*.{js,jsx,ts,tsx}";
@@ -178,7 +180,7 @@ export default {
 
 ### What Gets Imported
 
-The GothamJS theme CSS includes:
+The GothamUI theme CSS includes:
 
 - **Custom Color Palette**: Primary, secondary, neutral, success, error, warning, and info colors
 - **Dark Mode Support**: Automatic dark mode variants for all colors
@@ -186,12 +188,12 @@ The GothamJS theme CSS includes:
 - **Autofill Styles**: Browser autofill styling fixes for form inputs
 - **Base Styles**: Essential CSS resets and utilities
 
-### Using GothamJS Colors in Your Components
+### Using GothamUI Colors in Your Components
 
 ```jsx
-// GothamJS colors are available as Tailwind classes
+// GothamUI colors are available as Tailwind classes
 <div className="bg-primary text-white dark:bg-primary-dark dark:text-black-dark">
-  Styled with GothamJS theme
+  Styled with GothamUI theme
 </div>
 
 // Or use them in custom CSS
@@ -203,25 +205,25 @@ The GothamJS theme CSS includes:
 
 ## Components
 
-GothamJS provides a rich set of components to accelerate your development:
+GothamUI provides a rich set of components to accelerate your development:
 
 ### Chat Components
 
-GothamJS now includes a first-party chat UI module based on the `react-chat-elements` component set.
+GothamUI now includes a first-party chat UI module based on the `react-chat-elements` component set.
 
 ```tsx
 // Option 1: Namespace import from root package
-import {Chat} from '@nlabs/gothamjs';
+import {Chat} from '@nlabs/gothamui';
 
 // Option 2: Direct chat subpath import
-import {ChatList, MessageBox, MessageList} from '@nlabs/gothamjs/chat';
+import {ChatList, MessageBox, MessageList} from '@nlabs/gothamui/chat';
 ```
 
-Chat components inherit their runtime styles from GothamJS's Tailwind v4 stylesheet, so import [`@nlabs/gothamjs/styles/tailwind.css`](#installation) once at your app entrypoint.
+Chat components inherit their runtime styles from GothamUI's Tailwind v4 stylesheet, so import [`@nlabs/gothamui/styles/tailwind.css`](#installation) once at your app entrypoint.
 
 ### Icons
 
-GothamJS includes the complete [Lucide React](https://lucide.dev/) icon library, providing you with over 1000+ beautifully designed, customizable icons that follow a consistent design language.
+GothamUI includes the complete [Lucide React](https://lucide.dev/) icon library, providing you with over 1000+ beautifully designed, customizable icons that follow a consistent design language.
 
 #### Why Lucide React?
 
@@ -241,7 +243,7 @@ GothamJS includes the complete [Lucide React](https://lucide.dev/) icon library,
 #### Usage
 
 ```jsx
-import { Camera, Heart, Star, Settings, LucideLoader } from '@nlabs/gothamjs/icons';
+import { Camera, Heart, Star, Settings, LucideLoader } from '@nlabs/gothamui/icons';
 
 const MyComponent = () => (
   <div>
@@ -249,7 +251,7 @@ const MyComponent = () => (
     <Heart size={24} color="red" />
     <Star size={24} fill="yellow" />
     <Settings size={24} />
-    <LucideLoader size={24} /> {/* Use LucideLoader to avoid conflict with GothamJS Loader component */}
+    <LucideLoader size={24} /> {/* Use LucideLoader to avoid conflict with GothamUI Loader component */}
   </div>
 );
 ```
@@ -268,14 +270,14 @@ All Lucide React icons support these common properties:
 />
 ```
 
-> **Note**: The `Loader` icon from Lucide React is exported as `LucideLoader` to avoid conflicts with GothamJS's `Loader` component.
+> **Note**: The `Loader` icon from Lucide React is exported as `LucideLoader` to avoid conflicts with GothamUI's `Loader` component.
 
 ### Optimized Form Components
 
-GothamJS provides optimized form components with automatic validation, accessibility features, and performance optimizations:
+GothamUI provides optimized form components with automatic validation, accessibility features, and performance optimizations:
 
 ```jsx
-import { Button, Form, TextField } from '@nlabs/gothamjs';
+import { Button, Form, TextField } from '@nlabs/gothamui';
 import { z } from 'zod';
 
 // Define your form schema with Zod
@@ -333,7 +335,7 @@ const LoginForm = () => (
 ### Legacy Form Components
 
 ```jsx
-import { Form, TextField, Button } from '@nlabs/gothamjs';
+import { Form, TextField, Button } from '@nlabs/gothamui';
 import { z } from 'zod';
 
 // Define your form schema with Zod
@@ -373,7 +375,7 @@ const LoginForm = () => (
 `PaymentMethodPanel` displays an empty or masked saved-payment state while your application owns the provider integration. It never collects or stores card credentials.
 
 ```tsx
-import {PaymentMethodPanel} from '@nlabs/gothamjs';
+import {PaymentMethodPanel} from '@nlabs/gothamui';
 
 <PaymentMethodPanel
   brand="Visa"
@@ -388,7 +390,7 @@ Use `isAdding` and `isRemoving` to represent provider operations. See the [payme
 ### UI Components
 
 ```jsx
-import { Button, Notify, Loader } from '@nlabs/gothamjs';
+import { Button, Notify, Loader } from '@nlabs/gothamui';
 
 // Stylish button with multiple variants
 <Button
@@ -416,20 +418,20 @@ import { Button, Notify, Loader } from '@nlabs/gothamjs';
 `Markdown` is a lightweight wrapper around `react-markdown` for rendering inline or remote Markdown with optional template values:
 
 ```tsx
-import {Markdown} from '@nlabs/gothamjs';
+import {Markdown} from '@nlabs/gothamui';
 
 <Markdown
-  content="# GothamJS {{version}}\nAll UI components are publicly exported."
+  content="# GothamUI {{version}}\nAll UI components are publicly exported."
   values={{version: '1.5.4'}}
 />
 ```
 
 ### Code Editor
 
-`CodeEditor` is GothamJS's shared Monaco editor integration. Import it from the dedicated editor entry point so applications that do not use Monaco keep it out of their normal component imports:
+`CodeEditor` is GothamUI's shared Monaco editor integration. Import it from the dedicated editor entry point so applications that do not use Monaco keep it out of their normal component imports:
 
 ```tsx
-import {CodeEditor} from '@nlabs/gothamjs/editor';
+import {CodeEditor} from '@nlabs/gothamui/editor';
 
 <CodeEditor
   height="400px"
@@ -441,11 +443,11 @@ import {CodeEditor} from '@nlabs/gothamjs/editor';
 
 ### Public Views
 
-Every GothamJS view is part of the public package API. Import views from the package root or from the dedicated `views` entry point:
+Every GothamUI view is part of the public package API. Import views from the package root or from the dedicated `views` entry point:
 
 ```tsx
-import {DefaultView, Markdown} from '@nlabs/gothamjs';
-// Or: import {DefaultView} from '@nlabs/gothamjs/views';
+import {DefaultView, Markdown} from '@nlabs/gothamui';
+// Or: import {DefaultView} from '@nlabs/gothamui/views';
 
 const ReleaseNotes = () => (
   <DefaultView title="Release notes">
@@ -458,11 +460,11 @@ The public view exports are `AuthSignInView`, `AuthSignUpView`, `AuthView`, `Def
 
 ## State Management
 
-GothamJS uses ArkhamJS, a Flux implementation, for state management:
+GothamUI uses ArkhamJS, a Flux implementation, for state management:
 
 ```jsx
 import {useFlux} from '@nlabs/arkhamjs-utils-react';
-import {GothamActions} from '@nlabs/gothamjs';
+import {GothamActions} from '@nlabs/gothamui';
 
 const MyComponent = () => {
   const flux = useFlux();
@@ -502,7 +504,7 @@ const MyComponent = () => {
 
 ## Routing
 
-GothamJS simplifies routing with React Router integration:
+GothamUI simplifies routing with React Router integration:
 
 ```jsx
 const config = {
@@ -535,7 +537,7 @@ const config = {
 
 ## Authentication
 
-GothamJS provides built-in authentication support:
+GothamUI provides built-in authentication support:
 
 ```jsx
 const config = {
@@ -574,7 +576,7 @@ const config = {
 };
 
 // In your component
-import {useTranslation} from '@nlabs/gothamjs';
+import {useTranslation} from '@nlabs/gothamui';
 
 const MyComponent = () => {
   const { t } = useTranslation();
@@ -590,10 +592,10 @@ const MyComponent = () => {
 
 ## Analytics
 
-GothamJS can emit provider-neutral page views and UI events through an injected `awsRum` client. When paired with MetropolisJS, events are deduplicated, batched, and sent to a shared Reaktor analytics app.
+GothamUI can emit provider-neutral page views and UI events through an injected `awsRum` client. When paired with MetropolisJS, events are deduplicated, batched, and sent to a shared Reaktor analytics app.
 
 ```tsx
-import {useAwsRum} from '@nlabs/gothamjs';
+import {useAwsRum} from '@nlabs/gothamui';
 
 const MyComponent = () => {
   const awsRum = useAwsRum();
@@ -610,7 +612,7 @@ Learn more in the [Analytics documentation](./src/docs/analytics.md).
 
 ## Theming
 
-GothamJS supports light/dark mode and custom themes:
+GothamUI supports light/dark mode and custom themes:
 
 ```jsx
 const config = {
@@ -627,7 +629,7 @@ const config = {
 
 ## Configuration
 
-GothamJS is highly configurable:
+GothamUI is highly configurable:
 
 ```jsx
 const config = {
@@ -648,7 +650,7 @@ const config = {
 };
 ```
 
-## Why Choose GothamJS?
+## Why Choose GothamUI?
 
 - **UI Consistency**: Create visually cohesive applications with a unified design language
 - **Developer Experience**: Spend less time wiring up libraries and more time building features
@@ -660,11 +662,11 @@ const config = {
 
 ## Learn More
 
-Visit our [official documentation](http://gothamjs.io) for comprehensive guides, API references, and examples.
+Visit our [official documentation](https://gothamui.nitrogenx.co) for comprehensive guides, API references, and examples.
 
 ## Using with Lex
 
-GothamJS works seamlessly with [Lex](https://github.com/nitrogenlabs/lex), Nitrogen Labs' build and development toolkit. Lex provides optimized building, testing, and development workflows for projects using GothamJS.
+GothamUI works seamlessly with [Lex](https://github.com/nitrogenlabs/lex), Nitrogen Labs' build and development toolkit. Lex provides optimized building, testing, and development workflows for projects using GothamUI.
 
 ### Installation
 
@@ -711,9 +713,9 @@ lex lint --fix
 lex update --interactive
 ```
 
-### Integration with GothamJS
+### Integration with GothamUI
 
-Lex automatically detects GothamJS projects and configures Tailwind CSS integration. Your `lex.config.mjs` will include:
+Lex automatically detects GothamUI projects and configures Tailwind CSS integration. Your `lex.config.mjs` will include:
 
 ```js
 export default {
@@ -724,17 +726,17 @@ export default {
 
 ### Build Optimization
 
-Lex optimizes GothamJS builds by:
+Lex optimizes GothamUI builds by:
 
-- **Tree Shaking**: Removes unused GothamJS components from your bundle
-- **CSS Optimization**: Processes Tailwind CSS with GothamJS theme variables
+- **Tree Shaking**: Removes unused GothamUI components from your bundle
+- **CSS Optimization**: Processes Tailwind CSS with GothamUI theme variables
 - **TypeScript Compilation**: Optimized compilation with proper type checking
-- **Asset Handling**: Automatic copying of GothamJS assets and fonts
+- **Asset Handling**: Automatic copying of GothamUI assets and fonts
 
 ### Example Project Structure
 
 ```text
-my-gothamjs-app/
+my-gothamui-app/
 ├── src/
 │   ├── index.tsx
 │   ├── App.tsx
@@ -751,11 +753,11 @@ my-gothamjs-app/
 In your `src/styles/main.css`:
 
 ```css
-@import '@nlabs/gothamjs/styles/tailwind.css';
+@import '@nlabs/gothamui/styles/tailwind.css';
 
 /* Your custom styles */
 @theme {
-  /* Override GothamJS theme variables if needed */
+  /* Override GothamUI theme variables if needed */
 }
 ```
 
@@ -763,4 +765,4 @@ Lex will automatically process this CSS file and include it in your build output
 
 ## License
 
-GothamJS is [MIT licensed](./LICENSE).
+GothamUI is [MIT licensed](./LICENSE).

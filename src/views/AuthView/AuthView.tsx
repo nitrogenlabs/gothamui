@@ -1,4 +1,5 @@
 import {cn} from '@nlabs/utils';
+import {memo} from 'react';
 
 import {Card} from '../../components/Card/Card.js';
 
@@ -17,7 +18,7 @@ export interface AuthViewProps extends Omit<HTMLAttributes<HTMLElement>, 'title'
   readonly titleClassName?: string;
 }
 
-export const AuthView = ({
+const AuthViewComponent = ({
   cardClassName,
   cardDescription,
   cardHeaderClassName,
@@ -68,3 +69,6 @@ export const AuthView = ({
     </div>
   </main>
 );
+
+export const AuthView = memo(AuthViewComponent);
+AuthView.displayName = 'AuthView';

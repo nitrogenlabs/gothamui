@@ -1,5 +1,5 @@
 import {useFluxListener} from '@nlabs/arkhamjs-utils-react';
-import {useState} from 'react';
+import {memo, useState} from 'react';
 
 import {Loader} from '../../components/Loader/Loader.js';
 import {GothamConstants} from '../../constants/GothamConstants.js';
@@ -15,7 +15,7 @@ export const toggleLoader = (setLoading, setLoaderContent) => ({content, isLoadi
   setLoaderContent(content);
 };
 
-export const LoaderView = () => {
+const LoaderViewComponent = () => {
   const [isLoading, setLoading] = useState(false);
   const [content, setLoaderContent] = useState<string | undefined>();
 
@@ -34,3 +34,6 @@ export const LoaderView = () => {
     </div>
   );
 };
+
+export const LoaderView = memo(LoaderViewComponent);
+LoaderView.displayName = 'LoaderView';

@@ -1,5 +1,5 @@
 import {cn} from '@nlabs/utils';
-import {createContext} from 'react';
+import {createContext, useMemo} from 'react';
 
 import type {ComponentPropsWithoutRef, FC} from 'react';
 
@@ -38,19 +38,22 @@ export const Table = ({
   grid = false,
   striped = false,
   ...props
-}: TableProps) => (
-  <TableContext.Provider value={{bleed, dense, grid, striped}}>
-    <div className="flow-root" data-slot="table-wrapper">
-      <div className={cn('-mx-4 overflow-x-auto whitespace-nowrap sm:-mx-6 lg:-mx-8', className)} {...props}>
-        <div className={cn('inline-block min-w-full align-middle', !bleed && 'px-4 sm:px-6 lg:px-8')}>
-          <table className="min-w-full text-left text-sm/6 text-foreground dark:text-foreground-dark">
-            {children}
-          </table>
+}: TableProps) => {
+  const contextValue = useMemo(() => ({bleed, dense, grid, striped}), [bleed, dense, grid, striped]);
+  return (
+    <TableContext.Provider value={contextValue}>
+      <div className="flow-root" data-slot="table-wrapper">
+        <div className={cn('-mx-4 overflow-x-auto whitespace-nowrap sm:-mx-6 lg:-mx-8', className)} {...props}>
+          <div className={cn('inline-block min-w-full align-middle', !bleed && 'px-4 sm:px-6 lg:px-8')}>
+            <table className="min-w-full text-left text-sm/6 text-foreground dark:text-foreground-dark">
+              {children}
+            </table>
+          </div>
         </div>
       </div>
-    </div>
-  </TableContext.Provider>
-);
+    </TableContext.Provider>
+  );
+};
 
 export const TableHead = ({
   className,
@@ -79,24 +82,27 @@ export const TableRow: FC<TableRowProps> = ({
   target,
   title,
   ...props
-}) => (
-  <TableContext.Consumer>
-    {({striped}) => (
-      <TableRowContext.Provider value={{href, target, title}}>
-        <tr
-          className={cn(
-            href && 'focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-ring dark:focus-within:outline-ring-dark',
-            striped && 'even:bg-muted/50 dark:even:bg-muted-dark/50',
-            href && 'hover:bg-muted/60 dark:hover:bg-muted-dark/60',
-            className
-          )}
-          data-slot="table-row"
-          {...props}
-        />
-      </TableRowContext.Provider>
-    )}
-  </TableContext.Consumer>
-);
+}) => {
+  const rowContext = useMemo(() => ({href, target, title}), [href, target, title]);
+  return (
+    <TableContext.Consumer>
+      {({striped}) => (
+        <TableRowContext.Provider value={rowContext}>
+          <tr
+            className={cn(
+              href && 'focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-ring dark:focus-within:outline-ring-dark',
+              striped && 'even:bg-muted/50 dark:even:bg-muted-dark/50',
+              href && 'hover:bg-muted/60 dark:hover:bg-muted-dark/60',
+              className
+            )}
+            data-slot="table-row"
+            {...props}
+          />
+        </TableRowContext.Provider>
+      )}
+    </TableContext.Consumer>
+  );
+};
 
 export const TableHeader: FC<ComponentPropsWithoutRef<'th'>> = ({
   className,

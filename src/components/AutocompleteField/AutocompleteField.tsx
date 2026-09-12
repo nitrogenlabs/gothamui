@@ -71,19 +71,21 @@ export const AutocompleteField = <TSuggestion = AutocompleteSuggestion>({
   }, [defaultValue, value]);
 
   useEffect(() => {
+    const requestId = ++requestIdRef.current;
+
     if(selectedQueryRef.current === query) {
       selectedQueryRef.current = '';
-      return;
+      setIsLoading(false);
+      return undefined;
     }
 
     if(!getList || query.trim().length < 2) {
-      setSuggestions([]);
+      setSuggestions((current) => (current.length ? [] : current));
       setIsOpen(false);
-      return;
+      setIsLoading(false);
+      return undefined;
     }
 
-    const requestId = requestIdRef.current + 1;
-    requestIdRef.current = requestId;
     setIsLoading(true);
 
     getList(query)
@@ -109,6 +111,9 @@ export const AutocompleteField = <TSuggestion = AutocompleteSuggestion>({
           setIsLoading(false);
         }
       });
+    return () => {
+      requestIdRef.current += 1;
+    };
   }, [getList, query]);
 
   const selectSuggestion = (suggestion: TSuggestion) => {
@@ -127,9 +132,6 @@ export const AutocompleteField = <TSuggestion = AutocompleteSuggestion>({
         autoComplete="off"
         label={label}
         name={name}
-        placeholder={placeholder}
-        type={type}
-        value={query}
         onBlur={(event) => {
           window.setTimeout(() => setIsOpen(false), 120);
           onSelected?.({suggestion: {location: event.currentTarget.value} as TSuggestion});
@@ -139,6 +141,9 @@ export const AutocompleteField = <TSuggestion = AutocompleteSuggestion>({
           onChange?.(event);
         }}
         onFocus={() => setIsOpen(suggestions.length > 0)}
+        placeholder={placeholder}
+        type={type}
+        value={query}
       />
       {isOpen ? (
         <div className="app-autocomplete-list" role="listbox">

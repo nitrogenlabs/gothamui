@@ -2,13 +2,12 @@
  * Copyright (c) 2025-Present, Nitrogen Labs, Inc.
  * Copyrights licensed under the MIT License. See the accompanying LICENSE file for terms.
  */
-import {useState} from 'react';
+import {memo, useState} from 'react';
 
 import {useTranslation} from '../../i18n/index.js';
 import {Eye, EyeOff} from '../../icons/index.js';
-import {assignRef} from '../../utils/refUtils.js';
 import {ErrorMessage} from '../ErrorMessage/ErrorMessage.js';
-import {getFormErrorMessage, useGothamFormContext} from '../Form/FormContext.js';
+import {getFormErrorMessage, useGothamFormField} from '../Form/FormContext.js';
 import {InputField} from '../InputField/InputField.js';
 import {Label} from '../Label/Label.js';
 
@@ -42,7 +41,7 @@ export interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement | H
   readonly type?: string;
 }
 
-export const TextField = ({
+const TextFieldComponent = ({
   borderColor = 'black',
   borderType,
   className,
@@ -71,20 +70,15 @@ export const TextField = ({
   ...restInputProps
 }: TextFieldProps) => {
   const {t} = useTranslation();
-  const form = useGothamFormContext();
-  const formError = form?.errors?.[name];
+  const form = useGothamFormField(name);
+  const formError = form?.error;
   const hasError = !!formError || !!externalError;
   const placeholderText = placeholder ? t(placeholder) : '';
   const [showPassword, setShowPassword] = useState(false);
-  const [isTouched, setIsTouched] = useState(false);
-  const fieldValue = value ?? form?.values[name];
-  const resolvedDefaultValue = fieldValue === undefined ? String(form?.defaultValues[name] ?? defaultValue) : undefined;
+  const fieldValue = value ?? form?.value ?? (form ? String(form.defaultValue ?? defaultValue) : undefined);
+  const resolvedDefaultValue = fieldValue === undefined ? String(form?.defaultValue ?? defaultValue) : undefined;
   const inputType = type === 'password' && showPassword ? 'text' : type;
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if(!isTouched && e.target.value !== fieldValue) {
-      setIsTouched(true);
-    }
-
     form?.setValue(name, e.target.value);
     form?.clearError(name);
     onChangeProp?.(e);
@@ -119,12 +113,11 @@ export const TextField = ({
           }}
           onChange={handleChange}
           onFocus={(event) => {
-            setIsTouched(true);
             restInputProps.onFocus?.(event);
           }}
           placeholder={placeholderText}
           placeholderColor={placeholderColor}
-          ref={(e) => assignRef(ref, e)}
+          ref={ref}
           textColor={textColor}
           textFillColor={textFillColor}
           type={inputType}
@@ -132,12 +125,12 @@ export const TextField = ({
         />
         {type === 'password' && showPasswordToggle && (
           <button
-            type="button"
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
             className={`absolute inset-y-0 flex items-center ${
               borderType === 'underline' ? 'right-0 pr-3' : 'right-0 pr-3.5'
             } text-neutral-400 hover:text-neutral-600 outline-none focus:outline-none focus-visible:outline-none dark:text-neutral-500 dark:hover:text-neutral-300`}
             onClick={() => setShowPassword(!showPassword)}
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            type="button"
           >
             {showPassword ? (
               <Eye className="h-5 w-5" />
@@ -147,10 +140,13 @@ export const TextField = ({
           </button>
         )}
         <ErrorMessage
-          message={getFormErrorMessage(formError) || (externalError ? 'Invalid input' : undefined)}
           color={errorColor}
+          message={getFormErrorMessage(formError) || (externalError ? 'Invalid input' : undefined)}
         />
       </div>
     </div>
   );
 };
+
+export const TextField = memo(TextFieldComponent);
+TextField.displayName = 'TextField';

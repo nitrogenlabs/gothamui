@@ -65,7 +65,7 @@ export const createAwsRumDebugClient = ({
 }: AwsRumDebugOptions = {}): AwsRum => ({
   track: (event: AwsRumTrackEvent): void => {
     if(enabled) {
-      logger('[GothamJS] awsRum.track', event);
+      logger('[GothamUI] awsRum.track', event);
     }
 
     target?.track(event);

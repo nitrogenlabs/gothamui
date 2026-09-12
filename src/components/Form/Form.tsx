@@ -2,10 +2,10 @@
  * Copyright (c) 2021-Present, Nitrogen Labs, Inc.
  * Copyrights licensed under the MIT License. See the accompanying LICENSE file for terms.
  */
-import {startTransition, useActionState, useMemo, useRef, useState} from 'react';
+import {startTransition, useActionState, useCallback, useLayoutEffect, useMemo, useRef, useState} from 'react';
 import {z} from 'zod';
 
-import {GothamFormContext, getFormErrorMessage} from './FormContext.js';
+import {GothamFormContext, GothamFormFieldContext, createFormFieldStore, getFormErrorMessage} from './FormContext.js';
 
 import type {BaseSyntheticEvent, FormEvent, ReactNode} from 'react';
 import type {FormErrors, FormValues} from './FormContext.js';
@@ -83,12 +83,15 @@ const getErrorMessages = (errorObj: FormErrors): string[] => Object.values(error
   .map(getFormErrorMessage)
   .filter(Boolean) as string[];
 
+const emptyValues: FormValues = {};
+const emptyErrors: FormErrors = {};
+
 export const Form = <T extends Record<string, unknown>>({
   children,
   className,
-  defaultValues = {},
+  defaultValues = emptyValues,
   disabled = false,
-  errors = {},
+  errors = emptyErrors,
   name = 'default',
   schema,
   showErrors = false,
@@ -140,21 +143,33 @@ export const Form = <T extends Record<string, unknown>>({
       values: defaultValues
     }
   );
-  const allErrors = {
-    ...state.errors,
+  const allErrors = useMemo(() => ({
     ...localErrors,
     ...errors
-  };
-  const values = {
+  }), [errors, localErrors]);
+  const values = useMemo(() => ({
     ...state.values,
     ...localValues
-  };
-  const setValue = (fieldName: string, value: unknown) => {
-    setLocalValues((currentValues) => ({
-      ...currentValues,
-      [fieldName]: value
-    }));
-  };
+  }), [localValues, state.values]);
+  const setValue = useCallback((fieldName: string, value: unknown) => {
+    setLocalValues((currentValues) => {
+      if(Object.hasOwn(currentValues, fieldName) && Object.is(currentValues[fieldName], value)) {
+        return currentValues;
+      }
+      return {...currentValues, [fieldName]: value};
+    });
+  }, []);
+  const clearError = useCallback((fieldName: string) => {
+    setLocalErrors((currentErrors) => {
+      if(!Object.hasOwn(currentErrors, fieldName)) {
+        return currentErrors;
+      }
+
+      const nextErrors = {...currentErrors};
+      delete nextErrors[fieldName];
+      return nextErrors;
+    });
+  }, []);
   const methods: GothamFormMethods = useMemo(() => ({
     formState: {
       errors: allErrors,
@@ -172,21 +187,21 @@ export const Form = <T extends Record<string, unknown>>({
       }));
     },
     setValue
-  }), [allErrors, defaultValues, isPending, values]);
+  }), [allErrors, defaultValues, isPending, setValue, values]);
   const contextValue = useMemo(() => ({
-    clearError: (fieldName: string) => {
-      setLocalErrors((currentErrors) => {
-        const nextErrors = {...currentErrors};
-        delete nextErrors[fieldName];
-        return nextErrors;
-      });
-    },
+    clearError,
     defaultValues,
     errors: allErrors,
     isSubmitting: isPending,
     setValue,
     values
-  }), [allErrors, defaultValues, isPending, values]);
+  }), [allErrors, clearError, defaultValues, isPending, setValue, values]);
+  const [fieldStore] = useState(() => createFormFieldStore(contextValue));
+
+  // Publish committed React state, never state from an abandoned render.
+  useLayoutEffect(() => {
+    fieldStore.update(contextValue);
+  }, [contextValue, fieldStore]);
   const errorMessages = getErrorMessages(allErrors);
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -204,28 +219,30 @@ export const Form = <T extends Record<string, unknown>>({
   };
 
   return (
-    <GothamFormContext.Provider value={contextValue}>
-      <form
-        className={className}
-        data-testid={`form-${name}`}
-        noValidate
-        onSubmit={handleFormSubmit}
-      >
-        {showErrors && errorMessages.length > 0 && (
-          <div
-            aria-live="polite"
-            className="p-3 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
-            role="alert"
-          >
-            <ul className="list-disc list-inside">
-              {errorMessages.map((message, index) => (
-                <li key={index}>{message}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {typeof children === 'function' ? children(methods) : children}
-      </form>
-    </GothamFormContext.Provider>
+    <GothamFormFieldContext.Provider value={fieldStore}>
+      <GothamFormContext.Provider value={contextValue}>
+        <form
+          className={className}
+          data-testid={`form-${name}`}
+          noValidate
+          onSubmit={handleFormSubmit}
+        >
+          {showErrors && errorMessages.length > 0 && (
+            <div
+              aria-live="polite"
+              className="p-3 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+              role="alert"
+            >
+              <ul className="list-disc list-inside">
+                {errorMessages.map((message, index) => (
+                  <li key={index}>{message}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {typeof children === 'function' ? children(methods) : children}
+        </form>
+      </GothamFormContext.Provider>
+    </GothamFormFieldContext.Provider>
   );
 };

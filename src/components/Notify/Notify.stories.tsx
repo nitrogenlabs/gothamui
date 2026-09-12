@@ -11,7 +11,7 @@ import type {Meta, StoryObj} from '@nlabs/lex/storybook';
 import type {GothamNotifyParams} from './Notify.js';
 
 if (!(Flux as any).isInit) {
-  void Flux.init({name: 'gothamjs-storybook'});
+  void Flux.init({name: 'gothamui-storybook'});
 }
 
 const NotifyTrigger = ({notification}: {readonly notification: GothamNotifyParams}) => {

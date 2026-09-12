@@ -4,7 +4,7 @@
 - Use Lex (`@nlabs/lex`) for CLI workflows, building, compiling, deploying, and testing projects.
 - Use Vitest for unit and integration tests.
 - Use Playwright for end-to-end tests.
-- Use GothamJS (`@nlabs/gothamjs`) for the presentation layer. Obtain components, views, routing, Tailwind setup, and default styles from GothamJS before creating custom project-level components.
+- Use GothamUI (`@nlabs/gothamui`) for the presentation layer. Obtain components, views, routing, Tailwind setup, and default styles from GothamUI before creating custom project-level components.
 - Use React v19 for frontend work.
 - Use Tailwind v4 for CSS styles.
 - Use MetropolisJS (`@nlabs/metropolisjs`) as the starting point for all frontend API integration. Create custom data types, actions, queries, or mutations only after MetropolisJS has been exhausted.

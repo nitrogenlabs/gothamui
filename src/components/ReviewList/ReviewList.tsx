@@ -1,5 +1,6 @@
 import {cn} from '@nlabs/utils';
 import {Star} from 'lucide-react';
+import {memo} from 'react';
 
 import {Avatar} from '../Avatar/Avatar.js';
 
@@ -18,7 +19,7 @@ export interface ReviewListProps extends HTMLAttributes<HTMLDivElement> {
   readonly reviews: ReviewItem[];
 }
 
-export const ReviewList = ({
+const ReviewListComponent = ({
   className,
   reviews,
   ...props
@@ -47,3 +48,6 @@ export const ReviewList = ({
     ))}
   </div>
 );
+
+export const ReviewList = memo(ReviewListComponent);
+ReviewList.displayName = 'ReviewList';

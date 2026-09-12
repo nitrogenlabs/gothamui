@@ -22,6 +22,6 @@ export const Json: Story = {
       minimap: {enabled: false},
       wordWrap: 'on'
     },
-    value: '{\n  "framework": "GothamJS",\n  "editor": "Monaco"\n}'
+    value: '{\n  "framework": "GothamUI",\n  "editor": "Monaco"\n}'
   }
 };

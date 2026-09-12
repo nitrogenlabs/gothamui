@@ -40,7 +40,7 @@ export interface NotFoundProps extends Omit<HTMLAttributes<HTMLDivElement>, 'tit
 
 const defaultLinks: readonly NotFoundLink[] = [
   {
-    description: 'Learn how to integrate GothamJS components with your app.',
+    description: 'Learn how to integrate GothamUI components with your app.',
     href: '/docs',
     icon: BookOpen,
     label: 'Documentation'

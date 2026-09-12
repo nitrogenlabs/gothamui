@@ -1,4 +1,5 @@
 import {cn} from '@nlabs/utils';
+import {memo} from 'react';
 
 import type {HTMLAttributes, ReactNode} from 'react';
 
@@ -15,7 +16,7 @@ export interface IncentiveGridProps extends HTMLAttributes<HTMLDivElement> {
   readonly incentives: IncentiveItem[];
 }
 
-export const IncentiveGrid = ({
+const IncentiveGridComponent = ({
   className,
   incentives,
   ...props
@@ -36,3 +37,6 @@ export const IncentiveGrid = ({
     ))}
   </div>
 );
+
+export const IncentiveGrid = memo(IncentiveGridComponent);
+IncentiveGrid.displayName = 'IncentiveGrid';

@@ -16,7 +16,7 @@ const meta: Meta<typeof Markdown> = {
   parameters: {
     docs: {
       description: {
-        component: 'Renders inline or remote Markdown content with optional template values. Publicly import it from `@nlabs/gothamjs` or `@nlabs/gothamjs/components`.'
+        component: 'Renders inline or remote Markdown content with optional template values. Publicly import it from `@nlabs/gothamui` or `@nlabs/gothamui/components`.'
       }
     }
   },

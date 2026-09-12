@@ -37,7 +37,7 @@ export const Card: Story = {
         <MediaObject
           description="Published component stories."
           media={<Avatar initials="JS" />}
-          title="GothamJS"
+          title="GothamUI"
         />
       </ListItem>
     </ListContainer>

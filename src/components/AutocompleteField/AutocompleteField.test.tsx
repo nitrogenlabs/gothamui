@@ -1,4 +1,4 @@
-import {fireEvent, render, screen, waitFor} from '@testing-library/react';
+import {act, fireEvent, render, screen, waitFor} from '@testing-library/react';
 
 import {AutocompleteField} from './AutocompleteField.js';
 
@@ -57,6 +57,7 @@ describe('AutocompleteField', () => {
     await waitFor(() => expect(onSelected).toHaveBeenCalledWith({
       suggestion: {location: 'B'}
     }));
+
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
@@ -68,6 +69,24 @@ describe('AutocompleteField', () => {
     fireEvent.change(screen.getByLabelText('Location'), {target: {value: 'no'}});
 
     await waitFor(() => expect(screen.queryByText('Searching...')).not.toBeInTheDocument());
+
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
+});
+
+test('ignores a pending suggestion response after the query is cleared', async () => {
+  let resolveList: (value: {label: string}[]) => void;
+  const getList = vi.fn(() => new Promise<{label: string}[]>((resolve) => {
+    resolveList = resolve;
+  }));
+  render(<AutocompleteField getList={getList} label="Location" name="location" />);
+  fireEvent.change(screen.getByLabelText('Location'), {target: {value: 'go'}});
+  fireEvent.change(screen.getByLabelText('Location'), {target: {value: ''}});
+
+  expect(screen.queryByText('Searching...')).not.toBeInTheDocument();
+
+  await act(async () => resolveList([{label: 'Gotham'}]));
+
+  expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  expect(screen.getByLabelText('Location')).toHaveValue('');
 });

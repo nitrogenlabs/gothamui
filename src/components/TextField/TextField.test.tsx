@@ -19,11 +19,11 @@ describe('TextField', () => {
     );
 
     const input = screen.getByLabelText('Email');
-    fireEvent.change(input, {target: {value: 'team@gothamjs.dev'}});
+    fireEvent.change(input, {target: {value: 'team@gothamui.dev'}});
 
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onValidate).toHaveBeenCalledWith(true);
-    expect(input).toHaveValue('team@gothamjs.dev');
+    expect(input).toHaveValue('team@gothamui.dev');
   });
 
   it('toggles password visibility without changing the field value', () => {

@@ -1,4 +1,5 @@
 import {cn} from '@nlabs/utils';
+import {memo} from 'react';
 
 import type {AnchorHTMLAttributes, HTMLAttributes, ReactNode} from 'react';
 
@@ -18,7 +19,7 @@ export interface ProductGridProps extends HTMLAttributes<HTMLDivElement> {
   readonly products: ProductItem[];
 }
 
-export const ProductGrid = ({
+const ProductGridComponent = ({
   className,
   products,
   ...props
@@ -38,7 +39,7 @@ export interface ProductCardProps extends HTMLAttributes<HTMLElement> {
   readonly product: ProductItem;
 }
 
-export const ProductCard = ({
+const ProductCardComponent = ({
   className,
   product,
   ...props
@@ -96,3 +97,9 @@ export const ProductCard = ({
     </article>
   );
 };
+
+export const ProductGrid = memo(ProductGridComponent);
+ProductGrid.displayName = 'ProductGrid';
+
+export const ProductCard = memo(ProductCardComponent);
+ProductCard.displayName = 'ProductCard';

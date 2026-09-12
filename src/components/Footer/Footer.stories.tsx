@@ -102,7 +102,7 @@ type Story = StoryObj<typeof Footer>;
 
 export const Default: Story = {
   args: {
-    brand: 'GothamJS',
+    brand: 'GothamUI',
     copyright: '© 2026 Nitrogen Labs',
     links,
     supportEmail: 'support@example.com',
@@ -113,7 +113,7 @@ export const Default: Story = {
 
 export const Small: Story = {
   args: {
-    brand: 'GothamJS',
+    brand: 'GothamUI',
     copyright: '© 2026 Nitrogen Labs',
     links,
     supportEmail: 'support@example.com',
@@ -125,7 +125,7 @@ export const Small: Story = {
 
 export const Large: Story = {
   args: {
-    brand: <span className="text-2xl font-bold text-white">GothamJS</span>,
+    brand: <span className="text-2xl font-bold text-white">GothamUI</span>,
     copyright: '© 2026 Nitrogen Labs. All rights reserved.',
     description: 'Manage cloud applications, deployments, and resources with a polished operational interface.',
     linkGroups,

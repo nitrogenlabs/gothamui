@@ -1,10 +1,10 @@
 import {cn} from '@nlabs/utils';
+import {memo, useMemo} from 'react';
 import Lightbox, {useController, useNavigationState} from 'yet-another-react-lightbox';
 import Video from 'yet-another-react-lightbox/plugins/video';
+import 'yet-another-react-lightbox/styles.css';
 
 import {ChevronLeft, ChevronRight, X} from '../../icons/index.js';
-
-import 'yet-another-react-lightbox/styles.css';
 
 import type {FC} from 'react';
 
@@ -59,21 +59,30 @@ export const MediaLightboxNavButton: FC<{readonly direction: LightboxNavDirectio
   );
 };
 
-export const MediaLightbox: FC<MediaLightboxProps> = ({
+const emptyItems: unknown[] = [];
+const emptyRender: Record<string, unknown> = {};
+
+const MediaLightboxComponent: FC<MediaLightboxProps> = ({
   close,
   enableVideo = false,
   hideNavigationWhenSingle = false,
   index = 0,
   on,
   open = false,
-  plugins = [],
-  render = {},
-  slides = [],
+  plugins = emptyItems,
+  render = emptyRender,
+  slides = emptyItems,
   toolbar,
   video
 }) => {
   const showNavigation = !hideNavigationWhenSingle || slides.length > 1;
-  const lightboxPlugins = enableVideo ? [Video, ...plugins] : plugins;
+  const lightboxPlugins = useMemo(() => (enableVideo ? [Video, ...plugins] : plugins), [enableVideo, plugins]);
+  const lightboxRender = useMemo(() => ({
+    ...render,
+    buttonClose: () => <MediaLightboxCloseButton />,
+    buttonNext: () => (showNavigation ? <MediaLightboxNavButton direction="next" /> : null),
+    buttonPrev: () => (showNavigation ? <MediaLightboxNavButton direction="prev" /> : null)
+  }), [render, showNavigation]);
 
   return (
     <Lightbox
@@ -82,15 +91,13 @@ export const MediaLightbox: FC<MediaLightboxProps> = ({
       on={on as any}
       open={open}
       plugins={lightboxPlugins as any}
-      render={{
-        ...render,
-        buttonClose: () => <MediaLightboxCloseButton />,
-        buttonNext: () => (showNavigation ? <MediaLightboxNavButton direction="next" /> : null),
-        buttonPrev: () => (showNavigation ? <MediaLightboxNavButton direction="prev" /> : null)
-      }}
+      render={lightboxRender}
       slides={slides as any}
       toolbar={toolbar as any}
       video={video as any}
     />
   );
 };
+
+export const MediaLightbox = memo(MediaLightboxComponent);
+MediaLightbox.displayName = 'MediaLightbox';

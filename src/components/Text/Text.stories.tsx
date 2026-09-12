@@ -19,7 +19,7 @@ export const Default: Story = {
   play: interactWithCanvas,
   render: () => (
     <Text className="max-w-md">
-      GothamJS now includes typography primitives with <Strong>strong text</Strong>, inline <Code>code</Code>, and <TextLink href="#">links</TextLink>.
+      GothamUI now includes typography primitives with <Strong>strong text</Strong>, inline <Code>code</Code>, and <TextLink href="#">links</TextLink>.
     </Text>
   )
 };

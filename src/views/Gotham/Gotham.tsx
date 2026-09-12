@@ -4,7 +4,9 @@
  */
 
 import {useEffect} from 'react';
+
 import {GothamProvider} from './GothamProvider.js';
+
 import type {FC, ReactNode} from 'react';
 import type {GothamConfiguration, GothamStatus} from './GothamProvider.js';
 
@@ -56,7 +58,9 @@ export const onKeyUp = (event) => {
   }
 };
 
-export const Gotham: FC<GothamProps> = ({config = {}}) => {
+const emptyConfig: GothamConfiguration = {};
+
+export const Gotham: FC<GothamProps> = ({config = emptyConfig}) => {
   useEffect(() => {
     document.body.addEventListener('keyup', onKeyUp);
 

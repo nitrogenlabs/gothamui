@@ -1,5 +1,6 @@
 import {ListboxOption} from '@headlessui/react';
 import {Check} from 'lucide-react';
+import {memo} from 'react';
 
 import {Svg} from '../Svg/Svg.js';
 
@@ -14,11 +15,11 @@ export type SelectFieldOption = {
 export type SelectOptionProps = {
   readonly option: SelectFieldOption;
 };
-export const SelectOption = ({option}: SelectOptionProps) => (
+const SelectOptionComponent = ({option}: SelectOptionProps) => (
   <ListboxOption
+    className="group relative cursor-default py-2 pr-9 pl-3 text-gray-900 select-none data-focus:bg-indigo-600 data-focus:text-white data-focus:outline-hidden"
     key={option.id || option.label}
     value={String(option.value)}
-    className="group relative cursor-default py-2 pr-9 pl-3 text-gray-900 select-none data-focus:bg-indigo-600 data-focus:text-white data-focus:outline-hidden"
   >
     <div className="flex items-center">
       {option.icon && <Svg className="size-5 shrink-0 rounded-full" name={option.icon} />}
@@ -31,3 +32,6 @@ export const SelectOption = ({option}: SelectOptionProps) => (
     </span>
   </ListboxOption>
 );
+
+export const SelectOption = memo(SelectOptionComponent);
+SelectOption.displayName = 'SelectOption';

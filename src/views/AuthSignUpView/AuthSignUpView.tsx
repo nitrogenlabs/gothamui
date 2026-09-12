@@ -1,4 +1,5 @@
 import {cn} from '@nlabs/utils';
+import {memo} from 'react';
 import {z} from 'zod';
 
 import {Button} from '../../components/Button/Button.js';
@@ -40,7 +41,7 @@ const authSignUpSchema = z.object({
   path: ['confirmPassword']
 });
 
-export const AuthSignUpView = ({
+const AuthSignUpViewComponent = ({
   cardClassName,
   cardDescription = 'Use your email and create a secure password.',
   cardHeaderClassName,
@@ -141,3 +142,6 @@ export const AuthSignUpView = ({
     ) : null}
   </AuthView>
 );
+
+export const AuthSignUpView = memo(AuthSignUpViewComponent);
+AuthSignUpView.displayName = 'AuthSignUpView';
