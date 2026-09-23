@@ -1,4 +1,3 @@
-import React from 'react';
 
 import {interactWithCanvas} from '../../utils/storyInteractions.js';
 import {DropUpload} from './DropUpload.js';
@@ -51,4 +50,17 @@ export const Default: Story = {
     transformImages: false
   },
   play: interactWithCanvas
+};
+
+export const PasteImage: Story = {
+  args: {
+    accept: 'image/*',
+    browseLabel: 'Browse files',
+    helperText: 'PNG, JPG, or WebP up to 5 MB. Copy an image, then choose Paste image.',
+    label: 'Drop an image here',
+    maxFileSize: 5_000_000,
+    maxFiles: 1,
+    multiple: false,
+    showPasteButton: true
+  }
 };

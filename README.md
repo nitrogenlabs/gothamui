@@ -426,7 +426,50 @@ import {Markdown} from '@nlabs/gothamui';
 />
 ```
 
+### Image Upload and Paste
+
+`DropUpload` includes a **Paste image** button next to the file browser. Pasted
+images use the same `accept`, `maxFileSize`, `maxFiles`, resizing, preview, and
+`onFilesChange` behavior as selected or dropped files.
+
+```tsx
+<DropUpload
+  accept="image/*"
+  browseLabel="Browse files"
+  label="Drop an image here"
+  maxFileSize={5_000_000}
+  multiple={false}
+  onFilesChange={handleFilesChange}
+/>
+```
+
+Use `pasteLabel` to customize the button text, or `showPasteButton={false}` to
+hide it. Clipboard reading requires HTTPS (or localhost) and may prompt for
+permission. If access is unavailable or denied, focus the uploader or one of
+its buttons and press Ctrl+V / ⌘V instead. Keyboard paste works independently of
+the button and respects a custom `onPaste` handler calling `preventDefault()`.
+Text and image URLs are not converted into image files.
+
 ### Code Editor
+
+Monaco 0.56.0 pins DOMPurify to vulnerable version 3.4.8. Until Monaco updates
+that dependency, merge this override into your application's root `package.json`,
+then run `npm install` and `npm audit`:
+
+```json
+{
+  "overrides": {
+    "monaco-editor": {
+      "dompurify": "^3.4.15"
+    }
+  }
+}
+```
+
+GothamUI applies this override for its own development, but npm does not inherit
+overrides from installed libraries. Applications need the override even when
+they do not import the editor, because Monaco is a package dependency. This
+updates the npm dependency tree; it does not update a separately CDN-loaded Monaco.
 
 `CodeEditor` is GothamUI's shared Monaco editor integration. Import it from the dedicated editor entry point so applications that do not use Monaco keep it out of their normal component imports:
 

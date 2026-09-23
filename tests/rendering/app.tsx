@@ -1,9 +1,10 @@
 import i18n from 'i18next';
-import {initReactI18next} from 'react-i18next';
 import {useState} from 'react';
 import {createRoot} from 'react-dom/client';
+import {initReactI18next} from 'react-i18next';
 
 import {Checkbox} from '../../src/components/Checkbox/Checkbox.js';
+import {DropUpload} from '../../src/components/DropUpload/DropUpload.js';
 import {Form} from '../../src/components/Form/Form.js';
 import {Markdown} from '../../src/components/Markdown/Markdown.js';
 import {SelectField} from '../../src/components/SelectField/SelectField.js';
@@ -27,6 +28,7 @@ const App = () => {
       </>}
     </Form>
     <Markdown content="## Preview" />
+    <DropUpload accept="image/*" browseLabel="Browse images" />
     <output aria-label="Submission">{submission}</output>
   </>;
 };

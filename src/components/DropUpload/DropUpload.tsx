@@ -1,6 +1,7 @@
 import {cn} from '@nlabs/utils';
-import {FileImage, UploadCloud, X} from 'lucide-react';
-import {memo,
+import {Clipboard, FileImage, UploadCloud, X} from 'lucide-react';
+import {
+  memo,
   useCallback,
   useEffect,
   useId,
@@ -11,9 +12,9 @@ import {memo,
 
 import type {
   ChangeEvent,
+  ClipboardEvent,
   DragEvent,
   HTMLAttributes,
-  KeyboardEvent,
   ReactNode,
   Ref
 } from 'react';
@@ -49,8 +50,10 @@ export interface DropUploadProps extends Omit<HTMLAttributes<HTMLDivElement>, 'o
   readonly multiple?: boolean;
   readonly onFilesChange?: (files: File[], items: DropUploadItem[]) => void;
   readonly onReject?: (rejections: DropUploadRejection[]) => void;
+  readonly pasteLabel?: string;
   readonly previewClassName?: string;
   readonly ref?: Ref<HTMLDivElement>;
+  readonly showPasteButton?: boolean;
   readonly showPreviews?: boolean;
   readonly transformImages?: boolean;
 }
@@ -181,9 +184,12 @@ const DropUploadComponent = ({
   maxFiles = Number.POSITIVE_INFINITY,
   multiple = true,
   onFilesChange,
+  onPaste,
   onReject,
+  pasteLabel = 'Paste image',
   previewClassName,
   ref,
+  showPasteButton = true,
   showPreviews = true,
   transformImages = true,
   ...props
@@ -191,6 +197,9 @@ const DropUploadComponent = ({
   const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const itemsRef = useRef<DropUploadItem[]>([]);
+  const pasteInProgress = useRef(false);
+  const [isPasting, setIsPasting] = useState(false);
+  const [pasteMessage, setPasteMessage] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [internalItems, setInternalItems] = useState<DropUploadItem[]>(() => filesToItems(defaultFiles));
   const isControlled = Array.isArray(files);
@@ -235,7 +244,7 @@ const DropUploadComponent = ({
     const currentItems = multiple ? items : [];
     const acceptedFiles: File[] = [];
     const rejections: DropUploadRejection[] = [];
-    const remainingSlots = Math.max(0, maxFiles - currentItems.length);
+    const remainingSlots = Math.max(0, Math.min(maxFiles, multiple ? Number.POSITIVE_INFINITY : 1) - currentItems.length);
 
     incomingFiles.forEach((file) => {
       if(acceptedFiles.length >= remainingSlots) {
@@ -295,6 +304,9 @@ const DropUploadComponent = ({
     updateItems
   ]);
 
+  const latestAddFiles = useRef(addFiles);
+  latestAddFiles.current = addFiles;
+
   const onInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
     await addFiles(Array.from(event.target.files || []));
     event.target.value = '';
@@ -319,10 +331,69 @@ const DropUploadComponent = ({
     await addFiles(Array.from(event.dataTransfer.files || []));
   };
 
-  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if(event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      inputRef.current?.click();
+  const pasteImages = async () => {
+    if(disabled || pasteInProgress.current) {
+      return;
+    }
+
+    setPasteMessage('');
+
+    if(!navigator.clipboard?.read) {
+      setPasteMessage('Clipboard access is unavailable. Focus this uploader and press Ctrl+V or ⌘V to paste an image.');
+      return;
+    }
+
+    pasteInProgress.current = true;
+    setIsPasting(true);
+
+    try {
+      const clipboardItems = await navigator.clipboard.read();
+      const pastedFiles: File[] = [];
+
+      for(const item of clipboardItems) {
+        const type = item.types.find((mimeType) => mimeType.startsWith('image/'));
+
+        if(type) {
+          const blob = await item.getType(type);
+          const extension = type === 'image/jpeg' ? 'jpg' : type.slice(6).replace('+xml', '');
+          pastedFiles.push(new File([blob], `clipboard-image-${pastedFiles.length + 1}.${extension}`, {type}));
+        }
+      }
+
+      if(!pastedFiles.length) {
+        setPasteMessage('No image found in the clipboard. Copy an image and try again.');
+        return;
+      }
+
+      await latestAddFiles.current(pastedFiles);
+    } catch{
+      setPasteMessage('Could not paste the image. Focus this uploader and press Ctrl+V or ⌘V, or browse for a file.');
+    } finally {
+      pasteInProgress.current = false;
+      setIsPasting(false);
+    }
+  };
+
+  const onClipboardPaste = async (event: ClipboardEvent<HTMLDivElement>) => {
+    onPaste?.(event);
+
+    if(event.defaultPrevented || disabled || pasteInProgress.current) {
+      return;
+    }
+
+    const pastedFiles = Array.from(event.clipboardData.files).filter((file) => file.type.startsWith('image/'));
+
+    if(!pastedFiles.length) {
+      return;
+    }
+
+    event.preventDefault();
+    setPasteMessage('');
+
+    try {
+      await addFiles(pastedFiles);
+    } catch{
+      setPasteMessage('Could not process the pasted image. Try another image or browse for a file.');
     }
   };
 
@@ -331,39 +402,56 @@ const DropUploadComponent = ({
   };
 
   return (
-    <div className={cn('flex w-full flex-col gap-4', className)} ref={ref} {...props}>
+    <div className={cn('flex w-full flex-col gap-4', className)} onPaste={onClipboardPaste} ref={ref} {...props}>
       <div
         aria-disabled={disabled}
         className={cn(
-          'group relative flex min-h-44 w-full cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-border bg-transparent px-6 py-8 text-center transition-colors',
+          'group relative flex min-h-44 w-full flex-col items-center justify-center rounded-xl border border-dashed border-border bg-transparent px-6 py-8 text-center transition-colors',
           'focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/30',
           'hover:border-primary/70 hover:bg-primary/5',
           disabled && 'cursor-not-allowed opacity-50',
           isDragging && 'border-primary bg-primary/10'
         )}
-        onClick={() => inputRef.current?.click()}
         onDragLeave={onDragLeave}
         onDragOver={onDragOver}
         onDrop={onDrop}
-        onKeyDown={onKeyDown}
-        role="button"
+        role="group"
         tabIndex={disabled ? -1 : 0}>
         <input
           accept={accept}
+          aria-label={browseLabel}
           className="sr-only"
           disabled={disabled}
           id={inputId}
           multiple={multiple}
           onChange={onInputChange}
           ref={inputRef}
+          tabIndex={-1}
           type="file"
         />
         <UploadCloud aria-hidden="true" className="mb-4 size-10 text-muted-foreground transition-colors group-hover:text-primary" />
         <div className="text-sm font-medium text-foreground">
           <span>{label} </span>
-          <label className="cursor-pointer text-primary underline-offset-4 hover:underline" htmlFor={inputId}>
+        </div>
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
+          <button
+            className="rounded-lg bg-primary px-4 py-2 text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={disabled}
+            onClick={() => inputRef.current?.click()}
+            type="button">
             {browseLabel}
-          </label>
+          </button>
+          {showPasteButton && (
+            <button
+              aria-busy={isPasting}
+              className="inline-flex items-center gap-2 rounded-lg border border-primary px-4 py-2 text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={disabled || isPasting}
+              onClick={pasteImages}
+              type="button">
+              <Clipboard aria-hidden="true" className="size-4" />
+              {pasteLabel}
+            </button>
+          )}
         </div>
         {helperText && (
           <div className="mt-2 text-sm text-muted-foreground">
@@ -371,6 +459,7 @@ const DropUploadComponent = ({
           </div>
         )}
       </div>
+      <div aria-live="polite" className="text-sm text-muted-foreground" role="status">{pasteMessage}</div>
 
       {showPreviews && !!items.length && (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
