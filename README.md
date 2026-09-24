@@ -420,7 +420,7 @@ dismissal, and a damped spring animation. It opens from the right by default;
 set `side="left"` to open from the left. Reduced-motion preferences skip the animation.
 
 ```tsx
-import {Drawer} from '@nlabs/gothamui/components';
+import {DialogTitle, Drawer} from '@nlabs/gothamui/components';
 import {useState} from 'react';
 
 export const ProjectDetails = () => {
@@ -429,9 +429,9 @@ export const ProjectDetails = () => {
   return (
     <>
       <button onClick={() => setOpen(true)} type="button">View project</button>
-      <Drawer aria-labelledby="project-drawer-title" onClose={setOpen} open={open}>
+      <Drawer onClose={setOpen} open={open}>
         <header className="flex items-center justify-between border-b p-6">
-          <h2 id="project-drawer-title">Project details</h2>
+          <DialogTitle>Project details</DialogTitle>
           <button onClick={() => setOpen(false)} type="button">Close</button>
         </header>
         <div className="min-h-0 flex-1 overflow-y-auto p-6">
@@ -456,7 +456,7 @@ export const ProjectDetails = () => {
 Keep `<Drawer>` mounted while `open` changes; wrapping it in `{open && ...}`
 removes the exit animation and prevents `onAfterClose` from running. Keep selected
 content until that callback if it should remain visible during the exit.
-Provide an accessible name through `aria-label` or `aria-labelledby`, as above.
+Include a `DialogTitle` child to give the dialog an accessible name, as above.
 Panel HTML attributes and `style` are supported; the component owns its transform
 for animation. The default panel is full height, full width up to `max-w-lg`;
 give long content its own scrollable body. See the [Drawer notes](src/components/Drawer/README.md).
