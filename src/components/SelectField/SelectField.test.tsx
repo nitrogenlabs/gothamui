@@ -40,6 +40,30 @@ describe('SelectField', () => {
     expect(screen.getAllByText('Published')).toHaveLength(2);
   });
 
+  it('supports controlled changes without replacing the supplied value', () => {
+    const onChange = vi.fn();
+    const {container, rerender} = render(<SelectField label="Status" name="status" onChange={onChange} options={options} value="draft" />);
+    fireEvent.change(container.querySelector('select')!, {target: {value: 'published'}});
+
+    expect(onChange).toHaveBeenCalledWith('published');
+    expect(container.querySelector('select')).toHaveValue('draft');
+
+    rerender(<SelectField disabled label="Status" name="status" onChange={onChange} options={options} value="published" />);
+
+    expect(screen.getByRole('button', {name: /Status/})).toBeDisabled();
+    expect(container.querySelector('select')).toHaveValue('published');
+  });
+
+  it('validates required selections before form submission', () => {
+    const {container} = render(<form><SelectField label="Status" name="status" options={[{label: 'Choose', value: ''}, ...options]} required /></form>);
+
+    expect(container.querySelector('form')?.checkValidity()).toBe(false);
+
+    fireEvent.change(container.querySelector('select')!, {target: {value: 'draft'}});
+
+    expect(container.querySelector('form')?.checkValidity()).toBe(true);
+  });
+
   it('renders native select on mobile', () => {
     vi.mocked(window.matchMedia).mockReturnValue({
       addEventListener: vi.fn(),
@@ -54,7 +78,8 @@ describe('SelectField', () => {
 
     render(<SelectField defaultValue="draft" label="Status" name="status" options={options} />);
 
-    const select = screen.getByRole('combobox');
+    const select = screen.getByRole('combobox', {name: 'Status'});
+
     expect(within(select).getByRole('option', {name: 'Draft'})).toBeInTheDocument();
   });
 });

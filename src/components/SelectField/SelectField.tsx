@@ -3,7 +3,7 @@
 import {Label, Listbox, ListboxButton, ListboxOptions} from '@headlessui/react';
 import {cn} from '@nlabs/utils';
 import {ChevronDown} from 'lucide-react';
-import {memo, useMemo, useState} from 'react';
+import {memo, useId, useMemo, useRef, useState} from 'react';
 
 import {useIsMobile} from '../../hooks/useIsMobile.js';
 import {getBackgroundClasses, getOutlineClasses, getTextClasses} from '../../utils/colorUtils.js';
@@ -12,7 +12,7 @@ import {InputBorderType, getInputBorderClass} from '../InputField/InputField.js'
 import {Svg} from '../Svg/Svg.js';
 import {SelectFieldOption, SelectOption} from './SelectOption.js';
 
-import type {FC} from 'react';
+import type {ReactElement} from 'react';
 import type {GothamColor} from '../../utils/colorUtils.js';
 
 export type SelectFieldProps = {
@@ -22,35 +22,48 @@ export type SelectFieldProps = {
   readonly className?: string;
   readonly color?: GothamColor;
   readonly defaultValue?: string;
+  readonly disabled?: boolean;
+  readonly id?: string;
   readonly label?: string;
   readonly labelColor?: GothamColor;
   readonly labelClass?: string;
   readonly name: string;
+  readonly onChange?: (value: string) => void;
   readonly options: SelectFieldOption[];
+  readonly required?: boolean;
   readonly showChevron?: boolean;
+  readonly value?: string;
 };
 
-const SelectFieldComponent: FC<SelectFieldProps> = ({
+const SelectFieldComponent = ({
   backgroundColor = 'transparent',
   borderColor = 'black',
   borderType = 'solid',
   className = 'cursor-default grid outline-1 w-full grid-cols-1 rounded-md px-3.5 py-2 text-left sm:text-sm/6',
   color = 'primary',
   defaultValue,
+  disabled = false,
+  id,
   label,
   labelClass,
   labelColor = 'neutral',
   name,
+  onChange: onValueChange,
   options,
-  showChevron = true
-}) => {
+  required = false,
+  showChevron = true,
+  value
+}: SelectFieldProps): ReactElement => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const generatedId = useId();
+  const fieldId = id || generatedId;
   const isMobile = useIsMobile();
   const form = useGothamFormField(name);
   const [localValue, setLocalValue] = useState(defaultValue ?? '');
-  const fieldValue = form?.value ?? localValue;
+  const fieldValue = value ?? form?.value ?? localValue;
   const normalizedFieldValue = fieldValue === undefined || fieldValue === null ? '' : String(fieldValue);
   const selectClasses = useMemo(() => cn(
-    'flex relative w-full',
+    'flex relative w-full min-h-11 items-center justify-between px-3.5 py-2 text-left',
     getInputBorderClass(borderType, borderColor, color, 'transparent'), className), [borderType, borderColor, color, className]
   );
   const nativeSelectClasses = useMemo(() => cn(
@@ -77,46 +90,61 @@ const SelectFieldComponent: FC<SelectFieldProps> = ({
     [normalizedFieldValue, options]
   );
 
-  const onChange = (value: string) => {
-    if(!form) {
-      setLocalValue(String(value));
+  const onChange = (nextValue: string) => {
+    if(disabled) {
+      return;
     }
-    form?.setValue(name, String(value));
+    if(!form && value === undefined) {
+      setLocalValue(String(nextValue));
+    }
+    form?.setValue(name, String(nextValue));
     form?.clearError(name);
+    onValueChange?.(String(nextValue));
   };
 
   return isMobile ? (
-    <div className="relative w-full">
-      <select
-        className={nativeSelectClasses}
-        name={name}
-        onChange={(event) => onChange(event.target.value)}
-        value={normalizedFieldValue}>
-        {options.map((option) => (
-          <option key={option.id} value={String(option.value)}>{option.label}</option>
-        ))}
-      </select>
-      {showChevron ? (
-        <ChevronDown
-          aria-hidden="true"
-          className={cn('pointer-events-none absolute right-3 top-1/2 size-5 -translate-y-1/2', getTextClasses(color))}
-        />
-      ) : null}
+    <div className="w-full">
+      {label && <label className={labelClasses} htmlFor={fieldId}>{label}</label>}
+      <div className="relative w-full">
+        <select
+          className={nativeSelectClasses}
+          disabled={disabled}
+          id={fieldId}
+          name={name}
+          onChange={(event) => onChange(event.target.value)}
+          required={required}
+          value={normalizedFieldValue}>
+          {options.map((option) => (
+            <option key={option.id} value={String(option.value)}>{option.label}</option>
+          ))}
+        </select>
+        {showChevron ? (
+          <ChevronDown
+            aria-hidden="true"
+            className={cn('pointer-events-none absolute right-3 top-1/2 size-5 -translate-y-1/2', getTextClasses(color))}
+          />
+        ) : null}
+      </div>
     </div>
   ) : (
     <div className="flex flex-col w-full">
-      <Listbox onChange={onChange} value={normalizedFieldValue}>
+      <Listbox disabled={disabled} onChange={onChange} value={normalizedFieldValue}>
         <Label className={labelClasses}>
           {label}
         </Label>
-        <select hidden name={name} onChange={(event) => onChange(event.target.value)} value={normalizedFieldValue}>
+        <select
+          aria-hidden="true" className="sr-only" disabled={disabled} name={name}
+          onChange={(event) => onChange(event.target.value)} onInvalid={(event) => {
+            event.preventDefault();
+            buttonRef.current?.focus();
+          }} required={required} tabIndex={-1} value={normalizedFieldValue}>
           {options.map((option) => (
             <option key={option.id} value={String(option.value)}>{option.label}</option>
           ))}
         </select>
         <div className={cn('flex flex-col relative w-full', {'mt-2': label})}>
-          <ListboxButton className={selectClasses}>
-            <span className="col-start-1 row-start-1 flex items-center gap-3 pr-6">
+          <ListboxButton aria-required={required || undefined} className={selectClasses} id={fieldId} ref={buttonRef}>
+            <span className="col-start-1 row-start-1 flex min-w-0 items-center gap-3 pr-6">
               {selected?.image && <img alt="" className="size-5 shrink-0 rounded-full" src={selected.image} />}
               {selected?.icon && <Svg className="size-5 shrink-0 rounded-full" name={selected.icon} />}
               <span className="block truncate">{selected?.label}&nbsp;</span>

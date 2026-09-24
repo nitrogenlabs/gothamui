@@ -413,6 +413,54 @@ import { Button, Notify, Loader } from '@nlabs/gothamui';
 <Loader size="md" />
 ```
 
+### Drawer
+
+`Drawer` is a controlled modal side panel with focus trapping, Escape and backdrop
+dismissal, and a damped spring animation. It opens from the right by default;
+set `side="left"` to open from the left. Reduced-motion preferences skip the animation.
+
+```tsx
+import {Drawer} from '@nlabs/gothamui/components';
+import {useState} from 'react';
+
+export const ProjectDetails = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setOpen(true)} type="button">View project</button>
+      <Drawer aria-labelledby="project-drawer-title" onClose={setOpen} open={open}>
+        <header className="flex items-center justify-between border-b p-6">
+          <h2 id="project-drawer-title">Project details</h2>
+          <button onClick={() => setOpen(false)} type="button">Close</button>
+        </header>
+        <div className="min-h-0 flex-1 overflow-y-auto p-6">
+          <p>Review the project without leaving this page.</p>
+        </div>
+      </Drawer>
+    </>
+  );
+};
+```
+
+| Prop | Type / default | Purpose |
+| --- | --- | --- |
+| `open` | `boolean`, required | Controls visibility. |
+| `onClose` | `(open: boolean) => void`, required | Receives dismissal requests; update your state to close. |
+| `side` | `'left' \| 'right'`, default `'right'` | Selects the screen edge. |
+| `onAfterClose` | `() => void` | Runs after the exit settles, useful for clearing selected content. |
+| `className` | `string` | Customizes the panel, such as `max-w-xl` for a wider drawer. |
+| `backdropClassName` | `string` | Customizes the backdrop. |
+| `children` | `ReactNode` | Supplies the header, body, and actions. |
+
+Keep `<Drawer>` mounted while `open` changes; wrapping it in `{open && ...}`
+removes the exit animation and prevents `onAfterClose` from running. Keep selected
+content until that callback if it should remain visible during the exit.
+Provide an accessible name through `aria-label` or `aria-labelledby`, as above.
+Panel HTML attributes and `style` are supported; the component owns its transform
+for animation. The default panel is full height, full width up to `max-w-lg`;
+give long content its own scrollable body. See the [Drawer notes](src/components/Drawer/README.md).
+
 ### Markdown
 
 `Markdown` is a lightweight wrapper around `react-markdown` for rendering inline or remote Markdown with optional template values:
@@ -809,3 +857,7 @@ Lex will automatically process this CSS file and include it in your build output
 ## License
 
 GothamUI is [MIT licensed](./LICENSE).
+
+### Controlled selectors
+
+`SelectField` supports `value` and `onChange(value)` alongside Gotham form context and uncontrolled `defaultValue`. Pass `label` for accessible desktop and mobile controls, `disabled` while updating, and `required` for native form validation. Base spacing is retained when a custom `className` is supplied. Desktop uses the keyboard-accessible listbox; mobile uses a labeled native selector.

@@ -13,6 +13,7 @@ export * from './Dialog/Dialog.js';
 export * from './DateField/DateField.js';
 export * from './DateField/DatePicker.js';
 export * from './DescriptionList/DescriptionList.js';
+export * from './Drawer/Drawer.js';
 export * from './DropUpload/DropUpload.js';
 export * from './EmptyState/EmptyState.js';
 export * from './Empty/Empty.js';
