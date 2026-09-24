@@ -55,7 +55,7 @@ const TabsComponent = ({
             {items.map((item) => {
               const current = item.id === currentItem?.id || item.label === currentItem?.label;
               const commonClasses = cn(
-                'whitespace-nowrap text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50',
+                'cursor-pointer whitespace-nowrap text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50',
                 variant === 'underline' ? 'border-b-2 px-1 py-4' : 'rounded-md px-3 py-2',
                 getTabClasses(current, variant)
               );
@@ -107,7 +107,7 @@ const MobileTabSelect = ({
 }: MobileTabSelectProps) => (
   <div className="grid grid-cols-1 sm:hidden">
     <select
-      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-card py-2 pr-8 pl-3 text-base text-card-foreground outline-1 -outline-offset-1 outline-border focus:outline-2 focus:-outline-offset-2 focus:outline-ring dark:bg-card-dark dark:text-card-foreground-dark dark:outline-border-dark dark:focus:outline-ring-dark"
+      className="col-start-1 row-start-1 w-full cursor-pointer appearance-none rounded-md bg-card py-2 pr-8 pl-3 text-base text-card-foreground outline-1 -outline-offset-1 outline-border focus:outline-2 focus:-outline-offset-2 focus:outline-ring dark:bg-card-dark dark:text-card-foreground-dark dark:outline-border-dark dark:focus:outline-ring-dark"
       defaultValue={currentItem?.id ?? currentItem?.label}
       onChange={(event) => {
         const nextItem = items.find((item) => (item.id ?? item.label) === event.currentTarget.value);

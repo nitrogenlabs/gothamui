@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./chat.css";
+@import "./interactions.css";
 @source "../**/*.{js,jsx,ts,tsx}";
 
 @custom-variant dark (&:where(.dark, .dark *));

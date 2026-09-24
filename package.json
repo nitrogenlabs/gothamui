@@ -65,6 +65,9 @@
     },
     "./styles/tailwind.css": {
       "default": "./lib/styles/tailwind.css"
+    },
+    "./styles/interactions.css": {
+      "default": "./lib/styles/interactions.css"
     }
   },
   "keywords": [

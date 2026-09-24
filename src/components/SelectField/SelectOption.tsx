@@ -17,7 +17,7 @@ export type SelectOptionProps = {
 };
 const SelectOptionComponent = ({option}: SelectOptionProps) => (
   <ListboxOption
-    className="group relative cursor-default py-2 pr-9 pl-3 text-gray-900 select-none data-focus:bg-indigo-600 data-focus:text-white data-focus:outline-hidden"
+    className="group relative cursor-pointer disabled:cursor-not-allowed py-2 pr-9 pl-3 text-gray-900 select-none data-focus:bg-indigo-600 data-focus:text-white data-focus:outline-hidden"
     key={option.id || option.label}
     value={String(option.value)}
   >

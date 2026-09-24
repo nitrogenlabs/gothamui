@@ -20,6 +20,7 @@ describe('Tabs', () => {
 
     expect(screen.getByRole('button', {name: 'Team'})).toHaveAttribute('aria-current', 'page');
     expect(onTabChange).toHaveBeenCalledWith(items[2]);
+    expect(screen.getByRole('button', {name: 'Billing'})).toHaveClass('cursor-pointer');
   });
 
   it('renders pill links and disabled tabs', () => {

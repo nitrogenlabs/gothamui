@@ -39,7 +39,7 @@ const SelectFieldComponent = ({
   backgroundColor = 'transparent',
   borderColor = 'black',
   borderType = 'solid',
-  className = 'cursor-default grid outline-1 w-full grid-cols-1 rounded-md px-3.5 py-2 text-left sm:text-sm/6',
+  className = 'cursor-pointer disabled:cursor-not-allowed grid outline-1 w-full grid-cols-1 rounded-md px-3.5 py-2 text-left sm:text-sm/6',
   color = 'primary',
   defaultValue,
   disabled = false,
