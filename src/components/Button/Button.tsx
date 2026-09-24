@@ -67,13 +67,13 @@ export const Button = ({
   const resolvedLabelColor = labelColor ?? (normalizedVariant === 'solid' ? 'white' : color);
   const resolvedBorderColor = normalizedVariant === 'outline' ? resolvedLabelColor : resolvedBackgroundColor;
   const classes: string[] = [
+    'cursor-pointer',
     'disabled:pointer-events-none',
     'disabled:opacity-50'
   ];
 
   if(variant) {
     classes.push(...[
-      'cursor-pointer',
       'flex',
       'focus-visible:outline',
       'focus-visible:outline-2',

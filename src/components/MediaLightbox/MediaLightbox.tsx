@@ -50,7 +50,7 @@ export const MediaLightboxNavButton: FC<{readonly direction: LightboxNavDirectio
   return (
     <button
       aria-label={label}
-      className={cn('yarl__button', `yarl__navigation_${direction}`)}
+      className={cn('cursor-pointer yarl__button', `yarl__navigation_${direction}`)}
       disabled={disabled}
       onClick={() => onClick()}
       type="button">

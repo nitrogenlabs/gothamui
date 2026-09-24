@@ -140,11 +140,11 @@ export const DatePicker: FC<DatePickerProps> = ({
 
     days.push(
       <button
-        className={`h-7 w-7 text-sm rounded-full flex items-center justify-center ${
+        className={`cursor-pointer h-7 w-7 text-sm rounded-full flex items-center justify-center ${
           isSelected
             ? 'bg-blue-500 text-white'
             : isDisabled
-              ? 'text-gray-300 cursor-not-allowed'
+              ? 'text-gray-300 disabled:cursor-not-allowed'
               : 'hover:bg-gray-200'
         }`}
         disabled={isDisabled}
@@ -162,14 +162,14 @@ export const DatePicker: FC<DatePickerProps> = ({
     <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-3">
       <div className="flex justify-between items-center mb-2">
         <button
-          className="p-1 rounded-full hover:bg-gray-200 text-sm"
+          className="cursor-pointer p-1 rounded-full hover:bg-gray-200 text-sm"
           onClick={handlePrevMonth}
         >
           &lt;
         </button>
         <div className="flex space-x-1">
           <select
-            className="border border-gray-300 rounded px-1.5 py-0.5 text-sm"
+            className="cursor-pointer border border-gray-300 rounded px-1.5 py-0.5 text-sm"
             onChange={handleMonthChange}
             value={currentMonth}
           >
@@ -204,7 +204,7 @@ export const DatePicker: FC<DatePickerProps> = ({
           </div>
         </div>
         <button
-          className="p-1 rounded-full hover:bg-gray-200 text-sm"
+          className="cursor-pointer p-1 rounded-full hover:bg-gray-200 text-sm"
           onClick={handleNextMonth}
         >
           &gt;

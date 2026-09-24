@@ -98,13 +98,13 @@ const NotFoundContent = ({
     </p>
     <div className={cn('mt-10 flex flex-wrap items-center gap-x-6 gap-y-3', center && 'justify-center')}>
       <a
-        className="inline-flex items-center rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-primary-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:bg-primary-dark dark:hover:bg-primary-dark-300"
+        className="cursor-pointer inline-flex items-center rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-primary-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:bg-primary-dark dark:hover:bg-primary-dark-300"
         href={homeHref}
       >
         {homeLabel}
       </a>
       {supportHref ? (
-        <a className="inline-flex items-center gap-1 text-sm font-semibold text-gray-900 dark:text-white" href={supportHref}>
+        <a className="cursor-pointer inline-flex items-center gap-1 text-sm font-semibold text-gray-900 dark:text-white" href={supportHref}>
           {supportLabel}
           <ArrowRight aria-hidden="true" className="size-4" />
         </a>
@@ -130,7 +130,7 @@ const PopularLinks = ({links}: {readonly links: readonly NotFoundLink[]}) => (
             </div>
             <div className="flex-auto">
               <h3 className="text-sm/6 font-semibold text-gray-900 dark:text-white">
-                <a href={link.href}>
+                <a className="cursor-pointer" href={link.href}>
                   <span aria-hidden="true" className="absolute inset-0" />
                   {link.label}
                 </a>
@@ -182,7 +182,7 @@ export const NotFound = ({
           <h1 className="mt-4 text-5xl font-semibold tracking-tight text-balance text-white sm:text-7xl">{title}</h1>
           <p className="mt-6 text-lg font-medium text-pretty text-white/70 sm:text-xl/8">{description}</p>
           <div className="mt-10 flex justify-center">
-            <a className="inline-flex items-center gap-1 text-sm/7 font-semibold text-white hover:text-white/90" href={homeHref}>
+            <a className="cursor-pointer inline-flex items-center gap-1 text-sm/7 font-semibold text-white hover:text-white/90" href={homeHref}>
               <ArrowLeft aria-hidden="true" className="size-4" />
               {homeLabel}
             </a>
@@ -201,7 +201,7 @@ export const NotFound = ({
         {...props}
       >
         <header className="mx-auto w-full max-w-7xl px-6 pt-6 sm:pt-10 lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:px-8">
-          {logo ? <a href={homeHref}>{logo}</a> : null}
+          {logo ? <a className="cursor-pointer" href={homeHref}>{logo}</a> : null}
         </header>
         <main className="mx-auto flex w-full max-w-7xl items-center px-6 py-24 sm:py-32 lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:px-8">
           <div className="max-w-lg">
@@ -222,7 +222,7 @@ export const NotFound = ({
               {footerLinks.map((link, index) => (
                 <span className="contents" key={`${link.label}-${link.href}`}>
                   {index > 0 ? <span aria-hidden="true" className="size-0.5 rounded-full bg-gray-300 dark:bg-gray-600" /> : null}
-                  <a href={link.href}>{link.label}</a>
+                  <a className="cursor-pointer" href={link.href}>{link.label}</a>
                 </span>
               ))}
             </nav>
@@ -256,7 +256,7 @@ export const NotFound = ({
           </div>
           <PopularLinks links={links} />
           <div className="mt-10 flex justify-center">
-            <a className="inline-flex items-center gap-1 text-sm/6 font-semibold text-primary dark:text-primary-dark-300" href={homeHref}>
+            <a className="cursor-pointer inline-flex items-center gap-1 text-sm/6 font-semibold text-primary dark:text-primary-dark-300" href={homeHref}>
               <ArrowLeft aria-hidden="true" className="size-4" />
               {homeLabel}
             </a>
@@ -272,7 +272,7 @@ export const NotFound = ({
                   const Icon = item.icon;
 
                   return (
-                    <a className="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400" href={item.href} key={`${item.label}-${item.href}`}>
+                    <a className="cursor-pointer text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400" href={item.href} key={`${item.label}-${item.href}`}>
                       <span className="sr-only">{item.label}</span>
                       <Icon aria-hidden="true" className="size-6" />
                     </a>

@@ -49,7 +49,7 @@ export const PhotoMessage: FC<IPhotoMessageProps> = (props) => {
           })
         }}
       >
-        <img
+        <img className="cursor-pointer"
           src={props?.data?.uri}
           alt={props?.data?.alt}
           onClick={props.onOpen}
@@ -66,7 +66,7 @@ export const PhotoMessage: FC<IPhotoMessageProps> = (props) => {
         {!error && props?.data?.status && !props?.data?.status?.download && (
           <div className='rce-mbox-photo--img__block'>
             {!props?.data?.status.click && (
-              <button onClick={props.onDownload} className='rce-mbox-photo--img__block-item rce-mbox-photo--download'>
+              <button onClick={props.onDownload} className='cursor-pointer rce-mbox-photo--img__block-item rce-mbox-photo--download'>
                 <CloudDownloadIcon  />
               </button>
             )}

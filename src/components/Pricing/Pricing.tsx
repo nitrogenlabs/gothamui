@@ -407,12 +407,12 @@ const FrequencyToggle = ({
 
           return (
             <label
-              className={cn('relative rounded-full px-2.5 py-1 transition-colors', frequencyItemClasses[tone], checked && 'text-white')}
+              className={cn('cursor-pointer relative rounded-full px-2.5 py-1 transition-colors', frequencyItemClasses[tone], checked && 'text-white')}
               key={frequency.value}
             >
               <input
                 checked={checked}
-                className="sr-only"
+                className="cursor-pointer sr-only"
                 name="pricing-frequency"
                 onChange={() => onChange(frequency.value)}
                 type="radio"
@@ -509,7 +509,7 @@ const GridPricing = ({
                 <a
                   aria-describedby={tier.id}
                   className={cn(
-                    'mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm/6 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:focus-visible:outline-primary-dark-300',
+                    'cursor-pointer mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm/6 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:focus-visible:outline-primary-dark-300',
                     featured ? cardTokens.featuredCta : cardTokens.cta
                   )}
                   href={tier.href}
@@ -543,7 +543,7 @@ const GridPricing = ({
             </div>
             <a
               className={cn(
-                'rounded-md px-3.5 py-2 text-sm/6 font-semibold',
+                'cursor-pointer rounded-md px-3.5 py-2 text-sm/6 font-semibold',
                 tone === 'dark'
                   ? 'bg-white/10 text-white ring-1 ring-white/10 hover:bg-white/20'
                   : 'bg-white text-primary ring-1 ring-primary/20 hover:ring-primary/40 dark:bg-white/10 dark:text-white dark:ring-white/10 dark:hover:bg-white/20'
@@ -609,7 +609,7 @@ const SinglePricing = ({
             ) : null}
           </p>
           <a
-            className="mt-10 block w-full rounded-md bg-primary px-3 py-2 text-center text-sm font-semibold text-white hover:bg-primary-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:bg-primary-dark dark:hover:bg-primary-dark-300"
+            className="cursor-pointer mt-10 block w-full rounded-md bg-primary px-3 py-2 text-center text-sm font-semibold text-white hover:bg-primary-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:bg-primary-dark dark:hover:bg-primary-dark-300"
             href={singleOffer.ctaHref}
           >
             {singleOffer.ctaLabel}
@@ -693,7 +693,7 @@ const ComparisonPricing = ({
                       <a
                         aria-label={`${tier.ctaLabel} on the ${tier.name} plan`}
                         className={cn(
-                          'mt-8 inline-block rounded-md px-3.5 py-2 text-center text-sm/6 font-semibold',
+                          'cursor-pointer mt-8 inline-block rounded-md px-3.5 py-2 text-center text-sm/6 font-semibold',
                           featured ? cardTokens.featuredCta : cardTokens.cta
                         )}
                         href={tier.href}
@@ -741,7 +741,7 @@ const ComparisonPricing = ({
                       {tier.href && tier.ctaLabel ? (
                         <a
                           className={cn(
-                            'inline-block rounded-md px-2.5 py-1.5 text-sm font-semibold',
+                            'cursor-pointer inline-block rounded-md px-2.5 py-1.5 text-sm font-semibold',
                             tier.featured ? cardTokens.featuredCta : cardTokens.cta
                           )}
                           href={tier.href}
@@ -784,7 +784,7 @@ const ComparisonPricing = ({
               {tiers.map((tier) => (
                 <button
                   className={cn(
-                    'flex-1 border-b py-4 text-base/8 font-medium not-focus-visible:focus:outline-none',
+                    'cursor-pointer flex-1 border-b py-4 text-base/8 font-medium not-focus-visible:focus:outline-none',
                     activeMobileTier?.id === tier.id
                       ? 'border-primary text-primary dark:border-primary-dark-300 dark:text-primary-dark-300'
                       : 'border-transparent text-gray-500 dark:text-gray-400'
@@ -802,7 +802,7 @@ const ComparisonPricing = ({
                 {activeMobileTier.href && activeMobileTier.ctaLabel ? (
                   <a
                     className={cn(
-                      'block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold',
+                      'cursor-pointer block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold',
                       activeMobileTier.featured ? cardTokens.featuredCta : cardTokens.cta
                     )}
                     href={activeMobileTier.href}

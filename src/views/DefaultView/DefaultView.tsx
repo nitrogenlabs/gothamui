@@ -43,7 +43,7 @@ const DefaultViewComponent: React.FC<DefaultViewProps> = ({
               <button
                 aria-controls="mobile-menu"
                 aria-expanded={mobileOpen}
-                className="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                className="cursor-pointer inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                 onClick={handleDrawerToggle}
                 type="button"
               >
@@ -95,7 +95,7 @@ const DefaultViewComponent: React.FC<DefaultViewProps> = ({
               <div className="flex space-x-4">
                 {navItems.map(({label, path}) => (
                   <button
-                    className="text-white hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium"
+                    className="cursor-pointer text-white hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium"
                     key={path}
                     onClick={() => handleNavigation(path)}
                   >
@@ -115,7 +115,7 @@ const DefaultViewComponent: React.FC<DefaultViewProps> = ({
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navItems.map(({label, path}) => (
               <button
-                className="text-white hover:bg-indigo-500 block px-3 py-2 rounded-md text-base font-medium w-full text-left"
+                className="cursor-pointer text-white hover:bg-indigo-500 block px-3 py-2 rounded-md text-base font-medium w-full text-left"
                 key={path}
                 onClick={() => handleNavigation(path)}
               >

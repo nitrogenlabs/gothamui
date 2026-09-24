@@ -67,7 +67,7 @@ const CheckboxComponent = ({
               {...props}
               aria-describedby={descriptionId}
               checked={checked}
-              className={`${baseCheckboxClasses} ${optionClasses}`}
+              className={`cursor-pointer disabled:cursor-not-allowed ${baseCheckboxClasses} ${optionClasses}`}
               defaultChecked={checked === undefined ? Boolean(form?.defaultValue ?? defaultValue) : undefined}
               id={checkboxId}
               name={name}
@@ -100,7 +100,7 @@ const CheckboxComponent = ({
 
         <div className="text-sm/6">
           <label
-            className={`font-medium text-gray-900 ${labelClass}`}
+            className={cn('font-medium text-gray-900', props.disabled ? 'cursor-not-allowed' : 'cursor-pointer', labelClass)}
             htmlFor={checkboxId}
           >
             {label}

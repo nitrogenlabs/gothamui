@@ -76,7 +76,7 @@ const MenuViewComponent: FC<MenuViewProps> = () => {
           >
             <TransitionChild>
               <div className="absolute top-0 left-full flex w-16 justify-center pt-5 duration-300 ease-in-out data-closed:opacity-0">
-                <button className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)} type="button">
+                <button className="cursor-pointer -m-2.5 p-2.5" onClick={() => setSidebarOpen(false)} type="button">
                   <span className="sr-only">Close sidebar</span>
                   <X aria-hidden="true" className="size-6 text-white" />
                 </button>
@@ -97,7 +97,7 @@ const MenuViewComponent: FC<MenuViewProps> = () => {
                     <li key={item.name}>
                       <a
                         className={cn(
-                          item.current
+                          'cursor-pointer', item.current
                             ? 'bg-gray-800 text-white'
                             : 'text-gray-400 hover:bg-gray-800 hover:text-white',
                           'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold'
@@ -131,7 +131,7 @@ const MenuViewComponent: FC<MenuViewProps> = () => {
               <li key={item.name}>
                 <a
                   className={cn(
-                    item.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white',
+                    'cursor-pointer', item.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white',
                     'group flex gap-x-3 rounded-md p-3 text-sm/6 font-semibold'
                   )}
                   href={item.href}
@@ -147,7 +147,7 @@ const MenuViewComponent: FC<MenuViewProps> = () => {
 
       <div className="lg:pl-20">
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-xs sm:gap-x-6 sm:px-6 lg:px-8">
-          <button className="-m-2.5 p-2.5 text-gray-700 lg:hidden" onClick={() => setSidebarOpen(true)} type="button">
+          <button className="cursor-pointer -m-2.5 p-2.5 text-gray-700 lg:hidden" onClick={() => setSidebarOpen(true)} type="button">
             <span className="sr-only">Open sidebar</span>
             <Bars3 aria-hidden="true" className="size-6" />
           </button>
@@ -170,7 +170,7 @@ const MenuViewComponent: FC<MenuViewProps> = () => {
               />
             </form>
             <div className="flex items-center gap-x-4 lg:gap-x-6">
-              <button className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500" type="button">
+              <button className="cursor-pointer -m-2.5 p-2.5 text-gray-400 hover:text-gray-500" type="button">
                 <span className="sr-only">View notifications</span>
                 <Bell aria-hidden="true" className="size-6" />
               </button>
@@ -180,7 +180,7 @@ const MenuViewComponent: FC<MenuViewProps> = () => {
 
               {/* Profile dropdown */}
               <Menu as="div" className="relative">
-                <MenuButton className="-m-1.5 flex items-center p-1.5">
+                <MenuButton className="cursor-pointer -m-1.5 flex items-center p-1.5">
                   <span className="sr-only">Open user menu</span>
                   <img
                     alt=""
@@ -201,7 +201,7 @@ const MenuViewComponent: FC<MenuViewProps> = () => {
                   {userMenuItems?.map((item) => (
                     <MenuItem key={item.name}>
                       <a
-                        className="block px-3 py-1 text-sm/6 text-gray-900 data-focus:bg-gray-50 data-focus:outline-hidden"
+                        className="cursor-pointer block px-3 py-1 text-sm/6 text-gray-900 data-focus:bg-gray-50 data-focus:outline-hidden"
                         href={item.href}
                       >
                         {item.name}

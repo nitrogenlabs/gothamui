@@ -54,7 +54,7 @@ export const ProgressSteps = ({
         return (
           <li className="md:flex-1" key={step.id ?? step.label}>
             {step.href ? (
-              <a aria-current={step.status === 'current' ? 'step' : undefined} className={classes} href={step.href}>
+              <a aria-current={step.status === 'current' ? 'step' : undefined} className={cn('cursor-pointer', classes)} href={step.href}>
                 {content}
               </a>
             ) : (

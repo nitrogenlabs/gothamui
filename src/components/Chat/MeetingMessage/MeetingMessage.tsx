@@ -57,7 +57,7 @@ export const MeetingMessage: FC<IMeetingMessageProps> = ({
     <div className='rce-mbox-mtmg'>
       <div className='rce-mtmg'>
         <div className='rce-mtmg-subject'>{subject || 'Unknown Meeting'}</div>
-        <div className='rce-mtmg-body' onClick={onClick}>
+        <div className='cursor-pointer rce-mtmg-body' onClick={onClick}>
           <div className='rce-mtmg-item'>
             <Calendar04Icon  />
             <div className='rce-mtmg-content'>
@@ -84,7 +84,7 @@ export const MeetingMessage: FC<IMeetingMessageProps> = ({
             </div>
           )}
         </div>
-        <div className='rce-mtmg-body-bottom' onClick={toggleClick}>
+        <div className='cursor-pointer rce-mtmg-body-bottom' onClick={toggleClick}>
           {toogle === true ? (
             <div className='rce-mtmg-bottom--tptitle'>
               <ArrowDown01Icon  />
@@ -118,7 +118,7 @@ export const MeetingMessage: FC<IMeetingMessageProps> = ({
                     <div className='rce-mitem-body'>
                       <div className='rce-mitem-body--top'>
                         <div
-                          className='rce-mitem-body--top-title'
+                          className='cursor-pointer rce-mitem-body--top-title'
                           onClick={(e: React.MouseEvent<HTMLElement>) => _onMeetingLinkClick(x, i, e)}
                         >
                           {x.title}
@@ -170,7 +170,7 @@ export const MeetingMessage: FC<IMeetingMessageProps> = ({
                             <div className='rce-mtmg-call-body'>
                               <div
                                 onClick={(e: React.MouseEvent<HTMLElement>) => _onMeetingVideoLinkClick(x, i, e)}
-                                className='rce-mtmg-call-avatars'
+                                className='cursor-pointer rce-mtmg-call-avatars'
                               >
                                 <Avatar className={'rce-mtmg-call-avatars'} src={x.record.avatar} />
                                 <div className={'rce-mtmg-record-time'}>{x.record.time}</div>

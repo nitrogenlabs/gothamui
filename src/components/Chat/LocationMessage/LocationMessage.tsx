@@ -16,7 +16,7 @@ export const LocationMessage: FC<ILocationMessageProps> = ({markerColor = 'red',
     .replace('ZOOM', zoom)
     .replace('KEY', props.apiKey);
   const className = () => {
-    let _className = cn('rce-mbox-location', props.className);
+    let _className = cn('cursor-pointer rce-mbox-location', props.className);
 
     if(props.text) {
       _className = cn(_className, 'rce-mbox-location-has-text');

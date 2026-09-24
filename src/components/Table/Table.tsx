@@ -148,7 +148,7 @@ export const TableCell: FC<ComponentPropsWithoutRef<'td'>> = ({
             {href ? (
               <a
                 aria-label={title}
-                className="absolute inset-0 focus:outline-hidden"
+                className="cursor-pointer absolute inset-0 focus:outline-hidden"
                 data-row-link
                 href={href}
                 target={target}

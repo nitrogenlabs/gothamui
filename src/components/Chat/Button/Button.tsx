@@ -8,7 +8,7 @@ export const Button: FC<IButtonProps> = ({disabled = false, backgroundColor = '#
   <button
     ref={props.buttonRef}
     title={props.title}
-    className={cn('rce-button', props.type, props.className)}
+    className={cn('cursor-pointer rce-button', props.type, props.className)}
     style={{
       backgroundColor,
       color,

@@ -6,7 +6,7 @@ import type {IReplyMessageProps} from '../type';
 
 export const ReplyMessage: FC<IReplyMessageProps> = ({onClick, ...props}) => (
   <div
-    className={cn('rce-mbox-reply', {
+    className={cn('cursor-pointer rce-mbox-reply', {
       'rce-mbox-reply-border': !!props.titleColor
     })}
     style={{...(props.titleColor && {borderColor: props.titleColor})}}

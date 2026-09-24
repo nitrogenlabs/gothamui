@@ -126,7 +126,7 @@ const TextFieldComponent = ({
         {type === 'password' && showPasswordToggle && (
           <button
             aria-label={showPassword ? 'Hide password' : 'Show password'}
-            className={`absolute inset-y-0 flex items-center ${
+            className={`cursor-pointer absolute inset-y-0 flex items-center ${
               borderType === 'underline' ? 'right-0 pr-3' : 'right-0 pr-3.5'
             } text-neutral-400 hover:text-neutral-600 outline-none focus:outline-none focus-visible:outline-none dark:text-neutral-500 dark:hover:text-neutral-300`}
             onClick={() => setShowPassword(!showPassword)}

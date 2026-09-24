@@ -33,7 +33,7 @@ const RadioFieldComponent: FC<RadioFieldProps> = ({
   const form = useGothamFormField(name);
   const [localValue, setLocalValue] = useState(defaultValue);
   const optionClasses = useMemo(
-    () => cn(optionClass, getCheckedClasses(color)),
+    () => cn('cursor-pointer disabled:cursor-not-allowed', optionClass, getCheckedClasses(color)),
     [color, optionClass]
   );
   const currentValue = form?.value ?? localValue;
@@ -62,7 +62,7 @@ const RadioFieldComponent: FC<RadioFieldProps> = ({
             </div>
             <div className="ml-3 text-sm/6">
               {option.label && (
-                <label className="font-medium text-gray-900 dark:text-white" htmlFor={option.id || option.value}>
+                <label className="cursor-pointer font-medium text-gray-900 dark:text-white" htmlFor={option.id || option.value}>
                   {option.label}
                 </label>
               )}

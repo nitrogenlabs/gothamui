@@ -85,31 +85,31 @@ export const NotifyExample = () => {
           <div className="space-y-2">
             <button
               onClick={showBasicNotification}
-              className="w-full px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
+              className="cursor-pointer w-full px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
             >
               Basic Notification
             </button>
             <button
               onClick={showSuccessNotification}
-              className="w-full px-4 py-2 bg-green-100 hover:bg-green-200 text-green-800 rounded-md"
+              className="cursor-pointer w-full px-4 py-2 bg-green-100 hover:bg-green-200 text-green-800 rounded-md"
             >
               Success Notification
             </button>
             <button
               onClick={showErrorNotification}
-              className="w-full px-4 py-2 bg-red-100 hover:bg-red-200 text-red-800 rounded-md"
+              className="cursor-pointer w-full px-4 py-2 bg-red-100 hover:bg-red-200 text-red-800 rounded-md"
             >
               Error Notification
             </button>
             <button
               onClick={showWarningNotification}
-              className="w-full px-4 py-2 bg-yellow-100 hover:bg-yellow-200 text-yellow-800 rounded-md"
+              className="cursor-pointer w-full px-4 py-2 bg-yellow-100 hover:bg-yellow-200 text-yellow-800 rounded-md"
             >
               Warning Notification
             </button>
             <button
               onClick={showInfoNotification}
-              className="w-full px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-md"
+              className="cursor-pointer w-full px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-md"
             >
               Info Notification
             </button>
@@ -121,13 +121,13 @@ export const NotifyExample = () => {
           <div className="space-y-2">
             <button
               onClick={showTopRightNotification}
-              className="w-full px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-md"
+              className="cursor-pointer w-full px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-md"
             >
               Top Right Position
             </button>
             <button
               onClick={showActionNotification}
-              className="w-full px-4 py-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 rounded-md"
+              className="cursor-pointer w-full px-4 py-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 rounded-md"
             >
               With Action Buttons
             </button>

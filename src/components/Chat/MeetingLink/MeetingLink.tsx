@@ -10,7 +10,7 @@ export const MeetingLink: FC<IMeetingLinkMessageProps> = (props) => (
       </div>
       <div className='rce-mtlink-btn'>
         {props?.actionButtons?.map((Item: MeetingLinkActionButtons) => (
-          <div className='rce-mtlink-btn-content' onClick={() => Item.onClickButton(props?.meetingID ?? '')}>
+          <div className='cursor-pointer rce-mtlink-btn-content' onClick={() => Item.onClickButton(props?.meetingID ?? '')}>
             <Item.Component />
           </div>
         ))}

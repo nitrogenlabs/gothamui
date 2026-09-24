@@ -94,7 +94,7 @@ export const OptimizedFormExample = () => {
                 type="checkbox"
                 id="agreeToTerms"
                 name="agreeToTerms"
-                className="mr-2"
+                className="cursor-pointer mr-2"
               />
               <label htmlFor="agreeToTerms" className="text-sm">
                 I agree to the terms and conditions

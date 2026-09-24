@@ -73,6 +73,7 @@ const getPaginationItems = (currentPage: number, totalPages: number, siblingCoun
 };
 
 const buttonBaseClasses = [
+  'cursor-pointer',
   'inline-flex',
   'items-center',
   'text-sm',

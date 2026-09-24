@@ -25,7 +25,7 @@ export const Page: FC = () => {
         <h2>Pages in Storybook</h2>
         <p>
           We recommend building UIs with a{' '}
-          <a href="https://componentdriven.org" target="_blank" rel="noopener noreferrer">
+          <a className="cursor-pointer" href="https://componentdriven.org" target="_blank" rel="noopener noreferrer">
             <strong>component-driven</strong>
           </a>{' '}
           process starting with atomic components and ending with pages.
@@ -47,11 +47,11 @@ export const Page: FC = () => {
         </ul>
         <p>
           Get a guided tutorial on component-driven development at{' '}
-          <a href="https://storybook.js.org/tutorials/" target="_blank" rel="noopener noreferrer">
+          <a className="cursor-pointer" href="https://storybook.js.org/tutorials/" target="_blank" rel="noopener noreferrer">
             Storybook tutorials
           </a>
           . Read more in the{' '}
-          <a href="https://storybook.js.org/docs" target="_blank" rel="noopener noreferrer">
+          <a className="cursor-pointer" href="https://storybook.js.org/docs" target="_blank" rel="noopener noreferrer">
             docs
           </a>
           .

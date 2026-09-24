@@ -63,7 +63,7 @@ export const Footer = ({
                 <div className="flex gap-x-6">
                   {socialLinks.map((item) => (
                     <a
-                      className="text-gray-400 transition-colors duration-200 hover:text-violet-400"
+                      className="cursor-pointer text-gray-400 transition-colors duration-200 hover:text-violet-400"
                       href={item.href}
                       key={`${item.label}-${item.href}`}
                     >
@@ -83,7 +83,7 @@ export const Footer = ({
                       {group.links.map((item) => (
                         <li key={`${group.title}-${item.label}-${item.href}`}>
                           <a
-                            className="text-sm/6 text-gray-400 transition-colors duration-200 hover:text-violet-400"
+                            className="cursor-pointer text-sm/6 text-gray-400 transition-colors duration-200 hover:text-violet-400"
                             href={item.href}
                           >
                             {item.label}
@@ -116,7 +116,7 @@ export const Footer = ({
           <nav aria-label="Footer" className="flex flex-wrap items-center gap-x-5 gap-y-2">
             {links.map((item) => (
               <a
-                className="text-sm font-medium text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                className="cursor-pointer text-sm font-medium text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 href={item.href}
                 key={`${item.label}-${item.href}`}
               >
@@ -125,7 +125,7 @@ export const Footer = ({
             ))}
             {hasSupportEmail ? (
               <a
-                className="text-sm font-medium text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                className="cursor-pointer text-sm font-medium text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 href={`mailto:${supportEmail}`}
               >
                 {supportLabel}

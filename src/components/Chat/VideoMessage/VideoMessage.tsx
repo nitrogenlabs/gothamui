@@ -56,7 +56,7 @@ export const VideoMessage: FC<IVideoMessageProps> = (props) => {
         }}
       >
         {!downloaded && (
-          <img
+          <img className="cursor-pointer"
             src={props?.data.uri}
             alt={props?.data.alt}
             onClick={props.onOpen}
@@ -82,7 +82,7 @@ export const VideoMessage: FC<IVideoMessageProps> = (props) => {
         {!error && props?.data?.status && !downloaded && (
           <div className='rce-mbox-video--video__block'>
             {!props.data.status.click && (
-              <button onClick={props.onDownload} className='rce-mbox-video--video__block-item rce-mbox-video--download'>
+              <button onClick={props.onDownload} className='cursor-pointer rce-mbox-video--video__block-item rce-mbox-video--download'>
                 <CloudDownloadIcon  />
               </button>
             )}

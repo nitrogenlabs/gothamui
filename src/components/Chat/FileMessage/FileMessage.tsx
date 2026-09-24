@@ -51,7 +51,7 @@ export const FileMessage: FC<IFileMessageProps> = (props) => {
 
   return (
     <div className='rce-mbox-file'>
-      <button onClick={onClick}>
+      <button className="cursor-pointer" onClick={onClick}>
         <div className='rce-mbox-file--icon'>
           <File01Icon color='#aaa'  />
           <div className='rce-mbox-file--size'>{props?.data.size}</div>

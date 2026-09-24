@@ -51,7 +51,7 @@ export const MessageBox: FC<MessageBoxType> = ({focus = false, notch = true, sty
   }, [focus, prevProps]);
 
   return (
-    <div ref={messageRef} className={cn('rce-container-mbox', props.className)} onClick={props.onClick}>
+    <div ref={messageRef} className={cn('cursor-pointer rce-container-mbox', props.className)} onClick={props.onClick}>
       {props.renderAddCmp instanceof Function ? props.renderAddCmp() : props.renderAddCmp}
       {props.type === 'system' ? (
         <SystemMessage {...props} focus={focus} notch={notch} />
@@ -69,7 +69,7 @@ export const MessageBox: FC<MessageBoxType> = ({focus = false, notch = true, sty
             {!props.retracted && props.forwarded === true && (
               <div
                 className={cn(
-                  'rce-mbox-forward',
+                  'cursor-pointer rce-mbox-forward',
                   {'rce-mbox-forward-right': props.position === 'left'},
                   {'rce-mbox-forward-left': props.position === 'right'}
                 )}
@@ -84,12 +84,12 @@ export const MessageBox: FC<MessageBoxType> = ({focus = false, notch = true, sty
                 className={
                   props.forwarded !== true
                     ? cn(
-                      'rce-mbox-forward',
+                      'cursor-pointer rce-mbox-forward',
                       {'rce-mbox-forward-right': props.position === 'left'},
                       {'rce-mbox-forward-left': props.position === 'right'}
                     )
                     : cn(
-                      'rce-mbox-forward',
+                      'cursor-pointer rce-mbox-forward',
                       {'rce-mbox-reply-btn-right': props.position === 'left'},
                       {'rce-mbox-reply-btn-left': props.position === 'right'}
                     )
@@ -105,12 +105,12 @@ export const MessageBox: FC<MessageBoxType> = ({focus = false, notch = true, sty
                 className={
                   props.forwarded === true
                     ? cn(
-                      'rce-mbox-remove',
+                      'cursor-pointer rce-mbox-remove',
                       {'rce-mbox-remove-right': props.position === 'left'},
                       {'rce-mbox-remove-left': props.position === 'right'}
                     )
                     : cn(
-                      'rce-mbox-forward',
+                      'cursor-pointer rce-mbox-forward',
                       {'rce-mbox-reply-btn-right': props.position === 'left'},
                       {'rce-mbox-reply-btn-left': props.position === 'right'}
                     )
@@ -125,7 +125,7 @@ export const MessageBox: FC<MessageBoxType> = ({focus = false, notch = true, sty
               <div
                 style={{...(props.titleColor && {color: props.titleColor})}}
                 onClick={props.onTitleClick}
-                className={cn('rce-mbox-title', {
+                className={cn('cursor-pointer rce-mbox-title', {
                   'rce-mbox-title--clear': props.type === 'text'
                 })}
               >

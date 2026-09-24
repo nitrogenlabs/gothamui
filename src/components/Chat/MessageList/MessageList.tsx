@@ -211,7 +211,7 @@ const MessageListComponent: FC<IMessageListProps> = (listProps) => {
         {messages}
       </div>
       {downButton === true && _downButton && toBottomHeight !== '100%' && (
-        <div className='rce-mlist-down-button' onClick={toBottom}>
+        <div className='cursor-pointer rce-mlist-down-button' onClick={toBottom}>
           <ArrowDown01Icon  />
           {props.downButtonBadge !== undefined ? (
             <span className='rce-mlist-down-button--badge'>{props.downButtonBadge.toString()}</span>

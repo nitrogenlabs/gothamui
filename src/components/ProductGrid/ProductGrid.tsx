@@ -77,7 +77,7 @@ const ProductCardComponent = ({
   if(product.href) {
     return (
       <a
-        className={cn('group block', className)}
+        className={cn('cursor-pointer group block', className)}
         data-slot="product-card"
         href={product.href}
         {...props as AnchorHTMLAttributes<HTMLAnchorElement>}

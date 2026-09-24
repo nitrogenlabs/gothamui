@@ -435,7 +435,7 @@ const DropUploadComponent = ({
         </div>
         <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
           <button
-            className="rounded-lg bg-primary px-4 py-2 text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
+            className="cursor-pointer rounded-lg bg-primary px-4 py-2 text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
             disabled={disabled}
             onClick={() => inputRef.current?.click()}
             type="button">
@@ -444,7 +444,7 @@ const DropUploadComponent = ({
           {showPasteButton && (
             <button
               aria-busy={isPasting}
-              className="inline-flex items-center gap-2 rounded-lg border border-primary px-4 py-2 text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
+              className="cursor-pointer inline-flex items-center gap-2 rounded-lg border border-primary px-4 py-2 text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
               disabled={disabled || isPasting}
               onClick={pasteImages}
               type="button">

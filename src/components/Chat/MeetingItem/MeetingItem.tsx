@@ -34,13 +34,13 @@ export const MeetingItem: FC<IMeetingItemProps> = ({
     props.subject && subjectLimit && props.subject.substring(0, subjectLimit) + (props.subject.length > subjectLimit ? '...' : '');
 
   return (
-    <div className={cn('rce-container-mtitem', props.className)} onClick={onClick} onContextMenu={props.onContextMenu}>
+    <div className={cn('cursor-pointer rce-container-mtitem', props.className)} onClick={onClick} onContextMenu={props.onContextMenu}>
       <audio autoPlay loop muted={audioMuted} src={props.audioSource} />
 
       <div className='rce-mtitem'>
         <div className='rce-mtitem-top'>
           <div className='rce-mtitem-subject'>{subject}</div>
-          <div className='rce-mtitem-share' onClick={onShareClick}>
+          <div className='cursor-pointer rce-mtitem-share' onClick={onShareClick}>
             <Link05Icon  />
           </div>
         </div>
@@ -91,11 +91,11 @@ export const MeetingItem: FC<IMeetingItemProps> = ({
           </div>
           <div className='rce-mtitem-body--functions'>
             {props.closable && (
-              <div className='rce-mtitem-closable' onClick={props.onCloseClick}>
+              <div className='cursor-pointer rce-mtitem-closable' onClick={props.onCloseClick}>
                 <Call02Icon  />
               </div>
             )}
-            <div className='rce-mtitem-button' onClick={onMeetingClick}>
+            <div className='cursor-pointer rce-mtitem-button' onClick={onMeetingClick}>
               <Video01Icon  />
             </div>
           </div>

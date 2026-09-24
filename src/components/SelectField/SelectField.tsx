@@ -63,7 +63,7 @@ const SelectFieldComponent = ({
   const fieldValue = value ?? form?.value ?? localValue;
   const normalizedFieldValue = fieldValue === undefined || fieldValue === null ? '' : String(fieldValue);
   const selectClasses = useMemo(() => cn(
-    'flex relative w-full min-h-11 items-center justify-between px-3.5 py-2 text-left',
+    'cursor-pointer disabled:cursor-not-allowed flex relative w-full min-h-11 items-center justify-between px-3.5 py-2 text-left',
     getInputBorderClass(borderType, borderColor, color, 'transparent'), className), [borderType, borderColor, color, className]
   );
   const nativeSelectClasses = useMemo(() => cn(

@@ -98,7 +98,7 @@ export const ChatItem: FC<IChatItemProps> = ({
     <>
       <div
         key={props.id as Key}
-        className={cn('rce-container-citem', props.className)}
+        className={cn('cursor-pointer rce-container-citem', props.className)}
         onClick={handleOnClick}
         onContextMenu={props.onContextMenu}
       >
@@ -140,7 +140,7 @@ export const ChatItem: FC<IChatItemProps> = ({
                 type={cn('circle', {flexible: avatarFlexible})}
               />
               {props.subList && props.subList.length > 0 && (
-                <button className='rce-citem-expand-button' onClick={(e) => onExpandItem(e, props.id)}>
+                <button className='cursor-pointer rce-citem-expand-button' onClick={(e) => onExpandItem(e, props.id)}>
                   {props.expanded ? <ArrowUp01Icon  /> : <ArrowDown01Icon  />}
                 </button>
               )}
@@ -155,13 +155,13 @@ export const ChatItem: FC<IChatItemProps> = ({
                 <div className='rce-citem-body--bottom-title'>{props.subtitle}</div>
                 <div className='rce-citem-body--bottom-tools' onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
                   {props.showMute && (
-                    <div className='rce-citem-body--bottom-tools-item' onClick={props.onClickMute}>
+                    <div className='cursor-pointer rce-citem-body--bottom-tools-item' onClick={props.onClickMute}>
                       {props.muted === true && <VolumeOffIcon  />}
                       {props.muted === false && <VolumeHighIcon  />}
                     </div>
                   )}
                   {props.showVideoCall && (
-                    <div className='rce-citem-body--bottom-tools-item' onClick={props.onClickVideoCall}>
+                    <div className='cursor-pointer rce-citem-body--bottom-tools-item' onClick={props.onClickVideoCall}>
                       <Video01Icon  />
                     </div>
                   )}

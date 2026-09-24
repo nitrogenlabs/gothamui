@@ -35,7 +35,7 @@ export interface GothamNotifyParams {
 const Button = ({children, onClick, className = ''}) => (
   <button
     className={cn(
-      'inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm',
+      'cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm',
       'text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500',
       className
     )}
@@ -50,7 +50,7 @@ const Button = ({children, onClick, className = ''}) => (
 const IconButton = ({children, onClick, className = ''}) => (
   <button
     className={cn(
-      'p-1 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500',
+      'cursor-pointer p-1 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500',
       className
     )}
     onClick={onClick}
@@ -79,7 +79,7 @@ const Alert = ({children, severity, onClose}) => {
       {onClose && (
         <button
           aria-label="Dismiss"
-          className="-mx-1.5 -my-1.5 inline-flex shrink-0 rounded-md p-1.5 text-white hover:bg-black/20 focus:outline-none focus:ring-2 focus:ring-white"
+          className="cursor-pointer -mx-1.5 -my-1.5 inline-flex shrink-0 rounded-md p-1.5 text-white hover:bg-black/20 focus:outline-none focus:ring-2 focus:ring-white"
           onClick={onClose}
           type="button"
         >

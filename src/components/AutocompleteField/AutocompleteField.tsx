@@ -153,7 +153,7 @@ export const AutocompleteField = <TSuggestion = AutocompleteSuggestion>({
 
             return (
               <button
-                className="app-autocomplete-option"
+                className="cursor-pointer app-autocomplete-option"
                 key={`${suggestionLabel}-${index}`}
                 onMouseDown={(event) => {
                   event.preventDefault();

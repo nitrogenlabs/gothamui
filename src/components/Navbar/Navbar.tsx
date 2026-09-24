@@ -150,7 +150,7 @@ export const Navbar: FC<NavbarProps> = ({
       <div
         aria-hidden={!isMobileMenuOpen}
         className={cn(
-          'fixed inset-0 z-30 bg-black/45 opacity-0 backdrop-blur-md transition-opacity duration-200 lg:hidden',
+          'cursor-pointer fixed inset-0 z-30 bg-black/45 opacity-0 backdrop-blur-md transition-opacity duration-200 lg:hidden',
           isMobileMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none'
         )}
         data-slot="navbar-mobile-overlay"
@@ -183,7 +183,7 @@ export const Navbar: FC<NavbarProps> = ({
             <X aria-hidden="true" className="size-5" />
           </button>
         </div>
-        <div className="min-h-0 overflow-y-auto" onClick={() => setIsMobileMenuOpen(false)}>
+        <div className="cursor-pointer min-h-0 overflow-y-auto" onClick={() => setIsMobileMenuOpen(false)}>
           {mobileMenu}
         </div>
       </aside>
