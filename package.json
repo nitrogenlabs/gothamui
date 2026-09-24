@@ -1,6 +1,6 @@
 {
   "name": "@nlabs/gothamui",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "description": "React 19 UI framework with accessible components, routing, forms, i18n, responsive navigation, and Tailwind CSS v4 theming.",
   "type": "module",
   "license": "MIT",
