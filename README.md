@@ -498,6 +498,39 @@ its buttons and press Ctrl+V / ⌘V instead. Keyboard paste works independently 
 the button and respects a custom `onPaste` handler calling `preventDefault()`.
 Text and image URLs are not converted into image files.
 
+### Upload Progress
+
+Pass `progress` to `DropUpload` to show a circular progress overlay while an
+upload is in flight. The dropzone is disabled and marked `aria-busy` until
+`progress` is removed.
+
+```tsx
+<DropUpload
+  onFilesChange={handleFilesChange}
+  progress={uploading ? {label: 'Uploading…', value: percent} : undefined}
+/>
+```
+
+### CircularProgress
+
+`CircularProgress` is a determinate, gradient ring with a soft glow and a
+centered percentage. It has no continuous animation; the arc transitions
+between values and respects `prefers-reduced-motion`. It renders with
+`role="progressbar"` and the matching `aria-value*` attributes.
+
+```tsx
+import { CircularProgress } from '@nlabs/gothamui';
+
+<CircularProgress label="Uploading" size={112} value={64} />
+```
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `number` | required | Progress from 0 to 100. Values outside the range are clamped; non-finite values are treated as 0. |
+| `label` | `string` | `'Uploading'` | Accessible label (`aria-label`). |
+| `size` | `number` | `112` | Width and height in pixels. |
+| `className` | `string` | — | Class applied to the wrapper element. |
+
 ### Code Editor
 
 Monaco 0.56.0 pins DOMPurify to vulnerable version 3.4.8. Until Monaco updates

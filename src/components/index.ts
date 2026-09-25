@@ -59,3 +59,5 @@ export * from './Tabs/Tabs.js';
 export * from './Text/Text.js';
 export * from './Textarea/Textarea.js';
 export * from './TextField/TextField.js';
+
+export * from './CircularProgress/CircularProgress.js';

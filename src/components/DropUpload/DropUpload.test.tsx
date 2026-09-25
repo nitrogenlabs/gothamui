@@ -255,4 +255,12 @@ describe('DropUpload', () => {
     expect(drawImage).toHaveBeenCalledWith(expect.objectContaining({height: 100, width: 200}), 0, 0, 50, 25);
     expect(onFilesChange.mock.calls[0][0][0].type).toBe('image/jpeg');
   });
+
+  it('overlays upload progress and prevents another selection while transferring', () => {
+    render(<DropUpload progress={{label: 'Uploading clip', value: 64}} />);
+
+    expect(screen.getByRole('progressbar', {name: 'Uploading clip'})).toHaveAttribute('aria-valuenow', '64');
+    expect(screen.getByRole('group')).toHaveAttribute('aria-busy', 'true');
+    expect(screen.getByRole('button', {name: 'Paste image'})).toBeDisabled();
+  });
 });

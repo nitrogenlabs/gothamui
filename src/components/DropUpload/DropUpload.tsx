@@ -10,6 +10,8 @@ import {
   useState
 } from 'react';
 
+import {CircularProgress} from '../CircularProgress/CircularProgress.js';
+
 import type {
   ChangeEvent,
   ClipboardEvent,
@@ -52,6 +54,7 @@ export interface DropUploadProps extends Omit<HTMLAttributes<HTMLDivElement>, 'o
   readonly onReject?: (rejections: DropUploadRejection[]) => void;
   readonly pasteLabel?: string;
   readonly previewClassName?: string;
+  readonly progress?: {readonly label?: string; readonly value: number};
   readonly ref?: Ref<HTMLDivElement>;
   readonly showPasteButton?: boolean;
   readonly showPreviews?: boolean;
@@ -171,7 +174,7 @@ const DropUploadComponent = ({
   browseLabel = 'browse',
   className,
   defaultFiles = [],
-  disabled = false,
+  disabled: disabledProp = false,
   files,
   helperText,
   imageOutputMimeType = 'image/jpeg',
@@ -189,11 +192,13 @@ const DropUploadComponent = ({
   pasteLabel = 'Paste image',
   previewClassName,
   ref,
+  progress,
   showPasteButton = true,
   showPreviews = true,
   transformImages = true,
   ...props
 }: DropUploadProps) => {
+  const disabled = disabledProp || Boolean(progress);
   const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const itemsRef = useRef<DropUploadItem[]>([]);
@@ -404,12 +409,13 @@ const DropUploadComponent = ({
   return (
     <div className={cn('flex w-full flex-col gap-4', className)} onPaste={onClipboardPaste} ref={ref} {...props}>
       <div
+        aria-busy={Boolean(progress)}
         aria-disabled={disabled}
         className={cn(
           'group relative flex min-h-44 w-full flex-col items-center justify-center rounded-xl border border-dashed border-border bg-transparent px-6 py-8 text-center transition-colors',
           'focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/30',
           'hover:border-primary/70 hover:bg-primary/5',
-          disabled && 'cursor-not-allowed opacity-50',
+          disabled && !progress && 'cursor-not-allowed opacity-50',
           isDragging && 'border-primary bg-primary/10'
         )}
         onDragLeave={onDragLeave}
@@ -453,6 +459,10 @@ const DropUploadComponent = ({
             </button>
           )}
         </div>
+        {progress && <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 rounded-[inherit] bg-[#18151f]/95">
+          <CircularProgress label={progress.label} value={progress.value} />
+          <span className="text-xs text-violet-200">{progress.label || 'Uploading'}</span>
+        </div>}
         {helperText && (
           <div className="mt-2 text-sm text-muted-foreground">
             {helperText}
