@@ -3,6 +3,8 @@ import {useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import {initReactI18next} from 'react-i18next';
 
+import {PlayerExample} from './PlayerExample.js';
+
 import {Checkbox} from '../../src/components/Checkbox/Checkbox.js';
 import {DropUpload} from '../../src/components/DropUpload/DropUpload.js';
 import {Form} from '../../src/components/Form/Form.js';
@@ -33,4 +35,4 @@ const App = () => {
   </>;
 };
 
-createRoot(document.getElementById('root')!).render(<App />);
+createRoot(document.getElementById('root')!).render(new URLSearchParams(window.location.search).has('player') ? <PlayerExample /> : <App />);

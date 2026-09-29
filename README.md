@@ -894,3 +894,13 @@ GothamUI is [MIT licensed](./LICENSE).
 ### Controlled selectors
 
 `SelectField` supports `value` and `onChange(value)` alongside Gotham form context and uncontrolled `defaultValue`. Pass `label` for accessible desktop and mobile controls, `disabled` while updating, and `required` for native form validation. Base spacing is retained when a custom `className` is supplied. Desktop uses the keyboard-accessible listbox; mobile uses a labeled native selector.
+
+### Video playback
+
+Use `VideoPlayer`, `TimelineVideoPlayer`, and `PlaybackControls` from `@nlabs/gothamui/video` for native playback, composed timelines, or custom transports. See [the video player guide](docs/video-player.md) for scene data, callbacks, refs, and integration examples.
+
+### Sidebar motion
+
+Navbar's mobile sidebar uses a damped spring on both expansion and collapse, preserving velocity when direction changes. It responds immediately to `prefers-reduced-motion`, including changes during travel. Closed sidebar content is inert and hidden from assistive technology; closing from within the sidebar returns focus to its trigger. No consumer animation adapter is required.
+
+`SidebarMenu` is a controlled grouped navigation component: provide `groups` (`id`, `label`, `content`), `expandedId`, and `onExpandedChange`. It animates group height with the same damped spring, supports changing content height, and makes collapsed links inert. Consumers render their own router links in each group's content.

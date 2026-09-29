@@ -1,8 +1,9 @@
 import {cn} from '@nlabs/utils';
 import {Menu, X} from 'lucide-react';
-import {useEffect, useId, useState} from 'react';
+import {useCallback, useEffect, useId, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 
+import {useSidebarSpring} from '../../utils/useSidebarSpring.js';
 import {renderWithAsChild} from '../ComponentUtils/renderWithAsChild.js';
 
 import type {
@@ -85,6 +86,15 @@ export const Navbar: FC<NavbarProps> = ({
   const [isAtTop, setIsAtTop] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const mobileMenuId = useId();
+  const mobilePanelRef = useRef<HTMLElement>(null);
+  const mobileTriggerRef = useRef<HTMLButtonElement>(null);
+  useSidebarSpring(mobilePanelRef, isMobileMenuOpen);
+  const closeMobileMenu = useCallback((): void => {
+    if(mobilePanelRef.current?.contains(document.activeElement)) {
+      mobileTriggerRef.current?.focus();
+    }
+    setIsMobileMenuOpen(false);
+  }, []);
 
   useEffect(() => {
     if(!transparentOnScroll) {
@@ -124,7 +134,7 @@ export const Navbar: FC<NavbarProps> = ({
 
     const onKeyDown = (event: KeyboardEvent) => {
       if(event.key === 'Escape') {
-        setIsMobileMenuOpen(false);
+        closeMobileMenu();
       }
     };
 
@@ -136,7 +146,7 @@ export const Navbar: FC<NavbarProps> = ({
       document.documentElement.style.overscrollBehavior = htmlOverscrollBehavior;
       document.removeEventListener('keydown', onKeyDown);
     };
-  }, [isMobileMenuOpen]);
+  }, [closeMobileMenu, isMobileMenuOpen]);
 
   const scrollState = getNavbarScrollState(isAtTop, isMobileMenuOpen, transparentOnScroll);
   const navbarStyle = scrollState === 'scrolled' ? {
@@ -154,23 +164,28 @@ export const Navbar: FC<NavbarProps> = ({
           isMobileMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none'
         )}
         data-slot="navbar-mobile-overlay"
-        onClick={() => setIsMobileMenuOpen(false)}
+        onClick={closeMobileMenu}
         style={{
           WebkitBackdropFilter: 'blur(12px)',
           backdropFilter: 'blur(12px)'
         }}
       />
       <aside
+        aria-hidden={!isMobileMenuOpen}
         aria-label="Mobile navigation"
         className={cn(
           'fixed inset-y-0 right-0 z-50 grid w-[min(86vw,22rem)] grid-rows-[auto_1fr] gap-4 overflow-hidden overscroll-contain border-l border-white/15 bg-[rgba(16,22,36,.78)] p-5 text-white shadow-2xl backdrop-blur-xl transition-transform duration-200 lg:hidden',
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         )}
+        data-fluid-motion="spring"
         data-slot="navbar-mobile-menu"
         id={mobileMenuId}
+        inert={!isMobileMenuOpen}
+        ref={mobilePanelRef}
         style={{
           WebkitBackdropFilter: 'blur(24px)',
-          backdropFilter: 'blur(24px)'
+          backdropFilter: 'blur(24px)',
+          transition: 'none'
         }}>
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0 text-base font-semibold">{mobileMenuTitle}</div>
@@ -178,12 +193,12 @@ export const Navbar: FC<NavbarProps> = ({
             aria-label="Close navigation menu"
             className="inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md border-0 bg-transparent text-current transition-colors hover:bg-current/10 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-current"
             data-slot="navbar-mobile-close"
-            onClick={() => setIsMobileMenuOpen(false)}
+            onClick={closeMobileMenu}
             type="button">
             <X aria-hidden="true" className="size-5" />
           </button>
         </div>
-        <div className="cursor-pointer min-h-0 overflow-y-auto" onClick={() => setIsMobileMenuOpen(false)}>
+        <div className="cursor-pointer min-h-0 overflow-y-auto" onClick={closeMobileMenu}>
           {mobileMenu}
         </div>
       </aside>
@@ -202,6 +217,7 @@ export const Navbar: FC<NavbarProps> = ({
           className="ml-auto mr-3 inline-flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-md border-0 bg-transparent text-current transition-colors hover:bg-current/10 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-current lg:hidden"
           data-slot="navbar-mobile-trigger"
           onClick={() => setIsMobileMenuOpen((value) => !value)}
+          ref={mobileTriggerRef}
           type="button">
           <Menu aria-hidden="true" className="size-5" />
         </button>

@@ -61,3 +61,10 @@ export * from './Textarea/Textarea.js';
 export * from './TextField/TextField.js';
 
 export * from './CircularProgress/CircularProgress.js';
+
+export * from './PlaybackControls/PlaybackControls.js';
+export * from './TimelineVideoPlayer/TimelineVideoPlayer.js';
+export * from './VideoPlayer/VideoPlayer.js';
+
+export {SidebarMenu} from './SidebarMenu/SidebarMenu.js';
+export type {SidebarMenuProps} from './SidebarMenu/SidebarMenu.js';
