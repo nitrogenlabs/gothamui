@@ -48,8 +48,8 @@ export default defineConfig({
           perFile: true,
           statements: 90
         }])),
-        branches: 75,
-        functions: 85,
+        branches: 90,
+        functions: 90,
         lines: 90,
         statements: 90,
         [videoFiles]: {lines: 90, statements: 90}

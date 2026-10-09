@@ -12,3 +12,16 @@ describe('ProductGrid', () => {
     expect(screen.getByAltText('Bottle')).toHaveAttribute('src', '/bottle.jpg');
   });
 });
+
+test('renders non-linked products with descriptions, colors and badges', () => {
+  render(<ProductGrid products={[{
+    badge: 'New arrival', colors: ['red', 'blue'], description: 'Insulated steel', id: 'bottle',
+    imageAlt: 'Steel bottle', imageSrc: '/steel.jpg', name: 'Bottle'
+  }]} />);
+
+  expect(screen.getByRole('article')).toHaveTextContent('Insulated steel');
+  expect(screen.getByText('New arrival')).toBeInTheDocument();
+  expect(screen.getByLabelText('red')).toHaveStyle({backgroundColor: 'rgb(255, 0, 0)'});
+  expect(screen.getByLabelText('blue')).toHaveStyle({backgroundColor: 'rgb(0, 0, 255)'});
+  expect(screen.queryByRole('link')).not.toBeInTheDocument();
+});
