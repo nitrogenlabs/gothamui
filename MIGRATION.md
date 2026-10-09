@@ -21,7 +21,7 @@ import '@nlabs/gothamui/styles/tailwind.css';
 @source '../../../node_modules/@nlabs/gothamui/lib/**/*.{js,jsx,ts,tsx}';
 ```
 
-The `Gotham` component, `GothamActions`, configuration, props, and existing subpath exports retain their names. No component API rename is required. Version 1.8.0 starts the new package's release history and includes the rendering improvements documented in [render performance](docs/render-performance.md).
+The `Gotham` component, `GothamActions`, configuration, props, and existing subpath exports retain their names. No component API rename is required.
 
 ## Monaco sanitizer security
 
@@ -48,11 +48,3 @@ and the consumer audit confirms the dependency chain is clean.
 ## Existing installations
 
 The old `@nlabs/gothamjs` package remains installable for existing applications. After the new package is published and verified, its npm deprecation notice will direct users to `@nlabs/gothamui`. It will receive no further releases. Replace the dependency rather than installing both packages directly.
-
-Update your repository remote:
-
-```sh
-git remote set-url origin git@github.com:nitrogenlabs/gothamui.git
-```
-
-GitHub redirects old repository links after the repository rename. Documentation links should use the new hostname; the microsite migration also retains legacy path redirects.

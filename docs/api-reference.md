@@ -363,10 +363,183 @@ Action creators for common operations.
 | `signOut` | `() => Promise<FluxAction>` | Sign out user |
 | `updateTitle` | `(title: string, separator?: string) => Promise<FluxAction>` | Update page title |
 
+## Containers
+
+There are 2 included containers to choose from:
+
+*default*
+
+Has a top bar with logo and menu. The top bar is transparent and turns translucent with a backdrop blur when scrolling down. Use `transparentScrollBackdropFilter` to customize the blur while keeping the top state transparent.
+
+*menu*
+
+A side bar on the left.
+
+## Drawer
+
+A modal side panel with focus trapping, Escape/backdrop dismissal, and a damped spring. Import from `@nlabs/gothamui/components`.
+
+Control visibility with `open` and `onClose`. Keep the component mounted while closing; `onAfterClose` fires after the exit settles. Rapid direction changes preserve spring velocity. Reduced-motion preferences skip the animation.
+
+Use `side="left"` for a left drawer (default: right). Supply an accessible `aria-label` or a `DialogTitle` child. Customize the panel through `className` and the scrim through `backdropClassName`. Consumers own content, actions, and brand colors.
+
+## Chat
+
+GothamUI includes chat UI components vendored from `react-chat-elements`.
+
+### Import Options
+
+```ts
+import {Chat} from '@nlabs/gothamui';
+```
+
+```ts
+import {MessageBox, MessageList, ChatList} from '@nlabs/gothamui/chat';
+```
+
+### Migration From `react-chat-elements`
+
+```ts
+// Before
+import {MessageBox, MessageList, ChatList} from 'react-chat-elements';
+
+// After
+import {MessageBox, MessageList, ChatList} from '@nlabs/gothamui/chat';
+```
+
+### Exported Components
+
+- `MessageBox`
+- `ChatItem`
+- `ChatList`
+- `MessageList`
+- `MeetingItem`
+- `MeetingList`
+- `SystemMessage`
+- `ReplyMessage`
+- `MeetingMessage`
+- `AudioMessage`
+- `FileMessage`
+- `LocationMessage`
+- `SpotifyMessage`
+- `VideoMessage`
+- `PhotoMessage`
+- `MeetingLink`
+- `Input`
+- `Button`
+- `Avatar`
+- `Navbar`
+- `Dropdown`
+- `SideBar`
+- `Popup`
+- `Circle`
+
+## Notification examples
+
+The Notify component provides a customizable notification system for displaying alerts, messages, and interactive notifications to users.
+
+### Features
+
+- **Multiple Severity Levels**: Support for error, warning, info, and success notifications
+- **Customizable Positioning**: Position notifications at any corner or edge of the screen
+- **Auto-dismiss**: Automatically hide notifications after a configurable duration
+- **Interactive Actions**: Add buttons or icon buttons for user interaction
+- **Tailwind CSS Styling**: Fully styled with Tailwind CSS for easy customization
+
+### Usage
+
+```tsx
+import {GothamActions} from '@nlabs/gothamui';
+
+// Basic notification
+GothamActions.notify({
+  message: 'This is a basic notification',
+  autoHideDuration: 5000
+});
+
+// Notification with severity
+GothamActions.notify({
+  message: 'Operation completed successfully',
+  severity: 'success'
+});
+
+// Notification with custom position
+GothamActions.notify({
+  message: 'This appears in the top right',
+  anchorOrigin: {
+    horizontal: 'right',
+    vertical: 'top'
+  }
+});
+
+// Notification with actions
+GothamActions.notify({
+  message: 'Would you like to undo?',
+  actions: [
+    {
+      label: 'Undo',
+      onClick: (key) => {
+        console.log('Undo clicked', key);
+        // Perform undo action
+      }
+    },
+    {
+      icon: 'close',
+      onClick: (key) => {
+        console.log('Close clicked', key);
+        GothamActions.notifyClose();
+      }
+    }
+  ]
+});
+```
+
+### Props
+
+The `GothamNotifyParams` interface accepts the following properties:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `message` | ReactElement \| string | - | The content of the notification |
+| `severity` | 'error' \| 'warning' \| 'info' \| 'success' | - | The severity level of the notification |
+| `autoHideDuration` | number | 3000 | Time in milliseconds before automatically dismissing |
+| `anchorOrigin` | { horizontal: 'left' \| 'center' \| 'right', vertical: 'top' \| 'bottom' } | { horizontal: 'left', vertical: 'bottom' } | Position of the notification |
+| `actions` | GothamNotifyAction[] | [] | Array of action buttons to display |
+
+#### GothamNotifyAction
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `icon` | string | Icon name to display (uses the Svg component) |
+| `label` | string | Text label for the button |
+| `onClick` | (key: string) => void | Callback function when the action is clicked |
+
 ## Document head
 
-`DocumentHead` is exported from `@nlabs/gothamui/head` and the components barrel. `renderDocumentHead({metadata, owner})` is exported from the pure `@nlabs/gothamui/head/static` entry. See [scoped document head](./document-head.md) for ownership, JSON validation, cleanup and static adoption contracts. Route metadata/schema policy remains consumer-owned. These exports are validated locally in Giraldo's unpublished compatible archive.
+Import `DocumentHead` and descriptor types from `@nlabs/gothamui/head`. Import `renderDocumentHead` from `@nlabs/gothamui/head/static` for Node/static rendering; this entry has no React, router, DOM or styles dependency.
 
-## Reusable auth forms
+Pass a stable nonempty `owner` and a complete `metadata` snapshot with optional `title`, `canonicalUrl`, `meta` (`name` or `property`, plus `content`) and `jsonLd` (`id`, JSON-compatible `value`). Empty string values are preserved. JSON-LD requires plain JSON values: finite numbers, no cycles, accessors, array holes or serialization hooks. Validation and script collision checks precede DOM writes.
 
-`AuthSignInForm`, `AuthSignUpForm`, their readonly props/value types and `AuthFieldOptions` are public from root/components/form. See [authentication form documentation](../../docs/auth-forms.md) for schema, field, content and pending options. Provider integration and session policy stay application-owned.
+Distinct metadata owners overlap by mount order; updates do not promote priority. Cleanup restores original values/node identity by default, or removes nodes created by the owner. `missingTags: 'ignore'` skips absent meta/canonical/script nodes. Metadata cleanup supports `restore`/`retain`; structured-data cleanup also supports `remove`. Removal only affects the explicitly identified script. Duplicate active owners and conflicting script IDs/types/owner markers fail visibly. Unrelated scripts remain untouched.
+
+External value/attribute writes or node replacements survive cleanup. A subsequent explicit update resolves the current target and can reclaim valid metadata or a compatible script; its external state becomes the restoration baseline. Browser effects and events remain outside the pure serializer. The component renders null and is safe to render in Node.
+
+Static rendering uses `renderDocumentHead({metadata, owner})`. Output escapes markup and JSON script-breaking text and marks each JSON-LD script with `data-gotham-head-owner`. Give the browser the same owner/ID to adopt the static node. Product schema objects, route policy, defaults and analytics remain in the consumer.
+
+Check that your installed GothamUI version includes the `head` and `head/static` exports before using these APIs.
+
+## Authentication forms
+
+AuthSignInForm and AuthSignUpForm are public through @nlabs/gothamui, @nlabs/gothamui/components and @nlabs/gothamui/form. The full AuthSignInView/AuthSignUpView screens compose these forms and preserve their existing layout, validation and links.
+
+The forms own credential fields, password toggles, consent/remember checkboxes and pending submission through Form. Pass an awaited onSubmit callback; provider calls, session policy, product validation and routing remain in the application.
+
+Omitted schema retains existing validation: valid email/nonempty password for signin; accepted terms, confirmation, matching passwords and an eight-character minimum for signup. Pass a typed custom schema to replace it. Pass schema={null} only when the callback owns validation. This option deliberately bypasses all package schema checks.
+
+Both forms accept className/name, per-field fields overrides, fieldsClassName, optionsContent/optionsClassName, beforeSubmit, submitLabel/pendingLabel, submitClassName/submitVariant and showSubmitLoading. Field overrides allow autoComplete, borderColor, borderType, inputClass, label, labelClass and placeholder. Empty classes replace defaults; names/types/password toggles remain owned by the form. fieldsClassName={null} renders direct fields. optionsContent and beforeSubmit render inside the Form context; footers and branded shells remain outside.
+
+Signin accepts defaultEmail and showRememberEmail (default true; hidden remember has a false value). Signup accepts showPasswordStrength (default true) and termsProps for label/description/containerClass/labelClass/optionClass; acceptTerms identity remains fixed. Values are typed AuthSignInValues/AuthSignUpValues and callbacks retain Form's runtime event/error arguments.
+
+Submit buttons stay disabled during the entire callback. Default loading spinner and labels Sign In/Sign Up remain. pendingLabel changes pending copy; showSubmitLoading={false} retains a text-only indicator. Catch provider errors in the callback and supply error content through beforeSubmit; full views retain their error block outside the form.
+
+For a branded rounded form, set borderType rounded and clear inputClass/labelClass in every fields override; set fieldsClassName null and supply your form gap/class. Opt out of remember/strength only as an explicit product decision. Do not copy fields or implement another pending controller locally.

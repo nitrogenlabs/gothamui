@@ -102,16 +102,6 @@ allows later range requests to observe session rotation without recreating the d
 It accepts a canvas context, width, height, transition name, progress from zero to one, and
 outgoing/incoming drawing callbacks. The host owns asset selection and export configuration.
 
-## Validation
-
-Run `npm test` for the complete unit suite, including playback, lifecycle, composition, queue, and duration tests. The shared Vitest config enforces at least 90% line and statement coverage for the React players and shared hooks. The browser scenarios use real generated H.264/AAC media with HTTP range support:
-
-```sh
-npx lex test --e2e --e2eConfig playwright.config.ts --testNamePattern 'native player|timeline composes'
-```
-
-Storybook includes native, compact, passive, timeline, looping, and empty examples.
-
 ## Component API
 
 ### VideoPlayer

@@ -1,12 +1,8 @@
-# GothamUI: The Complete Front-End UI Framework
+# GothamUI
 
 > **GothamJS is now GothamUI.** Install `@nlabs/gothamui`. Existing component APIs and subpath exports are preserved. See the [migration guide](MIGRATION.md).
 
 ![GothamUI lowercase g logo](docs/assets/gothamui-logo.png)
-
-## Seamlessly integrating components, routing, state management, and transitions
-
-> A comprehensive front-end UI framework that handles everything from component rendering to routing and smooth transitions with minimal configuration.
 
 [![npm version](https://img.shields.io/npm/v/@nlabs/gothamui.svg?style=flat-square)](https://www.npmjs.com/package/@nlabs/gothamui)
 [![npm downloads](https://img.shields.io/npm/dm/@nlabs/gothamui.svg?style=flat-square)](https://www.npmjs.com/package/@nlabs/gothamui)
@@ -16,25 +12,17 @@
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 [![Chat](https://img.shields.io/discord/446122412715802649.svg)](https://discord.gg/Ttgev58)
 
-GothamUI is an all-inclusive React framework that unifies UI components, navigation, state management, and transitions into one cohesive system. Built by Nitrogen Labs, GothamUI eliminates the need to piece together multiple libraries, providing developers with a consistent, integrated solution for all front-end UI needs.
+GothamUI provides React 19 components, routing, forms, and Tailwind CSS v4 styles.
 
-## How GothamUI fits into your app
+## Documentation
 
-Your application keeps ownership of its routes, configuration, domain logic, and data. GothamUI turns those inputs into a cohesive presentation layer with components, navigation, state, forms, responsive styling, localization, and telemetry built in.
+Start with [Getting Started](#getting-started) below. Detailed guides live in `docs/`:
 
-![GothamUI architecture showing how a React app flows through the GothamUI presentation layer into a complete user experience](docs/assets/gothamui-app-architecture.svg)
-
-## Key Features
-
-- **Unified Component Library**: Beautifully designed, fully customizable UI components with consistent styling and behavior
-- **Seamless Routing & Transitions**: Built-in navigation system with smooth page transitions and animations
-- **Integrated State Management**: Flux-based state handling that connects directly to your UI components
-- **Form System**: Complete form components with validation, error handling, and accessibility features
-- **Theming & Styling**: Light/dark mode support and customizable design system based on Tailwind CSS
-- **Responsive Design**: Mobile-first components that adapt beautifully to any screen size
-- **Internationalization**: Built-in i18n support for multilingual applications
-- **Authentication Flows**: Ready-to-use authentication UI components and routing guards
-- **Icon Library**: Complete Lucide React icon set available for use throughout your application
+- [API reference](docs/api-reference.md), including authentication forms, document head, drawers, chat, and notifications
+- [Analytics](docs/analytics.md)
+- [Payment methods](docs/payments.md)
+- [Video players](docs/video-player.md)
+- [Migration from GothamJS](MIGRATION.md)
 
 ## Getting Started
 
@@ -219,20 +207,11 @@ import {Chat} from '@nlabs/gothamui';
 import {ChatList, MessageBox, MessageList} from '@nlabs/gothamui/chat';
 ```
 
-Chat components inherit their runtime styles from GothamUI's Tailwind v4 stylesheet, so import [`@nlabs/gothamui/styles/tailwind.css`](#installation) once at your app entrypoint.
+Chat components inherit their runtime styles from GothamUI's Tailwind v4 stylesheet, so import [`@nlabs/gothamui/styles/tailwind.css`](#importing-gothamui-styles) once at your app entrypoint.
 
 ### Icons
 
 GothamUI includes the complete [Lucide React](https://lucide.dev/) icon library, providing you with over 1000+ beautifully designed, customizable icons that follow a consistent design language.
-
-#### Why Lucide React?
-
-- **Consistent Design**: All icons follow the same design principles and stroke width
-- **Customizable**: Easy to customize size, color, stroke width, and other properties
-- **Accessible**: Built with accessibility in mind, including proper ARIA attributes
-- **Tree Shakeable**: Only the icons you import are included in your bundle
-- **TypeScript Support**: Full type definitions for all icons
-- **Active Development**: Regularly updated with new icons and improvements
 
 #### Quick Reference
 
@@ -272,9 +251,9 @@ All Lucide React icons support these common properties:
 
 > **Note**: The `Loader` icon from Lucide React is exported as `LucideLoader` to avoid conflicts with GothamUI's `Loader` component.
 
-### Optimized Form Components
+### Forms
 
-GothamUI provides optimized form components with automatic validation, accessibility features, and performance optimizations:
+Use `Form` with a Zod schema and field components to collect and validate input:
 
 ```jsx
 import { Button, Form, TextField } from '@nlabs/gothamui';
@@ -322,15 +301,6 @@ const LoginForm = () => (
   </Form>
 );
 ```
-
-#### Optimized Form Features
-
-- **Automatic Validation**: Integrated Zod schema validation with react-hook-form
-- **Performance Optimized**: Efficient re-rendering and validation triggering
-- **Accessibility**: Proper ARIA attributes and form structure
-- **Loading States**: Use `Button` with `disabled` and `isLoading` during form submission
-- **Error Handling**: Both field-level and form-level error display
-- **Type Safety**: Full TypeScript support with inferred types
 
 ### Legacy Form Components
 
@@ -385,7 +355,7 @@ import {PaymentMethodPanel} from '@nlabs/gothamui';
 />
 ```
 
-Use `isAdding` and `isRemoving` to represent provider operations. See the [payment-method documentation](./src/docs/payments.md) for empty states, customization, props, and the security boundary.
+Use `isAdding` and `isRemoving` to represent provider operations. See the [payment-method documentation](docs/payments.md) for empty states, customization, props, and the security boundary.
 
 ### UI Components
 
@@ -459,7 +429,7 @@ content until that callback if it should remain visible during the exit.
 Include a `DialogTitle` child to give the dialog an accessible name, as above.
 Panel HTML attributes and `style` are supported; the component owns its transform
 for animation. The default panel is full height, full width up to `max-w-lg`;
-give long content its own scrollable body. See the [Drawer notes](src/components/Drawer/README.md).
+give long content its own scrollable body. See the [Drawer notes](docs/api-reference.md#drawer).
 
 ### Markdown
 
@@ -732,7 +702,7 @@ const MyComponent = () => {
 };
 ```
 
-Learn more in the [Analytics documentation](./src/docs/analytics.md).
+Learn more in the [Analytics documentation](docs/analytics.md).
 
 ## Theming
 
@@ -774,23 +744,13 @@ const config = {
 };
 ```
 
-## Why Choose GothamUI?
-
-- **UI Consistency**: Create visually cohesive applications with a unified design language
-- **Developer Experience**: Spend less time wiring up libraries and more time building features
-- **Reduced Bundle Size**: One framework instead of multiple libraries means optimized bundle size
-- **Seamless Transitions**: Built-in animations and transitions between routes and UI states
-- **Accessibility**: Components designed with accessibility in mind from the start
-- **Rapid Development**: Go from concept to production with significantly less boilerplate code
-- **TypeScript Support**: Full type definitions for enhanced developer experience
-
 ## Learn More
 
 Visit our [official documentation](https://gothamui.nitrogenx.co) for comprehensive guides, API references, and examples.
 
 ## Using with Lex
 
-GothamUI works seamlessly with [Lex](https://github.com/nitrogenlabs/lex), Nitrogen Labs' build and development toolkit. Lex provides optimized building, testing, and development workflows for projects using GothamUI.
+Use [Lex](https://github.com/nitrogenlabs/lex) to build, test, and run projects using GothamUI.
 
 ### Installation
 
@@ -848,15 +808,6 @@ export default {
 };
 ```
 
-### Build Optimization
-
-Lex optimizes GothamUI builds by:
-
-- **Tree Shaking**: Removes unused GothamUI components from your bundle
-- **CSS Optimization**: Processes Tailwind CSS with GothamUI theme variables
-- **TypeScript Compilation**: Optimized compilation with proper type checking
-- **Asset Handling**: Automatic copying of GothamUI assets and fonts
-
 ### Example Project Structure
 
 ```text
@@ -887,10 +838,6 @@ In your `src/styles/main.css`:
 
 Lex will automatically process this CSS file and include it in your build output.
 
-## License
-
-GothamUI is [MIT licensed](./LICENSE).
-
 ### Controlled selectors
 
 `SelectField` supports `value` and `onChange(value)` alongside Gotham form context and uncontrolled `defaultValue`. Pass `label` for accessible desktop and mobile controls, `disabled` while updating, and `required` for native form validation. Base spacing is retained when a custom `className` is supplied. Desktop uses the keyboard-accessible listbox; mobile uses a labeled native selector.
@@ -920,11 +867,15 @@ goto forwards navigation options, and replace always sets `replace: true` while
 preserving caller state. Consumers use public `@nlabs/gothamui/router` hooks and
 GothamProvider from `@nlabs/gothamui/views`; do not recreate history/event bindings.
 
-AuthSignInForm and AuthSignUpForm provide reusable credential forms through the root, components and form entries. Full auth views compose them with unchanged defaults. See [auth form options and validation ownership](docs/auth-forms.md).
+AuthSignInForm and AuthSignUpForm provide reusable credential forms through the root, components and form entries. Full auth views compose them with unchanged defaults. See [auth form options and validation ownership](docs/api-reference.md#authentication-forms).
 
 
 ## Scrollable Navbar
 
 `ScrollableNavbar` (root/components exports) composes `Navbar` with arbitrary children using its documented `navbar-section` and `navbar-item` slots. Pass `activeKey`, `ariaLabel`, Navbar `className`, `wrapperClassName` and `arrowClassName`. Defaults use `scrollable-navbar`/`scrollable-navbar-arrow` plus `is-overflowing`, `can-scroll-left`, `can-scroll-right`, `is-left` and `is-right`; applications own rail/layout styles, links and labels. Controls are native focusable buttons named "Show previous tabs" and "Show more tabs".
 
-It preserves 2px overflow/edge tolerance, 4px adjacent-item tolerance, 65% viewport fallback, smooth scrolling with nonnegative offsets and active item centering (`is-active` or `aria-current=page`). Scroll listeners are passive, ResizeObserver is optional, and subscriptions release on active/content changes and unmount. Removing the section resets controls; changed children remeasure/rebind. No Tabs item schema or additional routing lifecycle is introduced.
+The selected item is centered automatically. Mark it with `is-active` or `aria-current="page"`. The arrow controls scroll adjacent items into view.
+
+## License
+
+GothamUI is [MIT licensed](./LICENSE).
