@@ -827,8 +827,8 @@ lex dev
 # Build for production
 lex compile
 
-# Run tests
-lex test
+# Run the complete test suite with coverage
+npm test
 
 # Lint and fix code
 lex lint --fix
@@ -904,3 +904,27 @@ Use `VideoPlayer`, `TimelineVideoPlayer`, and `PlaybackControls` from `@nlabs/go
 Navbar's mobile sidebar uses a damped spring on both expansion and collapse, preserving velocity when direction changes. It responds immediately to `prefers-reduced-motion`, including changes during travel. Closed sidebar content is inert and hidden from assistive technology; closing from within the sidebar returns focus to its trigger. No consumer animation adapter is required.
 
 `SidebarMenu` is a controlled grouped navigation component: provide `groups` (`id`, `label`, `content`), `expandedId`, and `onExpandedChange`. It animates group height with the same damped spring, supports changing content height, and makes collapsed links inert. Consumers render their own router links in each group's content.
+
+
+### Route analytics metadata
+
+Route `analytics` accepts a `GothamRouteAnalytics` object (`viewId`, optional `route`
+and `title`) or a pure `(pathname: string) => GothamRouteAnalytics | undefined`
+callback. These types are exported from `@nlabs/gothamui`. GothamRoot selects the
+deepest defined metadata from matched routes; an undefined callback falls through
+to the parent. Callbacks receive only the raw pathname, never query/hash data;
+errors remain visible. Stable `viewId` values deduplicate page views.
+
+Flux navigation uses React Router's NavigateFunction: back/forward move by -1/+1,
+goto forwards navigation options, and replace always sets `replace: true` while
+preserving caller state. Consumers use public `@nlabs/gothamui/router` hooks and
+GothamProvider from `@nlabs/gothamui/views`; do not recreate history/event bindings.
+
+AuthSignInForm and AuthSignUpForm provide reusable credential forms through the root, components and form entries. Full auth views compose them with unchanged defaults. See [auth form options and validation ownership](docs/auth-forms.md).
+
+
+## Scrollable Navbar
+
+`ScrollableNavbar` (root/components exports) composes `Navbar` with arbitrary children using its documented `navbar-section` and `navbar-item` slots. Pass `activeKey`, `ariaLabel`, Navbar `className`, `wrapperClassName` and `arrowClassName`. Defaults use `scrollable-navbar`/`scrollable-navbar-arrow` plus `is-overflowing`, `can-scroll-left`, `can-scroll-right`, `is-left` and `is-right`; applications own rail/layout styles, links and labels. Controls are native focusable buttons named "Show previous tabs" and "Show more tabs".
+
+It preserves 2px overflow/edge tolerance, 4px adjacent-item tolerance, 65% viewport fallback, smooth scrolling with nonnegative offsets and active item centering (`is-active` or `aria-current=page`). Scroll listeners are passive, ResizeObserver is optional, and subscriptions release on active/content changes and unmount. Removing the section resets controls; changed children remeasure/rebind. No Tabs item schema or additional routing lifecycle is introduced.

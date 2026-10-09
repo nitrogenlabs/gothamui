@@ -26,7 +26,7 @@ export * from './views/index.js';
 
 export * from './i18n/index.js';
 
-export type {GothamRouteData} from './types/gotham.js';
+export type {GothamRouteAnalytics, GothamRouteAnalyticsSource, GothamRouteData} from './types/gotham.js';
 
 export {
   AuthConstants,

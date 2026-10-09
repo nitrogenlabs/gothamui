@@ -10,15 +10,12 @@ import {AuthRoute} from '../components/AuthRoute/AuthRoute.js';
 import {Config} from '../config/appConfig.js';
 
 import type {RouteObject} from 'react-router';
+import type {GothamRouteAnalyticsSource} from '../types/gotham.js';
 
 
 // Define a type for our custom route objects
 export type CustomRouteProps = RouteObject & {
-  readonly analytics?: {
-    readonly route?: string;
-    readonly title?: string;
-    readonly viewId: string;
-  };
+  readonly analytics?: GothamRouteAnalyticsSource;
   readonly authenticate?: boolean;
   readonly props?: Record<string, unknown>;
   readonly routes?: CustomRouteProps[];

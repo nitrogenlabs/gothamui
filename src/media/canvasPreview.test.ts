@@ -1,6 +1,6 @@
 import {afterEach, describe, expect, it, vi} from 'vitest';
 
-import {createCanvasPreview} from './canvasPreview.js';
+import {createCanvasPreview} from '../video/index.js';
 
 import type {PreviewScene} from './canvasPreview.js';
 

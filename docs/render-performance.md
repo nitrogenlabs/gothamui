@@ -27,8 +27,7 @@ These changes prevent the covered redundant update paths; they do not guarantee 
 
 ## Verification
 
-- `npm test` runs the unit and render-isolation regression suite through Lex/Vitest.
-- `npm test -- --collectCoverageFrom 'src/{components,views}/**/*.{ts,tsx}'` checks the existing coverage thresholds and exclusions.
+- `npm test` runs the unit and render-isolation regression suite through Lex/Vitest, including coverage thresholds and exclusions from the shared `vitest.config.mts`.
 - `lex test --e2e --e2eConfig ./playwright.config.ts` exercises desktop form editing, selection, password visibility, submission, and mobile native selection.
 
 The installed Lex lint command expands its source glob through a shell and misses nested folders. A direct full-tree ESLint check also exposes an existing lint backlog, including a compatibility hook rule that incorrectly flags arrow-function components. The repository-wide lint result is not a clean baseline.

@@ -1,6 +1,6 @@
 /* @vitest-environment jsdom */
 import {render} from '@nlabs/lex/test-react';
-import {vi} from 'vitest';
+import {beforeEach, vi} from 'vitest';
 
 import {GothamContext} from '../../utils/GothamContext.js';
 
@@ -27,6 +27,13 @@ vi.mock('../../components/Notify/Notify.js', () => ({Notify: () => null}));
 vi.mock('../LoaderView/LoaderView.js', () => ({LoaderView: () => null}));
 
 const {GothamRoot} = await import('./GothamRoot.js');
+
+beforeEach(() => {
+  location.hash = '';
+  location.pathname = '/home';
+  location.search = '';
+  matches = [];
+});
 
 describe('GothamRoot analytics', () => {
   it('calls awsRum.track once for each distinct sanitized route', () => {
@@ -81,4 +88,26 @@ describe('GothamRoot analytics', () => {
 
     matches = [];
   });
+});
+
+it('tracks resolved aliases, fallback and each project while excluding query/hash-only changes', () => {
+  const awsRum = {track: vi.fn()};
+  matches = [{handle: {analytics: (pathname: string) => {
+    const route = pathname === '/contact' ? '/support' : pathname.startsWith('/projects/') ? pathname : '/';
+    return {route, title: 'Resolved title', viewId: route};
+  }}}, {handle: {analytics: () => undefined}}];
+  location.pathname = '/contact';
+  const node = <GothamContext.Provider value={{Flux: {} as never, awsRum}}><GothamRoot /></GothamContext.Provider>;
+  const {rerender} = render(node);
+  expect(awsRum.track).toHaveBeenLastCalledWith(expect.objectContaining({path: '/support', properties: {title: 'Resolved title', viewId: '/support'}}));
+  for(const pathname of ['/projects/a', '/projects/b', '/unknown']) {
+    location.pathname = pathname;
+    rerender(<GothamContext.Provider value={{Flux: {} as never, awsRum}}><GothamRoot /></GothamContext.Provider>);
+  }
+  expect(awsRum.track.mock.calls.map(([event]) => event.path)).toEqual(['/support', '/projects/a', '/projects/b', '/']);
+  location.pathname = '/another-unknown';
+  location.hash = '#programs';
+  location.search = '?private=secret';
+  rerender(<GothamContext.Provider value={{Flux: {} as never, awsRum}}><GothamRoot /></GothamContext.Provider>);
+  expect(awsRum.track).toHaveBeenCalledTimes(4);
 });

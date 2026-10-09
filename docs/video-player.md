@@ -82,9 +82,29 @@ For application-owned playback, use a `ref` of type `TimelineVideoPlayerHandle` 
 
 For an existing engine, `PlaybackControls` exposes play/pause/mute/fullscreen callbacks, duration, scene markers, a clock slot, custom groups, and refs for the scrubber/progress indicators. It owns no store or clock. All interactive controls include `cursor-pointer` and accessible names.
 
+## Application-owned canvas preview
+
+For custom editor controls or offscreen poster capture, import `createCanvasPreview` and the
+`CanvasPreviewOptions`/`PreviewScene` types from `@nlabs/gothamui/video`. The factory uses the same
+decoder, timeline, frame queue, audio synchronization and transitions as `TimelineVideoPlayer`.
+It returns `prepare(seconds)`, `play()`, `pause()`, `seek(seconds)`, `setMuted(boolean)`,
+`setRatio(number)` and `destroy()`. Prepare a frame before reading the supplied canvas; always
+destroy the engine when the operation finishes, is canceled, or its owner unmounts.
+
+The host supplies the canvas, scenes, and `onEnded`/`onMetadata`/`onPosition`/`onState` callbacks.
+`resolveMediaUrl` applies to images and decoded streams; `mediaRequestInit` applies only to
+decoded video/audio and receives the resolved URL. Native images still need public or signed
+URLs. A host that removes expiring query grants from private streams must retain signed image
+URLs and attach session headers only to its trusted media paths. A mutable `Headers` instance
+allows later range requests to observe session rotation without recreating the decoder.
+
+`paintTransition` is also exported from the video entry point for canvas transition swatches.
+It accepts a canvas context, width, height, transition name, progress from zero to one, and
+outgoing/incoming drawing callbacks. The host owns asset selection and export configuration.
+
 ## Validation
 
-Run `npm run test:video` for playback, lifecycle, composition, queue, and duration tests, with at least 90% line and statement coverage enforced for the React players and shared hooks. `npm test` runs the complete unit suite. The browser scenarios use real generated H.264/AAC media with HTTP range support:
+Run `npm test` for the complete unit suite, including playback, lifecycle, composition, queue, and duration tests. The shared Vitest config enforces at least 90% line and statement coverage for the React players and shared hooks. The browser scenarios use real generated H.264/AAC media with HTTP range support:
 
 ```sh
 npx lex test --e2e --e2eConfig playwright.config.ts --testNamePattern 'native player|timeline composes'

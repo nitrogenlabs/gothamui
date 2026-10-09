@@ -116,26 +116,33 @@ export const GothamProvider: FC<GothamProviderProps> = ({config: appConfig}) => 
   const {
     isAuth,
     middleware,
-    routes = [],
     storageType,
     stores,
     i18n: providedI18n,
     translations
   } = config;
+  const routes = appConfig.routes ?? defaultGothamConfig.routes ?? [];
   const name = config?.app?.name;
   const awsRum = config.awsRum || defaultAwsRum;
   const [session, setSession] = useState({});
   const [isFluxReady, setIsFluxReady] = useState(Boolean((flux as any)?.isInit));
-  const router = useMemo(() => createBrowserRouter(
-    [
+  const [router, setRouter] = useState<ReturnType<typeof createBrowserRouter> | null>(null);
+
+  const [routerVersion, setRouterVersion] = useState(0);
+
+  useEffect(() => {
+    const nextRouter = createBrowserRouter([
       {
         Component: GothamRoot,
         children: parseRoutes(routes as unknown as CustomRouteProps[]),
         index: false,
         path: '/'
       }
-    ]
-  ), [routes]);
+    ]);
+    setRouter(nextRouter);
+    setRouterVersion((version) => version + 1);
+    return () => nextRouter.dispose();
+  }, [routes]);
 
   // Initialize i18next if translations are provided but no i18n instance is given
   const i18nInstance = useMemo(() => {
@@ -167,6 +174,11 @@ export const GothamProvider: FC<GothamProviderProps> = ({config: appConfig}) => 
   useEffect(() => {
     Config.set(config as Record<string, unknown>);
     let isMounted = true;
+    let unregisterFlux: (() => void) | undefined;
+    const onSignOut = signOut(flux);
+    const onUpdateSession = ({session}: {session: Record<string, unknown>}): void => {
+      setSession(session);
+    };
 
     const setupFlux = async () => {
       if(!flux) {
@@ -198,12 +210,13 @@ export const GothamProvider: FC<GothamProviderProps> = ({config: appConfig}) => 
         await flux.init(fluxConfig);
       }
 
-      flux.on(GothamConstants.SIGN_OUT, signOut(flux));
-      flux.on(GothamConstants.UPDATE_SESSION, ({session}) => {
-        setSession(session);
-      });
+      if(!isMounted) {
+        return;
+      }
 
-      registerFlux(flux);
+      flux.on(GothamConstants.SIGN_OUT, onSignOut);
+      flux.on(GothamConstants.UPDATE_SESSION, onUpdateSession);
+      unregisterFlux = registerFlux(flux);
       if(isMounted) {
         setIsFluxReady(true);
       }
@@ -215,6 +228,9 @@ export const GothamProvider: FC<GothamProviderProps> = ({config: appConfig}) => 
 
     return () => {
       isMounted = false;
+      unregisterFlux?.();
+      flux?.off(GothamConstants.SIGN_OUT, onSignOut);
+      flux?.off(GothamConstants.UPDATE_SESSION, onUpdateSession);
     };
   }, [flux, config, middleware, name, storageType, stores]);
 
@@ -228,7 +244,7 @@ export const GothamProvider: FC<GothamProviderProps> = ({config: appConfig}) => 
 
   const contextValue = useMemo(() => ({Flux: flux, awsRum, isAuth, session}), [flux, awsRum, isAuth, session]);
 
-  if(!isFluxReady) {
+  if(!isFluxReady || !router) {
     return null;
   }
 
@@ -237,7 +253,7 @@ export const GothamProvider: FC<GothamProviderProps> = ({config: appConfig}) => 
       <I18nextProvider i18n={i18nInstance}>
         <GothamContext.Provider value={contextValue}>
           <div>
-            <RouterProvider router={router}/>
+            <RouterProvider key={routerVersion} router={router}/>
           </div>
         </GothamContext.Provider>
       </I18nextProvider>
@@ -247,7 +263,7 @@ export const GothamProvider: FC<GothamProviderProps> = ({config: appConfig}) => 
   return (
     <GothamContext.Provider value={contextValue}>
       <div>
-        <RouterProvider router={router}/>
+        <RouterProvider key={routerVersion} router={router}/>
       </div>
     </GothamContext.Provider>
   );

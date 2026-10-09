@@ -11,7 +11,7 @@ vi.mock('../../utils/navEventQueue.js', () => ({registerFlux: vi.fn()}));
 vi.mock('react-router', async (importOriginal) => ({
   ...await importOriginal<typeof import('react-router')>(),
   RouterProvider: vi.fn(() => <div>Router</div>),
-  createBrowserRouter: vi.fn(() => ({}))
+  createBrowserRouter: vi.fn(() => ({dispose: vi.fn()}))
 }));
 
 test('keeps the router and initialization stable across session and parent updates', async () => {
@@ -20,6 +20,9 @@ test('keeps the router and initialization stable across session and parent updat
     addMiddleware: vi.fn(),
     addStores: vi.fn(async () => {}),
     isInit: true,
+    off: vi.fn((event, listener) => {
+      if(listeners.get(event) === listener) listeners.delete(event);
+    }),
     on: vi.fn((event, listener) => {
       listeners.set(event, listener);
     })

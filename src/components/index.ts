@@ -68,3 +68,12 @@ export * from './VideoPlayer/VideoPlayer.js';
 
 export {SidebarMenu} from './SidebarMenu/SidebarMenu.js';
 export type {SidebarMenuProps} from './SidebarMenu/SidebarMenu.js';
+
+export * from './DocumentHead/DocumentHead.js';
+
+export * from './AuthSignInForm/AuthSignInForm.js';
+export * from './AuthSignUpForm/AuthSignUpForm.js';
+
+export type {AuthFieldOptions, AuthFormProps} from '../form/authTypes.js';
+
+export * from './ScrollableNavbar/ScrollableNavbar.js';

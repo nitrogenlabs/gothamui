@@ -33,9 +33,9 @@ export const clear = (): void => {
   handlers.clear();
 };
 
-export const registerFlux = (flux: any): void => {
+export const registerFlux = (flux: any): (() => void) => {
   if(!flux || typeof flux.on !== 'function') {
-    return;
+    return () => undefined;
   }
 
   const capture = (type: string) => (data: any) => {
@@ -51,8 +51,14 @@ export const registerFlux = (flux: any): void => {
     }
   };
 
-  flux.on(GothamConstants.NAV_GOTO, capture(GothamConstants.NAV_GOTO));
-  flux.on(GothamConstants.NAV_REPLACE, capture(GothamConstants.NAV_REPLACE));
-  flux.on(GothamConstants.NAV_BACK, capture(GothamConstants.NAV_BACK));
-  flux.on(GothamConstants.NAV_FORWARD, capture(GothamConstants.NAV_FORWARD));
+  const subscriptions = [
+    GothamConstants.NAV_GOTO,
+    GothamConstants.NAV_REPLACE,
+    GothamConstants.NAV_BACK,
+    GothamConstants.NAV_FORWARD
+  ].map((type) => ({listener: capture(type), type}));
+
+  subscriptions.forEach(({listener, type}) => flux.on(type, listener));
+
+  return () => subscriptions.forEach(({listener, type}) => flux.off?.(type, listener));
 };

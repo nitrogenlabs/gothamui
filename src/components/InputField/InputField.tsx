@@ -68,6 +68,7 @@ const InputFieldComponent = ({
   textColor = 'neutral',
   ...inputProps
 }: InputFieldProps) => {
+  const accessibleLabel = inputProps['aria-label'] ?? (inputProps['aria-labelledby'] ? undefined : label);
   const borderClasses = useMemo(
     () => getInputBorderClass(borderType, borderColor, textColor, placeholderColor),
     [borderType, borderColor, textColor, placeholderColor]
@@ -98,6 +99,7 @@ const InputFieldComponent = ({
   return multiline ? (
     <textarea
       {...inputProps as TextareaHTMLAttributes<HTMLTextAreaElement>}
+      aria-label={accessibleLabel}
       className={inputClasses}
       disabled={disabled}
       ref={ref as Ref<HTMLTextAreaElement>}
@@ -106,6 +108,7 @@ const InputFieldComponent = ({
   ) : (
     <input
       {...inputProps as InputHTMLAttributes<HTMLInputElement>}
+      aria-label={accessibleLabel}
       className={inputClasses}
       disabled={disabled}
       ref={ref as Ref<HTMLInputElement>}

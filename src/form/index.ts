@@ -10,3 +10,7 @@ export * from '../components/RadioField/RadioField.js';
 export * from '../components/SelectField/SelectField.js';
 export * from '../components/SelectField/SelectOption.js';
 export * from '../components/TextField/TextField.js';
+
+export * from '../components/AuthSignInForm/AuthSignInForm.js';
+export * from '../components/AuthSignUpForm/AuthSignUpForm.js';
+export type {AuthFieldOptions, AuthFormProps} from './authTypes.js';

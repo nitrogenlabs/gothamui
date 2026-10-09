@@ -362,3 +362,11 @@ Action creators for common operations.
 | `setConfig` | `(config: GothamConfiguration) => Promise<FluxAction>` | Update configuration |
 | `signOut` | `() => Promise<FluxAction>` | Sign out user |
 | `updateTitle` | `(title: string, separator?: string) => Promise<FluxAction>` | Update page title |
+
+## Document head
+
+`DocumentHead` is exported from `@nlabs/gothamui/head` and the components barrel. `renderDocumentHead({metadata, owner})` is exported from the pure `@nlabs/gothamui/head/static` entry. See [scoped document head](./document-head.md) for ownership, JSON validation, cleanup and static adoption contracts. Route metadata/schema policy remains consumer-owned. These exports are validated locally in Giraldo's unpublished compatible archive.
+
+## Reusable auth forms
+
+`AuthSignInForm`, `AuthSignUpForm`, their readonly props/value types and `AuthFieldOptions` are public from root/components/form. See [authentication form documentation](../../docs/auth-forms.md) for schema, field, content and pending options. Provider integration and session policy stay application-owned.

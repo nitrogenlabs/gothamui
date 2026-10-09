@@ -8,34 +8,14 @@ import {Outlet, useLocation, useMatches, useNavigate} from 'react-router';
 
 import {Notify} from '../../components/Notify/Notify.js';
 import {GothamConstants} from '../../constants/GothamConstants.js';
+import {navBack, navForward, navGoto, navReplace} from '../../utils/navigationHandlers.js';
+import {resolveRouteAnalytics} from '../../utils/routeAnalytics.js';
 import {GothamContext} from '../../utils/GothamContext.js';
 import {LoaderView} from '../LoaderView/LoaderView.js';
 
 import type {FC} from 'react';
 
-interface RouteAnalytics {
-  readonly route?: string;
-  readonly title?: string;
-  readonly viewId: string;
-}
-
-export const navBack = (history) => (): void => {
-  history.goBack();
-};
-
-export const navForward = (history) => (): void => {
-  history.goForward();
-};
-
-export const navGoto = (navigate) => (data): void => {
-  const {params, path = ''} = data;
-  navigate(path, params);
-};
-
-export const navReplace = (history) => (data): void => {
-  const {params, path = ''} = data;
-  history.replace(path, params);
-};
+export {navBack, navForward, navGoto, navReplace} from '../../utils/navigationHandlers.js';
 
 export const GothamRoot: FC = () => {
   const {awsRum} = useContext(GothamContext);
@@ -50,10 +30,7 @@ export const GothamRoot: FC = () => {
   useFluxListener(GothamConstants.NAV_REPLACE, navReplace(navigate));
 
   useEffect(() => {
-    const analytics = [...matches]
-      .reverse()
-      .map((match) => (match.handle as {analytics?: RouteAnalytics} | undefined)?.analytics)
-      .find(Boolean);
+    const analytics = resolveRouteAnalytics(matches, location.pathname);
     const path = analytics?.route || location.pathname;
     const viewId = analytics?.viewId || path;
 

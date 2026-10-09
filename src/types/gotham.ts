@@ -1,11 +1,17 @@
 import type {RouteProps} from 'react-router';
 
-export type GothamRouteData = RouteProps & {
-  readonly analytics?: {
-    readonly route?: string;
-    readonly title?: string;
-    readonly viewId: string;
-  };
+export interface GothamRouteAnalytics {
+  readonly route?: string;
+  readonly title?: string;
+  readonly viewId: string;
+}
+
+export type GothamRouteAnalyticsSource =
+  | GothamRouteAnalytics
+  | ((pathname: string) => GothamRouteAnalytics | undefined);
+
+export type GothamRouteData = Omit<RouteProps, 'children'> & {
+  readonly analytics?: GothamRouteAnalyticsSource;
   readonly authenticate?: boolean;
   // readonly component?: any;
   // readonly container?: 'default' | 'menu';
@@ -17,7 +23,7 @@ export type GothamRouteData = RouteProps & {
 
   readonly props?: any;
 
-  readonly children?: any ; // GothamRouteData[];
+  readonly children?: GothamRouteData[];
   readonly index?: boolean;
   // readonly sensitive?: boolean;
   // readonly strict?: boolean;
