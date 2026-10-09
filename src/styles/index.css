@@ -545,9 +545,6 @@
   .m-0 {
     margin: 0px;
   }
-  .m-4 {
-    margin: calc(var(--spacing) * 4);
-  }
   .m-\[3px\] {
     margin: 3px;
   }
@@ -1343,11 +1340,6 @@
     --tw-space-x-reverse: 0;
     margin-inline-start: calc(var(--spacing) * var(--tw-space-x-reverse));
     margin-inline-end: calc(var(--spacing) * calc(1 - var(--tw-space-x-reverse)));
-  }
-  :where(.space-x-2 > :not(:last-child)) {
-    --tw-space-x-reverse: 0;
-    margin-inline-start: calc(calc(var(--spacing) * 2) * var(--tw-space-x-reverse));
-    margin-inline-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-x-reverse)));
   }
   :where(.space-x-4 > :not(:last-child)) {
     --tw-space-x-reverse: 0;
@@ -7268,17 +7260,47 @@
   :is(button, select, input, [role]):is(:disabled, [aria-disabled='true'], [data-disabled]), label:has(input:disabled) {
     cursor: not-allowed !important;
   }
-  :root, :host {
+  :root,
+  :host {
     --default-font-family: var(--gotham-font-family, ui-sans-serif, system-ui, sans-serif);
   }
-  html, body, :host {
+  html,
+  body,
+  :host {
     font-family: var(--gotham-font-family, ui-sans-serif, system-ui, sans-serif);
   }
-  button, input, textarea, select {
+  button,
+  input,
+  textarea,
+  select {
     font: inherit;
   }
 }
-input:-internal-autofill-selected, input:-internal-autofill-selected:hover , input:-internal-autofill-selected:focus, input:-internal-autofill-selected:active, input:-internal-autofill-selected:focus-visible, input:-internal-autofill-selected:focus-within, input:-internal-autofill-previewed, input:-internal-autofill-previewed:hover, input:-internal-autofill-previewed:focus, input:-internal-autofill-previewed:active, input:-internal-autofill-previewed:focus-visible, input:-internal-autofill-previewed:focus-within, input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, textarea:-internal-autofill-selected, textarea:-internal-autofill-previewed, textarea:-webkit-autofill, textarea:-webkit-autofill:hover, textarea:-webkit-autofill:focus, select:-internal-autofill-selected, select:-internal-autofill-previewed, select:-webkit-autofill, select:-webkit-autofill:hover, select:-webkit-autofill:focus {
+input:-internal-autofill-selected,
+  input:-internal-autofill-selected:hover ,
+  input:-internal-autofill-selected:focus,
+  input:-internal-autofill-selected:active,
+  input:-internal-autofill-selected:focus-visible,
+  input:-internal-autofill-selected:focus-within,
+  input:-internal-autofill-previewed,
+  input:-internal-autofill-previewed:hover,
+  input:-internal-autofill-previewed:focus,
+  input:-internal-autofill-previewed:active,
+  input:-internal-autofill-previewed:focus-visible,
+  input:-internal-autofill-previewed:focus-within,
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-internal-autofill-selected,
+  textarea:-internal-autofill-previewed,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  select:-internal-autofill-selected,
+  select:-internal-autofill-previewed,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 1000px transparent inset;
   box-shadow: 0 0 0 1000px transparent inset;
   -webkit-text-fill-color: inherit;
