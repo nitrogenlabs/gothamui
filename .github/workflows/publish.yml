@@ -73,7 +73,9 @@ jobs:
           npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP/gothamui-release"
           archive="$RUNNER_TEMP/gothamui-release/nlabs-gothamui-${{ steps.version.outputs.version }}.tgz"
           test -f "$archive"
-          tar -tzf "$archive" | grep -q '^package/lib/index.js$'
+          # grep -q exits at the first match and would SIGPIPE tar under pipefail, so list to a file first.
+          tar -tzf "$archive" > "$RUNNER_TEMP/gothamui-release/FILES"
+          grep -q '^package/lib/index.js$' "$RUNNER_TEMP/gothamui-release/FILES"
           sha256sum "$archive" > "$RUNNER_TEMP/gothamui-release/SHA256SUMS"
           printf 'path=%s\n' "$archive" >> "$GITHUB_OUTPUT"
 
