@@ -535,6 +535,34 @@ import {CodeEditor} from '@nlabs/gothamui/editor';
 />
 ```
 
+### MarkdownEditor
+
+`MarkdownEditor` is a Lexical-based markdown editor with a formatting toolbar (undo/redo, headings, bold, italic, inline code, link, bulleted/numbered/check lists, quote) and markdown shortcuts. Import it from its own entry point so Lexical stays out of normal component imports:
+
+```tsx
+import {MarkdownEditor} from '@nlabs/gothamui/markdown-editor';
+
+<MarkdownEditor
+  aria-label="Chapter body"
+  height={400}
+  onChange={setMarkdown}
+  placeholder="Write your chapter…"
+  value={markdown}
+/>
+```
+
+The editor is controlled: `value` is markdown, `onChange` receives markdown for user edits only (replacing `value` from outside never calls `onChange`).
+
+| Prop | Description |
+| --- | --- |
+| `aria-label` | Accessible name of the editing surface. |
+| `className`, `height`, `minHeight` | Container sizing and styling. |
+| `highlights` | `{end, id, start, text?}[]` ranges to highlight (CSS Custom Highlight API). With `text` the range is found by searching the rendered text; otherwise `start`/`end` are offsets into the rendered text. |
+| `onHighlightClick` | Called with `{clientX, clientY, highlight}` when a highlight is clicked, so an application can attach its own comment or annotation UI. |
+| `onRequestLink` | Returns the URL for the link button (sync or async, `null` cancels). Defaults to `window.prompt`. |
+| `onSelectionChange` | Called with `{end, start, text}` (markdown offsets) or `null` when the selection collapses. |
+| `placeholder`, `readOnly`, `showToolbar` | Empty-state text, read-only mode (no toolbar), and toolbar visibility. |
+
 ### Public Views
 
 Every GothamUI view is part of the public package API. Import views from the package root or from the dedicated `views` entry point:

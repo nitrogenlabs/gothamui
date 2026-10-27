@@ -35,6 +35,7 @@ export default defineConfig({
       ],
       include: [
         'src/components/**/*.{ts,tsx}',
+        'src/markdown-editor/**/*.{ts,tsx}',
         'src/views/**/*.{ts,tsx}',
         ...auditedFiles,
         videoFiles
