@@ -1,0 +1,104 @@
+name: Publish @nlabs/gothamui
+
+# Releases are manual version commits (for example "1.13.0"). When package.json carries a version that is not yet on the
+# npm registry, this workflow verifies the package, freezes the tarball and publishes exactly that archive.
+# Prerelease versions (1.13.0-beta.1) publish under their prerelease tag, never under latest.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'package.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  cancel-in-progress: false
+  group: gothamui-publish
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Check prerequisites
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: ': "${NPM_TOKEN:?Add the repository secret NPM_TOKEN (npm automation token with publish rights to @nlabs)}"'
+
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          cache: npm
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      - name: Decide whether the version needs publishing
+        id: version
+        run: |
+          set -euo pipefail
+          name=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "$name@$version is already published."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          tag=latest
+          case "$version" in *-*) tag=$(printf '%s' "$version" | sed -E 's/^[^-]+-([A-Za-z]+).*/\1/');; esac
+          echo "publish=true" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - if: ${{ steps.version.outputs.publish == 'true' }}
+        name: Install
+        run: npm ci --ignore-scripts
+
+      - if: ${{ steps.version.outputs.publish == 'true' }}
+        name: Verify package
+        run: |
+          npm test
+          npm run build
+
+      - if: ${{ steps.version.outputs.publish == 'true' }}
+        name: Freeze verified package
+        id: package
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/gothamui-release"
+          npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP/gothamui-release"
+          archive="$RUNNER_TEMP/gothamui-release/nlabs-gothamui-${{ steps.version.outputs.version }}.tgz"
+          test -f "$archive"
+          tar -tzf "$archive" | grep -q '^package/lib/index.js$'
+          sha256sum "$archive" > "$RUNNER_TEMP/gothamui-release/SHA256SUMS"
+          printf 'path=%s\n' "$archive" >> "$GITHUB_OUTPUT"
+
+      - if: ${{ steps.version.outputs.publish == 'true' }}
+        name: Publish the frozen archive
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          set -euo pipefail
+          (cd "$RUNNER_TEMP/gothamui-release" && sha256sum -c SHA256SUMS)
+          npm publish "${{ steps.package.outputs.path }}" --access public --ignore-scripts --tag "${{ steps.version.outputs.tag }}"
+
+      - if: ${{ steps.version.outputs.publish == 'true' }}
+        name: Verify the registry
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3 4 5 6; do
+            published=$(npm view "@nlabs/gothamui@${{ steps.version.outputs.version }}" version 2>/dev/null || true)
+            [ "$published" = "${{ steps.version.outputs.version }}" ] && exit 0
+            sleep 10
+          done
+          echo "Registry does not report the published version." >&2
+          exit 1
+
+      - if: ${{ steps.version.outputs.publish == 'true' }}
+        name: Tag the release
+        run: |
+          git tag "v${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}"
