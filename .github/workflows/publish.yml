@@ -60,8 +60,9 @@ jobs:
       - if: ${{ steps.version.outputs.publish == 'true' }}
         name: Verify package
         run: |
-          npm test
+          # Some suites import the compiled output (lib/), so build first.
           npm run build
+          npm test
 
       - if: ${{ steps.version.outputs.publish == 'true' }}
         name: Freeze verified package
