@@ -907,3 +907,5 @@ The selected item is centered automatically. Mark it with `is-active` or `aria-c
 ## License
 
 GothamUI is [MIT licensed](./LICENSE).
+
+Content tabs: see [accessible tab panels](docs/tab-panels.md) for the public TabGroup family.
