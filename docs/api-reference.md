@@ -127,6 +127,7 @@ Text input component.
 | `label` | `string` | - | Field label |
 | `name` | `string` | Required | Field name |
 | `onChange` | `(event: ChangeEvent<HTMLInputElement>) => void` | - | Change handler |
+| `passwordToggleTabIndex` | `number` | - | Tab index for the password visibility button; use `-1` to skip it during sequential keyboard navigation while retaining pointer activation. Omit to keep normal keyboard access. |
 | `placeholder` | `string` | - | Placeholder text |
 | `required` | `boolean` | `false` | Whether the field is required |
 | `type` | `'text'` \| `'password'` \| `'email'` \| `'number'` \| `'tel'` | `'text'` | Input type |

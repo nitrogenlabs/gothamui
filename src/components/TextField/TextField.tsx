@@ -31,6 +31,8 @@ export interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement | H
   readonly multiline?: boolean;
   readonly name: string;
   readonly onValidate?: (isValid: boolean) => void;
+  /** Tab order of the password visibility button; omit to retain normal keyboard access. */
+  readonly passwordToggleTabIndex?: number;
   readonly pattern?: string;
   readonly placeholderColor?: GothamColor;
   readonly ref?: Ref<HTMLInputElement | HTMLTextAreaElement>;
@@ -57,6 +59,7 @@ const TextFieldComponent = ({
   name,
   onChange: onChangeProp,
   onValidate,
+  passwordToggleTabIndex,
   pattern,
   placeholder = '',
   placeholderColor = 'neutral',
@@ -130,6 +133,9 @@ const TextFieldComponent = ({
               borderType === 'underline' ? 'right-0 pr-3' : 'right-0 pr-3.5'
             } text-neutral-400 hover:text-neutral-600 outline-none focus:outline-none focus-visible:outline-none dark:text-neutral-500 dark:hover:text-neutral-300`}
             onClick={() => setShowPassword(!showPassword)}
+            // React supports tabIndex; the shared lint property table incorrectly rejects it.
+            // eslint-disable-next-line react/no-unknown-property
+            tabIndex={passwordToggleTabIndex}
             type="button"
           >
             {showPassword ? (

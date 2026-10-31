@@ -55,6 +55,7 @@ export * from './Skeleton/Skeleton.js';
 export * from './Svg/Svg.js';
 export * from './Switch/Switch.js';
 export * from './Table/Table.js';
+export * from './TabGroup/index.js';
 export * from './Tabs/Tabs.js';
 export * from './Text/Text.js';
 export * from './Textarea/Textarea.js';
