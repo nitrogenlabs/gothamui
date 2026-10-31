@@ -909,3 +909,7 @@ The selected item is centered automatically. Mark it with `is-active` or `aria-c
 GothamUI is [MIT licensed](./LICENSE).
 
 Content tabs: see [accessible tab panels](docs/tab-panels.md) for the public TabGroup family.
+
+### Password visibility keyboard navigation
+
+`TextField` accepts `passwordToggleTabIndex` when `showPasswordToggle` is enabled. Omit it to retain normal keyboard access to the visibility button. Set it to `-1` to skip that button during sequential Tab navigation while retaining pointer activation; the input’s own `tabIndex` is unchanged.
