@@ -1,12 +1,12 @@
 import {expect, test} from '@nlabs/lex/test-playwright';
 import {spawnSync} from 'node:child_process';
-import {chmodSync, copyFileSync, cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync} from 'node:fs';
+import {chmodSync, copyFileSync, cpSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {dirname, join, resolve} from 'node:path';
 
 const project = resolve(import.meta.dirname, '../..');
 let seed: {base: string; cleanup: () => void; repo: string} | undefined;
-const fixture = () => {
+const fixture = (inherited: NodeJS.ProcessEnv = process.env) => {
   const root = mkdtempSync(join(tmpdir(), 'gotham-hooks-'));
   const repo = join(root, 'repo');
   const bin = join(root, 'bin');
@@ -16,10 +16,24 @@ const fixture = () => {
   writeFileSync(log, '');
   writeFileSync(join(bin, 'npm'), '#!/bin/sh\nprintf "%s\\n" "$*" >> "$HOOK_TEST_LOG"\nexit "$HOOK_TEST_STATUS"\n');
   chmodSync(join(bin, 'npm'), 0o755);
-  const env = {...process.env, GIT_CONFIG_GLOBAL: '/dev/null', GIT_CONFIG_SYSTEM: '/dev/null',
+  const clean = Object.fromEntries(Object.entries(inherited).filter(([key]) => !key.startsWith('GIT_')));
+  const env: NodeJS.ProcessEnv = {...clean, GIT_CONFIG_GLOBAL: '/dev/null', GIT_CONFIG_SYSTEM: '/dev/null',
     HOOK_TEST_LOG: log, HOOK_TEST_STATUS: '0', PATH: `${bin}:${process.env.PATH}`};
-  const command = (program: string, args: string[], input?: string) => spawnSync(program, args,
-    {cwd: repo, encoding: 'utf8', env, input});
+  let initialized = false;
+  const assertChildRepository = () => {
+    const top = spawnSync('git', ['rev-parse', '--show-toplevel'], {cwd: repo, encoding: 'utf8', env});
+    const directory = spawnSync('git', ['rev-parse', '--absolute-git-dir'], {cwd: repo, encoding: 'utf8', env});
+    if(top.status !== 0 || directory.status !== 0 || realpathSync(top.stdout.trim()) !== realpathSync(repo)
+      || realpathSync(directory.stdout.trim()) !== realpathSync(join(repo, '.git'))) {
+      throw new Error('Temporary Git repository identity was not confirmed.');
+    }
+  };
+  const command = (program: string, args: string[], input?: string) => {
+    if(initialized) {
+      assertChildRepository();
+    }
+    return spawnSync(program, args, {cwd: repo, encoding: 'utf8', env, input});
+  };
   const git = (...args: string[]) => {
     const result = command('git', args);
     if(result.status !== 0) {
@@ -35,8 +49,12 @@ const fixture = () => {
   if(seed) {
     cpSync(seed.repo, repo, {recursive: true});
     ({base} = seed);
+    assertChildRepository();
+    initialized = true;
   } else {
     git('init', '-q', '-b', 'main');
+    assertChildRepository();
+    initialized = true;
     git('config', 'user.name', 'Fixture');
     git('config', 'user.email', 'fixture@example.test');
     for(const path of ['.githooks/pre-commit', '.githooks/pre-push', 'scripts/gitHookPolicy.mjs',
@@ -188,5 +206,34 @@ test('real pre-push sees a code commit and its revert even when only docs remain
     expect(f.calls()).toEqual(['run test:e2e']);
   } finally {
     f.cleanup();
+  }
+});
+
+
+test('nested hook Git variables cannot escape into a child temporary repository', () => {
+  const parent = fixture();
+  let child: ReturnType<typeof fixture> | undefined;
+  try {
+    const parentGit = join(parent.repo, '.git');
+    const head = parent.git('rev-parse', 'HEAD');
+    const index = readFileSync(join(parentGit, 'index'));
+    const config = readFileSync(join(parentGit, 'config'));
+    const inherited: NodeJS.ProcessEnv = {...parent.env};
+    for(const key of parent.git('rev-parse', '--local-env-vars').split('\n')) {
+      inherited[key] = 'poison';
+    }
+    const injected = {...inherited, GIT_COMMON_DIR: parentGit, GIT_CONFIG: join(parentGit, 'config'), GIT_CONFIG_COUNT: '1',
+      GIT_CONFIG_KEY_0: 'core.bare', GIT_CONFIG_VALUE_0: 'true', GIT_DIR: parentGit,
+      GIT_INDEX_FILE: join(parentGit, 'index'), GIT_WORK_TREE: parent.repo};
+    child = fixture(injected);
+    child.commit('src/nested.ts');
+
+    expect(child.git('rev-parse', '--show-toplevel')).toBe(realpathSync(child.repo));
+    expect(parent.git('rev-parse', 'HEAD')).toBe(head);
+    expect(readFileSync(join(parentGit, 'index'))).toEqual(index);
+    expect(readFileSync(join(parentGit, 'config'))).toEqual(config);
+  } finally {
+    child?.cleanup();
+    parent.cleanup();
   }
 });
