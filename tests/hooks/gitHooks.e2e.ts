@@ -258,3 +258,22 @@ test('a staged regular JavaScript to symlink type change cannot bypass the unit 
     f.cleanup();
   }
 });
+
+test('a merge-resolution-only code change in the pushed range requires E2E', () => {
+  const f = fixture();
+  try {
+    f.git('checkout', '-q', '-b', 'side');
+    f.commit('side.md');
+    f.git('checkout', '-q', 'main');
+    f.commit('README.md');
+    f.git('merge', '--no-ff', '--no-commit', 'side');
+    f.commit('src/merge-only.ts');
+    f.reset();
+    f.env.HOOK_TEST_STATUS = '9';
+
+    expect(f.push().status).toBe(9);
+    expect(f.calls()).toEqual(['run test:e2e']);
+  } finally {
+    f.cleanup();
+  }
+});

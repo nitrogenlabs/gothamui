@@ -103,7 +103,7 @@ These rules apply to new and modified code. The cross-project audit and capabili
 
 ## Local Git test gates
 
-- Tracked `.githooks/pre-commit` runs only `npm run test:precommit` when staged TypeScript or JavaScript changes include additions, edits, renames or deletions. CSS, docs, JSON and assets do not trigger unit tests.
-- Tracked `.githooks/pre-push` runs only `npm run test:e2e` when any commit being pushed changes TypeScript, JavaScript or CSS. It scans the entire pushed range, including code later reverted; new branches use their default-branch fork. Unreadable history runs E2E conservatively.
+- Tracked `.githooks/pre-commit` runs only `npm run test:precommit` when staged TypeScript or JavaScript changes include additions, edits, renames, deletions or file type changes. CSS, docs, JSON and assets do not trigger unit tests.
+- Tracked `.githooks/pre-push` runs only `npm run test:e2e` when any commit being pushed changes TypeScript, JavaScript or CSS. It scans the entire pushed range, including merge-only changes and code later reverted; new branches use their default-branch fork. Unreadable history runs E2E conservatively.
 - Run `npm run hooks:install` or the normal `npm run prepare` lifecycle to configure this repository's local hooks path. Do not bypass a failing hook; diagnose and fix the named failure before committing or pushing again.
 - Hook tests that create child Git repositories must remove inherited `GIT_*` variables before applying explicit isolated settings. Verify the child's canonical worktree and Git directory before writes, and assert that nested operations preserve the parent's HEAD, index and config.

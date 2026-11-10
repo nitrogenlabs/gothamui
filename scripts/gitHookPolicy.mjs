@@ -40,7 +40,7 @@ export const selectHookTask = (kind, git, input) => {
         return 'test:e2e';
       }
     }
-    const changed = git(['log', '--format=', '--name-only', '--no-renames', '-z', `${base}..${local}`]);
+    const changed = git(['log', '-m', '--format=', '--name-only', '--no-renames', '-z', `${base}..${local}`]);
     if(changed.status !== 0 || changed.stdout.split('\0').some((name) => e2eFiles.test(name))) {
       return 'test:e2e';
     }

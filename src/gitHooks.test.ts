@@ -37,7 +37,7 @@ test('a new branch compares the original default-branch fork across all pushed c
 
   expect(selectHookTask('pre-push', git, line('a'.repeat(40), '0'.repeat(40)))).toBe('test:e2e');
   expect(git).toHaveBeenCalledWith(['merge-base', 'a'.repeat(40), 'refs/remotes/origin/main']);
-  expect(git).toHaveBeenCalledWith(['log', '--format=', '--name-only', '--no-renames', '-z', `fork..${'a'.repeat(40)}`]);
+  expect(git).toHaveBeenCalledWith(['log', '-m', '--format=', '--name-only', '--no-renames', '-z', `fork..${'a'.repeat(40)}`]);
 });
 
 test('unreadable ranges fail closed while deleted branches run nothing', () => {
@@ -71,6 +71,8 @@ test('every pushed ref is inspected and malformed input runs the required E2E ga
   const git = vi.fn().mockReturnValueOnce(files(['README.md'])).mockReturnValueOnce(files(['style.css']));
 
   expect(selectHookTask('pre-push', git, line() + line('c'.repeat(40)))).toBe('test:e2e');
+  expect(git).toHaveBeenNthCalledWith(1, ['log', '-m', '--format=', '--name-only', '--no-renames', '-z',
+    `${'b'.repeat(40)}..${'a'.repeat(40)}`]);
   expect(selectHookTask('pre-push', git, 'unreadable input')).toBe('test:e2e');
   expect(selectHookTask('pre-push', git, '')).toBeUndefined();
 });
@@ -79,7 +81,7 @@ test('code added then reverted within the pushed range still requires E2E', () =
   const git = vi.fn((args: string[]) => files(args[0] === 'log' ? ['src/transient.ts', 'README.md'] : ['README.md']));
 
   expect(selectHookTask('pre-push', git, line())).toBe('test:e2e');
-  expect(git).toHaveBeenCalledWith(['log', '--format=', '--name-only', '--no-renames', '-z',
+  expect(git).toHaveBeenCalledWith(['log', '-m', '--format=', '--name-only', '--no-renames', '-z',
     `${'b'.repeat(40)}..${'a'.repeat(40)}`]);
 });
 
