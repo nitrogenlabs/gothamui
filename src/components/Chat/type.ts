@@ -125,7 +125,7 @@ export interface IChatListProps {
  * @param index The Chat List's index.
  * @param event The Chat List's event.
  */
-type ChatListEvent = (item: IChatItemProps, index: number, event: React.MouseEvent<HTMLElement>) => any
+export type ChatListEvent = (item: IChatItemProps, index: number, event: React.MouseEvent<HTMLElement>) => any
 
 /**
  *
@@ -533,7 +533,7 @@ export interface ISpotifyMessageProps extends ISpotifyMessage {}
  */
 export interface IMessageBoxProps {
   onMessageFocused?: any
-  renderAddCmp?: JSX.Element | (() => JSX.Element)
+  renderAddCmp?: React.JSX.Element | (() => React.JSX.Element)
   onClick?: React.MouseEventHandler
   onOpen?: React.MouseEventHandler
   onPhotoError?: React.MouseEventHandler
@@ -674,7 +674,7 @@ export interface IMeetingLinkMessageProps extends IMeetingLinkMessage {
  * @param index The MessageListEvent's index.
  * @param event The MessageListEvent's event.
  */
-type MeetingMessageEvent = (item: IMeetingMessage, index: number, event: React.MouseEvent<HTMLElement>) => any
+export type MeetingMessageEvent = (item: IMeetingMessage, index: number, event: React.MouseEvent<HTMLElement>) => any
 
 /**
  * ITextMessage Interface extends IMessage
@@ -710,7 +710,7 @@ export interface IMeetingListProps {
  * @param index The MessageListEvent's index.
  * @param event The MessageListEvent's event.
  */
-type MeetingListEvent = (item: IMeetingItemProps, index: number, event: React.MouseEvent<HTMLElement>) => any
+export type MeetingListEvent = (item: IMeetingItemProps, index: number, event: React.MouseEvent<HTMLElement>) => any
 
 /**
  * IMeetingItemProps Interface
@@ -923,7 +923,7 @@ export interface IButtonIcon {
  * @type IDropdown
  * @type string
  */
-type IDropdownItemType = IDropdownItem | string
+export type IDropdownItemType = IDropdownItem | string
 
 /**
  * IDropdownItem Interface
@@ -1099,29 +1099,29 @@ export type MessageType =
 
 export type MessageBoxType = MessageType & IMessageBoxProps
 
-export class ChatItem extends React.Component<IChatItemProps> {}
-export class ChatList extends React.Component<IChatListProps> {}
-export class MessageBox extends React.Component<MessageBoxType> {}
-export class LocationMessage extends React.Component<ILocationMessageProps> {}
-export class PhotoMessage extends React.Component<IPhotoMessageProps> {}
-export class VideoMessage extends React.Component<IVideoMessageProps> {}
-export class SpotifyMessage extends React.Component<ISpotifyMessageProps> {}
-export class AudioMessage extends React.Component<IAudioMessageProps> {}
-export class MeetingLink extends React.Component<IMeetingLinkMessageProps> {}
-export class FileMessage extends React.Component<IFileMessageProps> {}
-export class TextMessage extends React.Component<ITextMessageProps> {}
-export class SystemMessage extends React.Component<ISystemMessageProps> {}
-export class ReplyMessage extends React.Component<IReplyMessageProps> {}
-export class MeetingMessage extends React.Component<IMeetingMessageProps> {}
-export class MeetingItem extends React.Component<IMeetingItemProps> {}
-export class MeetingList extends React.Component<IMeetingListProps> {}
-export class MessageList extends React.Component<IMessageListProps> {}
+export declare class ChatItem extends React.Component<IChatItemProps> {}
+export declare class ChatList extends React.Component<IChatListProps> {}
+export declare class MessageBox extends React.Component<MessageBoxType> {}
+export declare class LocationMessage extends React.Component<ILocationMessageProps> {}
+export declare class PhotoMessage extends React.Component<IPhotoMessageProps> {}
+export declare class VideoMessage extends React.Component<IVideoMessageProps> {}
+export declare class SpotifyMessage extends React.Component<ISpotifyMessageProps> {}
+export declare class AudioMessage extends React.Component<IAudioMessageProps> {}
+export declare class MeetingLink extends React.Component<IMeetingLinkMessageProps> {}
+export declare class FileMessage extends React.Component<IFileMessageProps> {}
+export declare class TextMessage extends React.Component<ITextMessageProps> {}
+export declare class SystemMessage extends React.Component<ISystemMessageProps> {}
+export declare class ReplyMessage extends React.Component<IReplyMessageProps> {}
+export declare class MeetingMessage extends React.Component<IMeetingMessageProps> {}
+export declare class MeetingItem extends React.Component<IMeetingItemProps> {}
+export declare class MeetingList extends React.Component<IMeetingListProps> {}
+export declare class MessageList extends React.Component<IMessageListProps> {}
 
-export class Popup extends React.Component<IPopupProps> {}
-export class Avatar extends React.Component<IAvatarProps> {}
-export class Button extends React.Component<IButtonProps> {}
-export class Sidebar extends React.Component<ISideBar> {}
-export class Navbar extends React.Component<INavbarProps> {}
-export class Input extends React.Component<IInputProps> {}
-export class Dropdown extends React.Component<IDropdownProps> {}
-export class Circle extends React.Component<ICircleProps> {}
+export declare class Popup extends React.Component<IPopupProps> {}
+export declare class Avatar extends React.Component<IAvatarProps> {}
+export declare class Button extends React.Component<IButtonProps> {}
+export declare class Sidebar extends React.Component<ISideBar> {}
+export declare class Navbar extends React.Component<INavbarProps> {}
+export declare class Input extends React.Component<IInputProps> {}
+export declare class Dropdown extends React.Component<IDropdownProps> {}
+export declare class Circle extends React.Component<ICircleProps> {}

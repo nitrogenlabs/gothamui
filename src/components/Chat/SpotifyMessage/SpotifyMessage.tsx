@@ -1,6 +1,6 @@
 
 import type {FC} from 'react';
-import type {ISpotifyMessageProps} from '../type';
+import type {ISpotifyMessageProps} from '../type.js';
 
 export const SpotifyMessage: FC<ISpotifyMessageProps> = ({
   width = 300,

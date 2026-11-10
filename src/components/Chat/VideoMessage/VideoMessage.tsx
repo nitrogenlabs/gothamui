@@ -7,7 +7,7 @@ import {
 import {ProgressCircle} from '../Circle/Circle.js';
 
 import type {FC} from 'react';
-import type {IProgressOptions, IVideoMessageProps} from '../type';
+import type {IProgressOptions, IVideoMessageProps} from '../type.js';
 
 export const VideoMessage: FC<IVideoMessageProps> = (props) => {
   const progressOptions = {

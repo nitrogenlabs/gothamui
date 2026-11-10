@@ -1,6 +1,6 @@
 
 import type {FC} from 'react';
-import type {IMeetingLinkMessageProps, MeetingLinkActionButtons} from '../type';
+import type {IMeetingLinkMessageProps, MeetingLinkActionButtons} from '../type.js';
 
 export const MeetingLink: FC<IMeetingLinkMessageProps> = (props) => (
   <div className='rce-mtlink'>

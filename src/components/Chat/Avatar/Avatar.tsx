@@ -1,7 +1,7 @@
 import {cn} from '@nlabs/utils';
 import {useEffect} from 'react';
 
-import {IAvatarProps} from '../type';
+import {IAvatarProps} from '../type.js';
 
 import type {FC} from 'react';
 

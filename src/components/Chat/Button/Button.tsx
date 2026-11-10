@@ -1,6 +1,6 @@
 import {cn} from '@nlabs/utils';
 
-import {IButtonProps} from '../type';
+import {IButtonProps} from '../type.js';
 
 import type {FC} from 'react';
 

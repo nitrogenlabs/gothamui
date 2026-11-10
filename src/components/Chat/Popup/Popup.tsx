@@ -3,7 +3,7 @@ import {cn} from '@nlabs/utils';
 import {Button} from '../Button/Button.js';
 
 import type {FC} from 'react';
-import type {IPopupProps} from '../type';
+import type {IPopupProps} from '../type.js';
 
 export const Popup: FC<IPopupProps> = ({...props}) => {
   if(props.popup?.show === true) {

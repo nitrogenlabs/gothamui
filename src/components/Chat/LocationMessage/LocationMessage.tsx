@@ -1,6 +1,6 @@
 import {cn} from '@nlabs/utils';
 
-import {ILocationMessageProps} from '../type';
+import {ILocationMessageProps} from '../type.js';
 
 import type {FC} from 'react';
 

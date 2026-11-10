@@ -7,7 +7,7 @@ import {
 import {ProgressCircle} from '../Circle/Circle.js';
 
 import type {FC} from 'react';
-import type {IFileMessageProps} from '../type';
+import type {IFileMessageProps} from '../type.js';
 
 export const FileMessage: FC<IFileMessageProps> = (props) => {
   const progressOptions = {

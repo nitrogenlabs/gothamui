@@ -9,7 +9,7 @@ import {
 import {useEffect, useState} from 'react';
 
 import {Avatar} from '../Avatar/Avatar.js';
-import {IChatItemProps} from '../type';
+import {IChatItemProps} from '../type.js';
 import {resolveDateValue, useRelativeDateText} from '../utils/formatRelativeDate.js';
 
 import type {FC, Key} from 'react';

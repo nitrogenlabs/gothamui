@@ -5,7 +5,7 @@ import {memo, useEffect, useMemo, useRef, useState} from 'react';
 import {MessageBox} from '../MessageBox/MessageBox.js';
 
 import type {FC} from 'react';
-import type {IMessageListProps, MessageListEvent} from '../type';
+import type {IMessageListProps, MessageListEvent} from '../type.js';
 
 const MessageListComponent: FC<IMessageListProps> = (listProps) => {
   const {

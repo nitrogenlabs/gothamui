@@ -1,6 +1,6 @@
 import {cn} from '@nlabs/utils';
 
-import {INavbarProps} from '../type';
+import {INavbarProps} from '../type.js';
 
 import type {FC} from 'react';
 

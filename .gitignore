@@ -8,3 +8,5 @@ storybook-static
 .DS_Store
 /.tmp/
 /nlabs-gothamui-*.tgz
+
+/.artifacts/

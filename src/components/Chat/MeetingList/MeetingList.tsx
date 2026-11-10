@@ -3,7 +3,7 @@ import {cn} from '@nlabs/utils';
 import {MeetingItem} from '../MeetingItem/MeetingItem.js';
 
 import type {FC, Key} from 'react';
-import type {IMeetingListProps, MeetingListEvent} from '../type';
+import type {IMeetingListProps, MeetingListEvent} from '../type.js';
 
 export const MeetingList: FC<IMeetingListProps> = (props) => {
   const onClick: MeetingListEvent = (item, index, event) => {

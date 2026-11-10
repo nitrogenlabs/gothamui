@@ -1,4 +1,4 @@
-import {IAudioMessageProps} from '../type';
+import {IAudioMessageProps} from '../type.js';
 
 import type {FC} from 'react';
 

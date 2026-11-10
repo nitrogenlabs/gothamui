@@ -2,7 +2,7 @@ import {cn} from '@nlabs/utils';
 
 
 import type {FC} from 'react';
-import type {IReplyMessageProps} from '../type';
+import type {IReplyMessageProps} from '../type.js';
 
 export const ReplyMessage: FC<IReplyMessageProps> = ({onClick, ...props}) => (
   <div

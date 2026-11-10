@@ -14,7 +14,7 @@ import {Dropdown} from '../Dropdown/Dropdown.js';
 import {formatRelativeDate} from '../utils/formatRelativeDate.js';
 
 import type {FC} from 'react';
-import type {IMeetingMessageProps, MeetingMessageEvent} from '../type';
+import type {IMeetingMessageProps, MeetingMessageEvent} from '../type.js';
 
 export const MeetingMessage: FC<IMeetingMessageProps> = ({
   date,

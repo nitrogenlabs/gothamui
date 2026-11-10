@@ -3,7 +3,7 @@ import {cn} from '@nlabs/utils';
 import {ChatItem} from '../ChatItem/ChatItem.js';
 
 import type {Dispatch, FC, Key, SetStateAction} from 'react';
-import type {ChatListEvent, IChatListProps} from '../type';
+import type {ChatListEvent, IChatListProps} from '../type.js';
 
 const list: Dispatch<SetStateAction<any>>[] = [];
 

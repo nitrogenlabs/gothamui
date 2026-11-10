@@ -24,7 +24,7 @@ import {resolveDateValue, useRelativeDateText} from '../utils/formatRelativeDate
 import {VideoMessage} from '../VideoMessage/VideoMessage.js';
 
 import type {FC} from 'react';
-import type {MessageBoxType} from '../type';
+import type {MessageBoxType} from '../type.js';
 
 export const MessageBox: FC<MessageBoxType> = ({focus = false, notch = true, styles, ...props}) => {
   const prevProps = useRef(focus);

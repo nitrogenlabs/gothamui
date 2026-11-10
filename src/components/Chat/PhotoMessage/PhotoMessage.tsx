@@ -6,7 +6,7 @@ import {
 import {ProgressCircle} from '../Circle/Circle.js';
 
 import type {FC} from 'react';
-import type {IPhotoMessageProps, IProgressOptions} from '../type';
+import type {IPhotoMessageProps, IProgressOptions} from '../type.js';
 
 export const PhotoMessage: FC<IPhotoMessageProps> = (props) => {
   const progressOptions = {

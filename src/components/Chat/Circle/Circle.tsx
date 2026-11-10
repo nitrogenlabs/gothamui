@@ -2,7 +2,7 @@ import {Circle} from 'progressbar.js';
 import {useCallback, useEffect, useMemo} from 'react';
 
 import type {FC} from 'react';
-import type {ICircleProps} from '../type';
+import type {ICircleProps} from '../type.js';
 
 let wrapper: HTMLDivElement;
 

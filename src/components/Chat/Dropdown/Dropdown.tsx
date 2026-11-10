@@ -4,7 +4,7 @@ import {useState} from 'react';
 import {Button} from '../Button/Button.js';
 
 import type {FC} from 'react';
-import type {IDropdownItemType, IDropdownProps} from '../type';
+import type {IDropdownItemType, IDropdownProps} from '../type.js';
 
 export const Dropdown: FC<IDropdownProps> = ({animationPosition = 'nortwest', animationType = 'default', ...props}) => {
   const [show, setShow] = useState<boolean | undefined>(undefined);

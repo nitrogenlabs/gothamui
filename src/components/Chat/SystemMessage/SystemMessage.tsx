@@ -2,7 +2,7 @@ import {cn} from '@nlabs/utils';
 
 
 import type {FC} from 'react';
-import type {ISystemMessageProps} from '../type';
+import type {ISystemMessageProps} from '../type.js';
 
 export const SystemMessage: FC<ISystemMessageProps> = (props) => (
   <div className={cn('rce-container-smsg', props.className)}>
