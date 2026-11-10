@@ -51,8 +51,8 @@ jobs:
           assert.equal(intent.baselineAccess, 'public');
           assert.equal(intent.tag, 'vault-cutover');
           assert.equal(intent.archive, 'publication/nlabs-gothamui-1.15.1.tgz');
-          assert.equal(intent.producerSource, 'f1216044087b46272bccf2fb3aef524519507bca');
-          assert.equal(intent.sha256, '302f27bbe1c55cb0ce5c90def84f9b9d9885db55286f40983c1aaf4841cc3a21');
+          assert.equal(intent.producerSource, '6c24259c94189b8d205d0bd378ac89ddae4f4376');
+          assert.equal(intent.sha256, 'bd233f934c5f59f59f87d44a53218d7ee4e64ce2d87945aa2934bffa9a755894');
           assert.deepEqual(intent.baselineTags, {reactorbox: '1.11.3-architecture.1', latest: '1.15.0'});
           const hash = (bytes, algorithm = 'sha256') => createHash(algorithm).update(bytes).digest('hex');
           assert.equal(approval.intentSha256, hash(intentBytes));
@@ -71,6 +71,7 @@ jobs:
           assert.equal(manifest.version, intent.version);
           assert.equal(manifest.publishConfig.access, intent.access);
           assert.equal(manifest.devDependencies['@nlabs/lex'], '2.1.5');
+          assert.equal(manifest.dependencies['@floating-ui/react-dom'], '2.1.9');
           assert.equal(JSON.parse(readFileSync('package.json')).devDependencies['@nlabs/lex'], '2.1.5');
           const directory = `${process.env.RUNNER_TEMP}/gotham-release`;
           copyFileSync(intent.archive, `${directory}/nlabs-gothamui-1.15.1.tgz`);

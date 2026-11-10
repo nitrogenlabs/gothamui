@@ -7,9 +7,9 @@
     "latest": "1.15.0"
   },
   "name": "@nlabs/gothamui",
-  "producerSource": "f1216044087b46272bccf2fb3aef524519507bca",
-  "sha256": "302f27bbe1c55cb0ce5c90def84f9b9d9885db55286f40983c1aaf4841cc3a21",
+  "producerSource": "6c24259c94189b8d205d0bd378ac89ddae4f4376",
+  "sha256": "bd233f934c5f59f59f87d44a53218d7ee4e64ce2d87945aa2934bffa9a755894",
   "tag": "vault-cutover",
   "version": "1.15.1",
-  "workflowSha256": "fe12c675ddbe940759a6dd270963a7c9374758bfea4343e048fa128ec83eac6b"
+  "workflowSha256": "9c5ba7b39a40b08cf4044e645b9c9554124f879dde563a4df6a517a1918ba573"
 }
