@@ -11,5 +11,5 @@
   "sha256": "302f27bbe1c55cb0ce5c90def84f9b9d9885db55286f40983c1aaf4841cc3a21",
   "tag": "vault-cutover",
   "version": "1.15.1",
-  "workflowSha256": "6f68274ec374492b28ec511d43fec775bbe6876112a72f44d0fe860c7615b60d"
+  "workflowSha256": "fe12c675ddbe940759a6dd270963a7c9374758bfea4343e048fa128ec83eac6b"
 }
