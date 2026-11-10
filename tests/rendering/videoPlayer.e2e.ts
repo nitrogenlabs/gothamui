@@ -1,4 +1,4 @@
-import {expect, test} from '@playwright/test';
+import {expect, test} from '@nlabs/lex/test-playwright';
 import {readFile} from 'node:fs/promises';
 
 const fixture = new URL('./fixtures/player.mp4', import.meta.url);

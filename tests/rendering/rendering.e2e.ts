@@ -1,4 +1,4 @@
-import {expect, test} from '@playwright/test';
+import {expect, test} from '@nlabs/lex/test-playwright';
 
 test.beforeEach(async ({page}) => {
   page.on('pageerror', (error) => { throw error; });
@@ -43,4 +43,11 @@ test('uses the native select at mobile widths', async ({page}) => {
   await page.locator('select[name="role"]').selectOption('writer');
   await page.getByRole('button', {name: 'Save'}).click();
   await expect(page.getByLabel('Submission')).toContainText('"role":"writer"');
+});
+
+
+test('the built public chat entry renders and preserves its original click callback', async ({page}) => {
+  await page.goto('/chat.html');
+  await page.getByRole('region', {name: 'Published chat contract'}).getByText('Retained chat').click();
+  await expect(page.getByLabel('Submission')).toHaveText('chat-selected');
 });

@@ -147,7 +147,11 @@
     "sync:tailwind-lib": "node -e \"const fs=require('fs'); fs.mkdirSync('./lib/styles',{recursive:true}); fs.writeFileSync('./lib/styles/tailwind.css','@import \\\"./index.css\\\";\\n');\"",
     "tailwind:build": "postcss ./src/styles/tailwind.css --use @tailwindcss/postcss --no-map -o ./src/styles/index.css",
     "tailwind:watch": "postcss ./src/styles/tailwind.css --use @tailwindcss/postcss --no-map -o ./src/styles/index.css --watch",
-    "test:public-types": "tsc -p tests/chat-declarations/tsconfig.json && tsc -p tests/chat-declarations/tsconfig.nodenext.json"
+    "test:public-types": "tsc -p tests/chat-declarations/tsconfig.json && tsc -p tests/chat-declarations/tsconfig.nodenext.json",
+    "hooks:install": "node -e \"if(require('node:fs').existsSync('scripts/install-hooks.mjs'))import('./scripts/install-hooks.mjs');\"",
+    "prepare": "npm run hooks:install",
+    "test:precommit": "lex test --unit --config ./vitest.config.mts",
+    "test:e2e": "npm run build && lex test --e2e --e2eConfig playwright.config.ts"
   },
   "browserslist": [
     "> 5%",
@@ -194,7 +198,7 @@
     "@nlabs/arkhamjs-middleware-logger": "^3.30.12",
     "@nlabs/arkhamjs-storage-browser": "^3.30.12",
     "@nlabs/arkhamjs-utils-react": "^3.32.13",
-    "@nlabs/lex": "2.1.0",
+    "@nlabs/lex": "2.1.5",
     "@types/history": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.6.4",

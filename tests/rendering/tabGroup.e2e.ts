@@ -1,4 +1,4 @@
-import {expect, test} from '@playwright/test';
+import {expect, test} from '@nlabs/lex/test-playwright';
 
 test('keeps real underline tab panels and keyboard navigation at mobile width', async ({page}) => {
   page.on('pageerror', (error) => {

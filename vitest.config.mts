@@ -2,6 +2,7 @@ import {defineConfig} from 'vitest/config';
 
 // Keep the audited capabilities at 90% per file within the shared suite.
 const auditedFiles = [
+  'scripts/gitHookPolicy.mjs',
   'src/components/AuthSignInForm/AuthSignInForm.tsx',
   'src/components/AuthSignUpForm/AuthSignUpForm.tsx',
   'src/components/DocumentHead/DocumentHead.tsx',

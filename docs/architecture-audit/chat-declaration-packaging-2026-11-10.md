@@ -22,3 +22,15 @@ Local producer verification completed:
 - Mutation checks prove the new public regression: removing emitted type.d.ts fails with missing declarations; changing legacy Avatar.size Object to object fails the positive legacy assignment. Both generated-file mutations were restored byte-exact in finally, then the complete build/public checks passed again. Restoration SHA256577174aeb60cfc5694a271d2377539fa7ce7a9d0c654da7b1af4d6a1ca0032b2.
 
 Publication remains held for coordinating owner review of clean source and frozen archive. No registry tag or Vault manifest was changed by this candidate.
+
+## Required Git test gates — supersedes the first archive
+
+The user additionally requires passing unit tests before committing eligible code changes and passing end-to-end tests before pushing eligible commits. The initial a9420fcb archive is superseded, remains unpublished, and is preserved unchanged. A new archive must come from the clean, normally committed and pushed source after these gates pass.
+
+Tracked `.githooks/pre-commit` and `.githooks/pre-push` invoke the single local `scripts/git-test-hook.mjs` adapter. Pure `gitHookPolicy.mjs` selects only `test:precommit` for staged TS/JS (including deletions and renames), and only `test:e2e` for pushed TS/JS/CSS. Filenames are NUL-separated. Push discovery scans every commit from the original remote/fork boundary, including code added and subsequently reverted; unreadable history runs E2E conservatively. Docs, JSON, assets, unstaged code and deleted branch refs do not trigger tests. `npm run prepare` configures only the local repository's hooks path through the guarded installer; registry archives without source hook files are left alone.
+
+The new pure policy has33 isolated mocked cases and100% statement/branch/function/line coverage. The real temporary-Git script tests are explicit E2E cases with stub npm; they prove ordinary commit/push failures actually block, staged deletion/rename, multi-commit and add/revert history, and docs/unreadable history. They do not bypass hooks. Classifying these new process/filesystem cases as E2E keeps heavy cold process setup out of unit tests. Their original assertions are retained.
+
+The real full E2E suite passed16cases before the added net-revert case; the latter passed separately after an observed pure+real RED. The existing native video isolation assertion stays unchanged and now consumes the documented public components entry: importing the custom-engine video barrel also exports its synchronous decoder factory and eagerly loads that implementation in Vite dev. Chat public rendering has its own fixture page. No component runtime behavior or public custom-engine API changed.
+
+Three additional mutation probes failed as required: dropping process failure propagation, ignoring staged deletions, and allowing JSON to trigger unit tests. All source mutations were restored byte-exact in finally. Lex2.1.5 is the only related tooling upgrade, using its verified public Vitest/Playwright exports; no direct duplicate runner dependency was added. Normal commit/push final counts and the replacement archive remain the next gates.

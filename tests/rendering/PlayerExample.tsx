@@ -1,9 +1,9 @@
 import {useState} from 'react';
 
-import {TimelineVideoPlayer, VideoPlayer} from '../../src/video/index.js';
+import {TimelineVideoPlayer, VideoPlayer} from '@nlabs/gothamui/components';
 import '../../src/styles/index.css';
 
-import type {TimelineVideoScene} from '../../src/video/index.js';
+import type {TimelineVideoScene} from '@nlabs/gothamui/components';
 
 const scenes: TimelineVideoScene[] = [
   {audio: [], end: 2.5, id: 'first', sourceStart: 0.5, start: 0, transition: {duration: 0.5, type: 'crossfade'},
