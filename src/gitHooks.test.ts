@@ -9,7 +9,7 @@ test.each(['ts', 'tsx', 'js', 'jsx', 'mjs', 'cjs', 'mts', 'cts'])('staged .%s ru
   const git = vi.fn(() => files([`src/雪\nname.${extension}`]));
 
   expect(selectHookTask('pre-commit', git, '')).toBe('test:precommit');
-  expect(git).toHaveBeenCalledWith(['diff', '--cached', '--name-only', '--no-renames', '--diff-filter=ACMRD', '-z']);
+  expect(git).toHaveBeenCalledWith(['diff', '--cached', '--name-only', '--no-renames', '--diff-filter=ACMRDT', '-z']);
 });
 
 test.each(['README.md', 'package.json', 'image.png', 'source.css', 'file.py', 'index.html'])('staged %s never runs tests', (name) => {
@@ -81,4 +81,11 @@ test('code added then reverted within the pushed range still requires E2E', () =
   expect(selectHookTask('pre-push', git, line())).toBe('test:e2e');
   expect(git).toHaveBeenCalledWith(['log', '--format=', '--name-only', '--no-renames', '-z',
     `${'b'.repeat(40)}..${'a'.repeat(40)}`]);
+});
+
+test('staged JavaScript file type changes are included in the unit gate', () => {
+  const git = vi.fn(() => files(['src/type.js']));
+
+  expect(selectHookTask('pre-commit', git, '')).toBe('test:precommit');
+  expect(git).toHaveBeenCalledWith(['diff', '--cached', '--name-only', '--no-renames', '--diff-filter=ACMRDT', '-z']);
 });

@@ -1,6 +1,6 @@
 import {expect, test} from '@nlabs/lex/test-playwright';
 import {spawnSync} from 'node:child_process';
-import {chmodSync, copyFileSync, cpSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync} from 'node:fs';
+import {chmodSync, copyFileSync, cpSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {dirname, join, resolve} from 'node:path';
 
@@ -235,5 +235,26 @@ test('nested hook Git variables cannot escape into a child temporary repository'
   } finally {
     child?.cleanup();
     parent.cleanup();
+  }
+});
+
+
+test('a staged regular JavaScript to symlink type change cannot bypass the unit gate', () => {
+  const f = fixture();
+  try {
+    f.commit('src/type.js');
+    f.reset();
+    rmSync(join(f.repo, 'src/type.js'));
+    symlinkSync('fixture-target.txt', join(f.repo, 'src/type.js'));
+    f.git('add', 'src/type.js');
+
+    expect(f.git('diff', '--cached', '--name-status')).toBe('T\tsrc/type.js');
+
+    f.env.HOOK_TEST_STATUS = '7';
+
+    expect(f.command('git', ['commit', '-q', '-m', 'type change']).status).not.toBe(0);
+    expect(f.calls()).toEqual(['run test:precommit']);
+  } finally {
+    f.cleanup();
   }
 });

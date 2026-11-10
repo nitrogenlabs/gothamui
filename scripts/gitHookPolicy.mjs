@@ -10,7 +10,7 @@ const e2eFiles = /\.(?:ts|tsx|js|jsx|mjs|cjs|mts|cts|css)$/;
  */
 export const selectHookTask = (kind, git, input) => {
   if(kind === 'pre-commit') {
-    const changed = git(['diff', '--cached', '--name-only', '--no-renames', '--diff-filter=ACMRD', '-z']);
+    const changed = git(['diff', '--cached', '--name-only', '--no-renames', '--diff-filter=ACMRDT', '-z']);
     return changed.status !== 0 || changed.stdout.split('\0').some((name) => unitFiles.test(name))
       ? 'test:precommit' : undefined;
   }
