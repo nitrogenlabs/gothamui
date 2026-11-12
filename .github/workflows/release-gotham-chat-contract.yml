@@ -4,7 +4,7 @@ name: Publish reviewed GothamUI Chat contract
 on:
   push:
     branches: [codex/gotham-chat-type-packaging]
-    paths: [publication/gotham-1.15.1.approved.json]
+    paths: [publication/gotham-1.15.2.approved.json]
 
 permissions:
   contents: read
@@ -39,21 +39,21 @@ jobs:
           import {execFileSync} from 'node:child_process';
           import {createHash} from 'node:crypto';
           import {copyFileSync, readFileSync, writeFileSync} from 'node:fs';
-          const intentBytes = readFileSync('publication/gotham-1.15.1.json');
+          const intentBytes = readFileSync('publication/gotham-1.15.2.json');
           const intent = JSON.parse(intentBytes);
-          const approval = JSON.parse(readFileSync('publication/gotham-1.15.1.approved.json'));
+          const approval = JSON.parse(readFileSync('publication/gotham-1.15.2.approved.json'));
           assert.deepEqual(Object.keys(intent).sort(), ['access', 'archive', 'baselineAccess', 'baselineTags', 'name',
             'producerSource', 'sha256', 'tag', 'version', 'workflowSha256']);
           assert.deepEqual(Object.keys(approval).sort(), ['archiveSha256', 'intentSha256', 'producerSource']);
           assert.equal(intent.name, '@nlabs/gothamui');
-          assert.equal(intent.version, '1.15.1');
+          assert.equal(intent.version, '1.15.2');
           assert.equal(intent.access, 'public');
           assert.equal(intent.baselineAccess, 'public');
           assert.equal(intent.tag, 'vault-cutover');
-          assert.equal(intent.archive, 'publication/nlabs-gothamui-1.15.1.tgz');
-          assert.equal(intent.producerSource, '6c24259c94189b8d205d0bd378ac89ddae4f4376');
-          assert.equal(intent.sha256, 'bd233f934c5f59f59f87d44a53218d7ee4e64ce2d87945aa2934bffa9a755894');
-          assert.deepEqual(intent.baselineTags, {reactorbox: '1.11.3-architecture.1', latest: '1.15.0'});
+          assert.equal(intent.archive, 'publication/nlabs-gothamui-1.15.2.tgz');
+          assert.equal(intent.producerSource, '027e8c3ffbd080358fc9b3cb954280dcf5ed9007');
+          assert.equal(intent.sha256, 'a3ee22730ac1d9b5ea478f0ea4573737b72ce90e8ba73f94e29b7929d92a45fa');
+          assert.deepEqual(intent.baselineTags, {reactorbox: '1.11.3-architecture.1', latest: '1.15.0', 'vault-cutover': '1.15.1'});
           const hash = (bytes, algorithm = 'sha256') => createHash(algorithm).update(bytes).digest('hex');
           assert.equal(approval.intentSha256, hash(intentBytes));
           assert.equal(approval.archiveSha256, intent.sha256);
@@ -74,13 +74,13 @@ jobs:
           assert.equal(manifest.dependencies['@floating-ui/react-dom'], '2.1.9');
           assert.equal(JSON.parse(readFileSync('package.json')).devDependencies['@nlabs/lex'], '2.1.5');
           const directory = `${process.env.RUNNER_TEMP}/gotham-release`;
-          copyFileSync(intent.archive, `${directory}/nlabs-gothamui-1.15.1.tgz`);
-          copyFileSync('publication/gotham-1.15.1.json', `${directory}/intent.json`);
-          copyFileSync('publication/gotham-1.15.1.approved.json', `${directory}/approval.json`);
+          copyFileSync(intent.archive, `${directory}/nlabs-gothamui-1.15.2.tgz`);
+          copyFileSync('publication/gotham-1.15.2.json', `${directory}/intent.json`);
+          copyFileSync('publication/gotham-1.15.2.approved.json', `${directory}/approval.json`);
           writeFileSync(`${directory}/source-sha.txt`, `${process.env.GITHUB_SHA}\n`);
           NODE
-          sha256sum "$RUNNER_TEMP/gotham-release/nlabs-gothamui-1.15.1.tgz" > "$RUNNER_TEMP/gotham-release/SHA256SUMS"
-          printf 'path=%s\n' "$RUNNER_TEMP/gotham-release/nlabs-gothamui-1.15.1.tgz" >> "$GITHUB_OUTPUT"
+          sha256sum "$RUNNER_TEMP/gotham-release/nlabs-gothamui-1.15.2.tgz" > "$RUNNER_TEMP/gotham-release/SHA256SUMS"
+          printf 'path=%s\n' "$RUNNER_TEMP/gotham-release/nlabs-gothamui-1.15.2.tgz" >> "$GITHUB_OUTPUT"
       - name: Verify authenticated public registry baseline and exact version absence
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -98,7 +98,7 @@ jobs:
           const intent = read('intent.json');
           assert.equal(read('access-before.json')[intent.name], intent.baselineAccess);
           assert.deepEqual(read('tags-before.json'), intent.baselineTags);
-          const absent = spawnSync('npm', ['view', '@nlabs/gothamui@1.15.1', 'version', '--json', '--prefer-online'], {encoding: 'utf8'});
+          const absent = spawnSync('npm', ['view', '@nlabs/gothamui@1.15.2', 'version', '--json', '--prefer-online'], {encoding: 'utf8'});
           assert.notEqual(absent.status, 0, 'Version already exists; do not repeat publication.');
           assert.equal(JSON.parse(absent.stdout).error.code, 'E404', 'Only confirmed version absence permits publication.');
           NODE
@@ -108,6 +108,17 @@ jobs:
         run: |
           npm ci --ignore-scripts
           node -e "require('node:assert/strict').equal(require('./node_modules/@nlabs/lex/package.json').version, '2.1.5')"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import {readFileSync} from 'node:fs';
+          import * as lex from '@nlabs/lex/eslint.config.mjs';
+          import {config, typescriptConfig} from 'eslint-config-styleguidejs';
+          const manifest = JSON.parse(readFileSync('package.json'));
+          assert.equal(manifest.devDependencies['eslint-config-styleguidejs'], '5.0.10');
+          assert.equal(manifest.overrides['eslint-config-styleguidejs'], '$eslint-config-styleguidejs');
+          assert.equal(lex.config, config);
+          assert.equal(lex.typescriptConfig, typescriptConfig);
+          NODE
           test -z "$(git status --porcelain)"
       - name: Qualify the frozen archive in a disposable public consumer
         env:
@@ -182,13 +193,13 @@ jobs:
         run: |
           set -euo pipefail
           deadline=$((SECONDS + 600))
-          until npm view @nlabs/gothamui@1.15.1 version dist.integrity --json --prefer-online --fetch-retries=0 --fetch-timeout=20000 > "$RUNNER_TEMP/gotham-release/registry.json" 2>/dev/null; do
+          until npm view @nlabs/gothamui@1.15.2 version dist.integrity --json --prefer-online --fetch-retries=0 --fetch-timeout=20000 > "$RUNNER_TEMP/gotham-release/registry.json" 2>/dev/null; do
             if ((SECONDS >= deadline)); then echo 'Publication visibility unresolved; do not repeat publication.' >&2; exit 1; fi
             sleep 20
           done
           mkdir "$RUNNER_TEMP/gotham-release/registry"
-          npm pack @nlabs/gothamui@1.15.1 --ignore-scripts --pack-destination "$RUNNER_TEMP/gotham-release/registry"
-          cmp "$GOTHAM_ARCHIVE" "$RUNNER_TEMP/gotham-release/registry/nlabs-gothamui-1.15.1.tgz"
+          npm pack @nlabs/gothamui@1.15.2 --ignore-scripts --pack-destination "$RUNNER_TEMP/gotham-release/registry"
+          cmp "$GOTHAM_ARCHIVE" "$RUNNER_TEMP/gotham-release/registry/nlabs-gothamui-1.15.2.tgz"
           npm access get status @nlabs/gothamui --json > "$RUNNER_TEMP/gotham-release/access-after.json"
           node --input-type=module <<'NODE'
           import assert from 'node:assert/strict';
@@ -196,7 +207,7 @@ jobs:
           import {readFileSync} from 'node:fs';
           const directory = `${process.env.RUNNER_TEMP}/gotham-release`;
           const read = (file) => JSON.parse(readFileSync(`${directory}/${file}`));
-          assert.equal(read('registry.json').version, '1.15.1');
+          assert.equal(read('registry.json').version, '1.15.2');
           assert.equal(read('registry.json')['dist.integrity'], 'sha512-' + createHash('sha512').update(readFileSync(process.env.GOTHAM_ARCHIVE)).digest('base64'));
           assert.equal(read('access-after.json')['@nlabs/gothamui'], 'public');
           NODE
@@ -210,7 +221,7 @@ jobs:
           const read = (file) => JSON.parse(readFileSync(`${directory}/${file}`));
           const before = read('tags-before.json');
           const after = read('tags-after.json');
-          if(isDeepStrictEqual(after, {...before, 'vault-cutover': '1.15.1'})) process.exit(0);
+          if(isDeepStrictEqual(after, {...before, 'vault-cutover': '1.15.2'})) process.exit(0);
           if(isDeepStrictEqual(after, before)) process.exit(75);
           process.stderr.write('Registry tags conflict with the reviewed publication intent.\n');
           process.exit(1);
