@@ -51,7 +51,7 @@ jobs:
           assert.equal(intent.baselineAccess, 'public');
           assert.equal(intent.tag, 'vault-cutover');
           assert.equal(intent.archive, 'publication/nlabs-gothamui-1.15.2.tgz');
-          assert.equal(intent.producerSource, '027e8c3ffbd080358fc9b3cb954280dcf5ed9007');
+          assert.equal(intent.producerSource, '0f424f8c2c65e157c3d1b80dd868037d1196c40d');
           assert.equal(intent.sha256, 'a3ee22730ac1d9b5ea478f0ea4573737b72ce90e8ba73f94e29b7929d92a45fa');
           assert.deepEqual(intent.baselineTags, {reactorbox: '1.11.3-architecture.1', latest: '1.15.0', 'vault-cutover': '1.15.1'});
           const hash = (bytes, algorithm = 'sha256') => createHash(algorithm).update(bytes).digest('hex');
