@@ -12,7 +12,8 @@ const task = selectHookTask(kind, (args) => {
   return {status: result.status, stdout: result.stdout ?? ''};
 }, kind === 'pre-push' ? readFileSync(0, 'utf8') : '');
 if(task) {
-  const result = spawnSync('npm', ['run', task], {stdio: 'inherit'});
+  const args = ['run', task, ...(kind === 'pre-commit' ? ['--', '--onlyChanged', '--passWithNoTests'] : [])];
+  const result = spawnSync('npm', args, {stdio: 'inherit'});
   if(result.error) {
     process.stderr.write('Required Git hook test command could not be launched.\n');
   }

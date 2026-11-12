@@ -3,9 +3,9 @@ import lexConfig from '@nlabs/lex/eslint.config.mjs';
 export default [
   ...lexConfig,
   {
-    files: ['*.config.mts'],
+    files: ['*.config.mts', 'scripts/**/*.mjs', 'src/gitHooks.test.ts'],
     rules: {
-      'import/extensions': ['error', 'ignorePackages', {js: 'always', mts: 'always', ts: 'always'}]
+      'import/extensions': ['error', 'ignorePackages', {js: 'always', mjs: 'always', mts: 'always', ts: 'always'}]
     }
   },
   {

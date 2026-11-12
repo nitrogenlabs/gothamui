@@ -115,7 +115,7 @@ const SelectFieldComponent = ({
           required={required}
           value={normalizedFieldValue}>
           {options.map((option) => (
-            <option key={option.id} value={String(option.value)}>{option.label}</option>
+            <option key={option.id === undefined ? `value:${String(option.value)}` : `id:${option.id}`} value={String(option.value)}>{option.label}</option>
           ))}
         </select>
         {showChevron ? (
@@ -139,7 +139,7 @@ const SelectFieldComponent = ({
             buttonRef.current?.focus();
           }} required={required} tabIndex={-1} value={normalizedFieldValue}>
           {options.map((option) => (
-            <option key={option.id} value={String(option.value)}>{option.label}</option>
+            <option key={option.id === undefined ? `value:${String(option.value)}` : `id:${option.id}`} value={String(option.value)}>{option.label}</option>
           ))}
         </select>
         <div className={cn('flex flex-col relative w-full', {'mt-2': label})}>

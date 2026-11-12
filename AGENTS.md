@@ -76,6 +76,27 @@ These rules apply to new and modified code. The cross-project audit and capabili
 - Adopt verified compatible published registry versions with manifest/lockfile agreement. For authorized shared-package work, publish the owning package before consumer adoption; do not use local or repository-relative archives, file links, source aliases, or vendored shared source as consumer dependencies. Existing archive pins are migration debt: replace them with verified published releases within the authorized scope, rather than introducing another archive. Immutable tarballs are reviewed publication artifacts, not consumer dependency substitutes. Do not assume local exports are published, blanket-upgrade unrelated dependencies, or alter registry/release state without authorization.
 - For authorized release publication, use the verified public Lex immutable-archive workflow with the exact reviewed tarball, lifecycle scripts disabled and an explicit intended distribution tag. Recheck archive hashes, registry payload/version and tags after execution; a dry run or authenticated identity does not establish publication, and two-factor rejection must remain an unresolved release gate. Never rebuild a frozen archive from a dirty producer tree or promote latest implicitly.
 - Shared fixes require package regression tests plus a representative consumer integration check before removing the old implementation. Record ownership, adoption status, and remaining gaps in the audit. Keep local project instructions; update these guardrails centrally and check all scoped AGENTS.md files with `nitrogenx/scripts/sync-architecture-guardrails.py --check`.
+
+### Unit test rules
+
+These apply to every unit test in every project. Tests that touch real I/O, real time or heavy per-test work pass on a quiet machine, fail intermittently on a loaded one, and block commits.
+
+- Mock every request. A unit test never reaches a real network, database, cloud provider, DNS, socket, loopback server, or filesystem outside a per-test temporary directory. Stub the transport at its boundary (the injected request implementation, `fetch`, or an in-memory fake of the port) and make any unexpected outbound call fail the test.
+- Time is a dependency. Tests of deadlines, retries, expiry or debouncing use a fake clock and advance it deterministically; a real deadline of a few milliseconds is a race on a loaded machine. Run until the operation reaches the port the test holds open, assert that premise, then advance the clock. Never sleep to wait for work.
+- Isolate every test. Each test builds its own state and does not depend on order, shared module state, or the asynchronous leftovers of an earlier step. Split a test that chains several behaviors through one rendered tree or one long async sequence.
+- Keep tests fast. The default 5 s limit is a ceiling, not a budget. A unit test that takes more than 1 s alone is a defect: find where the time goes (a missing mock, real crypto or password-hash cost, schema or module graph rebuilt per test, a fixture rebuilt per test) and remove it by mocking, injecting a test-only cost parameter whose default is the production value, sharing immutable setup, or splitting the test. Never lower a production security or cost parameter for a test. Measure per-test durations before and after.
+- No workarounds. Do not raise `testTimeout` or add per-test timeouts, add retries or sleeps, use `skip`, `todo` or `only`, loosen, widen or delete an assertion or mock, rerun until green, or bypass hooks (`--no-verify`) to make a test pass. An intermittent test is a defect with a cause: reproduce it (loop it under CPU load), fix the cause, and if the code under test cannot be made deterministic, refactor that code or remove the test and state why.
+- Verify before changing a test. Read the code under test and establish whether the code or the test is wrong, and keep the assertion's intent. After the fix, prove the test still fails when the behavior breaks (change the implementation, see it fail, restore it), run the test repeatedly under load, and run lint.
+- Report a failed pre-commit or CI run by test name and cause. Do not retry blindly or call a failure a flake without a reproduction or evidence.
+
+### Test automation rules
+
+- Pre-commit runs only unit tests. Pre-push runs only end-to-end tests. Neither hook runs the other kind, and neither runs more than the tests need, for example only the builds their tests consume.
+- Only TypeScript and JavaScript files (`.ts`, `.tsx`, `.js`, `.jsx`, `.mjs`, `.cjs`, `.mts`, `.cts`) trigger a unit test run. Only those and CSS (`.css`) trigger an end-to-end run. Documentation, JSON, images, configuration and every other file type never trigger a run, whether the trigger is a hook, a CI path filter or a watcher.
+- The pre-commit hook decides from the staged files, counting deletions and renames. The pre-push hook decides from every commit being pushed, not only the last one: a new branch is compared with where it left the default branch, and an unreadable range runs the tests instead of skipping them.
+- Each project tests its own hooks by running the real hook scripts in a temporary git repository with `npm` stubbed, and proves each rule by breaking it and seeing a test fail.
+- Define the end-to-end suite explicitly (one script that runs it) so the pre-push hook has a single entry point. Do not leave end-to-end configs unreferenced.
+- A hook is never skipped to get a change in. Fix the cause or report the failing test.
 <!-- END SHARED ARCHITECTURE GUARDRAILS -->
 
 ## Verified routing ownership
@@ -103,7 +124,22 @@ These rules apply to new and modified code. The cross-project audit and capabili
 
 ## Local Git test gates
 
-- Tracked `.githooks/pre-commit` runs only `npm run test:precommit` when staged TypeScript or JavaScript changes include additions, edits, renames, deletions or file type changes. CSS, docs, JSON and assets do not trigger unit tests.
+- Tracked `.githooks/pre-commit` runs only `npm run test:precommit -- --onlyChanged --passWithNoTests` when staged TypeScript or JavaScript changes include additions, edits, renames, deletions or file type changes. CSS, docs, JSON and assets do not trigger unit tests.
 - Tracked `.githooks/pre-push` runs only `npm run test:e2e` when any commit being pushed changes TypeScript, JavaScript or CSS. It scans the entire pushed range, including merge-only changes and code later reverted; new branches use their default-branch fork. Unreadable history runs E2E conservatively.
 - Run `npm run hooks:install` or the normal `npm run prepare` lifecycle to configure this repository's local hooks path. Do not bypass a failing hook; diagnose and fix the named failure before committing or pushing again.
 - Hook tests that create child Git repositories must remove inherited `GIT_*` variables before applying explicit isolated settings. Verify the child's canonical worktree and Git directory before writes, and assert that nested operations preserve the parent's HEAD, index and config.
+
+
+## SelectField optional-ID key regression — November12, 2026
+
+SelectFieldOption.id is optional. Native and hidden option maps must supply stable React keys for valid label/value-only options in both layouts. Namespace explicit IDs separately from derived value keys: a supplied ID may equal a different option value. An assistant-prepared plain ID-or-value fallback introduced that collision; two executed regressions caught it before publication/adoption. Keep desktop/mobile no-console-error tests and real selection assertions, including mixed numeric/boolean values and explicit IDs. Original missing-key attribution is uncertain. Evidence: .artifacts/select-field-optional-ids/ (original RED, collision RED, two guard mutants, family coverage and strict noEmit proof). Publication and registry consumer adoption are separate gates.
+
+Browser QA must assert visible scoped form content rather than a zero-height modal layout wrapper, and collect console errors as well as pageerrors. Do not suppress valid React tabIndex to satisfy the installed styleguide5.0.9 false positive; its prepared5.0.10 owning-package fix must be qualified/published/adopted.
+
+## Release qualification follow-through — November12, 2026
+
+Lex2.1.5 pins styleguide5.0.9 exactly. A direct5.0.10 dev dependency alone nests the old version under Lex; use the declared npm override tied to the exact direct dependency, then prove actual Lex/public styleguide config identity, manifest/lock agreement, unchanged unrelated versions and positive/negative rule behavior. Do not patch installed modules. The initial nesting was detected before adoption was claimed; the corrected lock changes only root and styleguide entries.
+
+For an ESLint lintText contract probe, use a path admitted by the actual project and assert fatalErrorCount=0 plus the enabled rule before interpreting empty diagnostics. An assistant-created probe used a nonexistent TS project path; parsing stopped before the property rule, so its missing invalid-property diagnostic was rejected as fixture evidence. The corrected probe binds the existing SelectField path, accepts canonical tabIndex and rejects tabindex without changing rule settings. Retain rejected fixture evidence separately. Evidence: .artifacts/gotham1152-release-qualification/.
+
+The hook runner forwards affected-unit flags without changing the full unit script or E2E-only pre-push policy. Real-hook temporary-Git tests verify literal filenames, deletion/rename, complete pushed history, merge-only resolutions, conservative history failure and parent HEAD/index/config preservation. Installed public Lex qualification separately verifies npm delimiter forwarding, related selection/coverage and zero-test success; a changed real package.json can still force all units through Vitest defaults.

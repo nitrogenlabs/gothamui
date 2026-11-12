@@ -1,4 +1,9 @@
-import {expect, test, vi} from '@nlabs/lex/test-vitest';
+import {afterEach, beforeEach, describe, expect, test, vi} from '@nlabs/lex/test-vitest';
+import {spawnSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import {chmodSync, copyFileSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {dirname, join, resolve} from 'node:path';
 
 import {selectHookTask} from '../scripts/gitHookPolicy.mjs';
 
@@ -90,4 +95,213 @@ test('staged JavaScript file type changes are included in the unit gate', () => 
 
   expect(selectHookTask('pre-commit', git, '')).toBe('test:precommit');
   expect(git).toHaveBeenCalledWith(['diff', '--cached', '--name-only', '--no-renames', '--diff-filter=ACMRDT', '-z']);
+});
+
+describe('actual Git hooks in isolated repositories', () => {
+  const producer = resolve(import.meta.dirname, '..');
+  const zero = '0'.repeat(40);
+  const code = ['ts', 'tsx', 'js', 'jsx', 'mjs', 'cjs', 'mts', 'cts'];
+  const affected = ['run', 'test:precommit', '--', '--onlyChanged', '--passWithNoTests'];
+  let directory: string;
+  let repository: string;
+  let binaries: string;
+  let log: string;
+  let parentBefore: string[];
+  const environment = () => ({
+    ...Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_'))),
+    GIT_CONFIG_GLOBAL: '/dev/null', GIT_CONFIG_SYSTEM: '/dev/null'
+  });
+  const git = (...args: string[]): string => {
+    const result = spawnSync('git', args, {cwd: repository, encoding: 'utf8', env: environment()});
+    if(result.status !== 0) {
+      throw new Error(`Fixture git failed with status ${result.status}`);
+    }
+    return result.stdout.trim();
+  };
+  const parentPins = (): string[] => {
+    const command = (...args: string[]): string => {
+      const result = spawnSync('git', args, {cwd: producer, encoding: 'utf8', env: environment()});
+      if(result.status !== 0) {
+        throw new Error(`Parent inspection failed with status ${result.status}`);
+      }
+      return result.stdout.trim();
+    };
+    return [command('rev-parse', 'HEAD'), ...['index', 'config'].map((name) => createHash('sha256')
+      .update(readFileSync(resolve(producer, command('rev-parse', '--git-path', name)))).digest('hex'))];
+  };
+  const write = (name: string, value = 'fixture'): void => {
+    mkdirSync(dirname(join(repository, name)), {recursive: true});
+    writeFileSync(join(repository, name), value);
+  };
+  const commit = (): string => {
+    git('add', '-A');
+    git('commit', '-qm', 'Fixture');
+    return git('rev-parse', 'HEAD');
+  };
+  const run = (kind: 'pre-commit' | 'pre-push', input = '', status = 0) => {
+    writeFileSync(log, '');
+    const result = spawnSync('/bin/sh', [join(repository, '.githooks', kind)], {cwd: repository,
+      encoding: 'utf8', env: {...environment(), GOTHAM_HOOK_LOG: log, GOTHAM_NPM_STATUS: String(status),
+        PATH: `${binaries}:${process.env.PATH}`}, input});
+    return {args: readFileSync(log, 'utf8').trim().split('\n').filter(Boolean), status: result.status};
+  };
+  const push = (head: string, base: string): string => `refs/heads/task ${head} refs/heads/task ${base}\n`;
+
+  beforeEach(() => {
+    parentBefore = parentPins();
+    directory = mkdtempSync(join(tmpdir(), 'gotham-hook-'));
+    repository = join(directory, 'repo');
+    binaries = join(directory, 'bin');
+    log = join(directory, 'npm.log');
+    mkdirSync(repository);
+    mkdirSync(binaries);
+    git('init', '-q', '-b', 'main');
+
+    expect(git('rev-parse', '--show-toplevel')).toBe(realpathSync(repository));
+    expect(git('rev-parse', '--absolute-git-dir')).toBe(join(realpathSync(repository), '.git'));
+
+    git('config', 'user.name', 'Fixture');
+    git('config', 'user.email', 'fixture@example.test');
+    for(const file of ['.githooks/pre-commit', '.githooks/pre-push', 'scripts/git-test-hook.mjs', 'scripts/gitHookPolicy.mjs']) {
+      mkdirSync(dirname(join(repository, file)), {recursive: true});
+      copyFileSync(join(producer, file), join(repository, file));
+    }
+    writeFileSync(join(binaries, 'npm'), '#!/bin/sh\nprintf "%s\\n" "$@" >> "$GOTHAM_HOOK_LOG"\nexit "$GOTHAM_NPM_STATUS"\n');
+    chmodSync(join(binaries, 'npm'), 0o755);
+    write('README.md');
+    write('src/seed.js');
+    commit();
+  });
+
+  afterEach(() => {
+    rmSync(directory, {force: true, recursive: true});
+
+    expect(parentPins()).toEqual(parentBefore);
+  });
+
+  test('isolates child Git writes from inherited hook repository variables', () => {
+    vi.stubEnv('GIT_DIR', join(directory, 'foreign.git'));
+    vi.stubEnv('GIT_INDEX_FILE', join(directory, 'foreign.index'));
+    try {
+      write('src/isolated.ts');
+      git('add', '-A');
+
+      expect(run('pre-commit')).toEqual({args: affected, status: 0});
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
+  test.each(code)('forwards affected unit arguments for staged .%s', (extension) => {
+    write(`src/new.${extension}`);
+    git('add', '-A');
+
+    expect(run('pre-commit')).toEqual({args: affected, status: 0});
+  });
+
+  test.each(['README.md', 'package.json', 'image.png', 'style.css', 'file.py', 'index.html'])(
+    'does not run units for staged %s', (name) => {
+      write(name, 'changed');
+      git('add', '-A');
+
+      expect(run('pre-commit')).toEqual({args: [], status: 0});
+    }
+  );
+
+  test.each(['delete', 'rename'] as const)('counts a staged source %s', (kind) => {
+    if(kind === 'delete') {
+      git('rm', 'src/seed.js');
+    } else {
+      git('mv', 'src/seed.js', 'src/seed.txt');
+    }
+
+    expect(run('pre-commit')).toEqual({args: affected, status: 0});
+  });
+
+  test.each(['src/雪.ts', 'src/quote".ts', 'src/line\nbreak.ts'])('preserves literal staged filename %s', (name) => {
+    write(name);
+    git('add', '-A');
+
+    expect(run('pre-commit')).toEqual({args: affected, status: 0});
+  });
+
+  test('ignores unstaged code', () => {
+    write('src/seed.js', 'changed');
+
+    expect(run('pre-commit')).toEqual({args: [], status: 0});
+  });
+
+  test('propagates unit failure', () => {
+    write('src/seed.js', 'changed');
+    git('add', '-A');
+
+    expect(run('pre-commit', '', 17)).toEqual({args: affected, status: 17});
+  });
+
+  test.each([...code, 'css'])('runs only E2E for pushed .%s', (extension) => {
+    const base = git('rev-parse', 'HEAD');
+    write(`src/new.${extension}`);
+    const head = commit();
+
+    expect(run('pre-push', push(head, base))).toEqual({args: ['run', 'test:e2e'], status: 0});
+  });
+
+  test.each(['README.md', 'package.json', 'image.png', 'index.html'])('runs no suite for pushed %s', (name) => {
+    const base = git('rev-parse', 'HEAD');
+    write(name, 'changed');
+
+    expect(run('pre-push', push(commit(), base))).toEqual({args: [], status: 0});
+  });
+
+  test('includes earlier added and reverted code in the complete pushed range', () => {
+    const base = git('rev-parse', 'HEAD');
+    write('src/transient.ts');
+    commit();
+    git('revert', '--no-edit', 'HEAD');
+    write('docs/change.md');
+
+    expect(run('pre-push', push(commit(), base))).toEqual({args: ['run', 'test:e2e'], status: 0});
+  });
+
+  test('includes a source resolution introduced only by a merge', () => {
+    git('checkout', '-qb', 'side');
+    write('docs/side.md');
+    commit();
+    git('checkout', 'main');
+    write('docs/main.md');
+    const base = commit();
+    git('merge', '--no-ff', '--no-commit', 'side');
+    write('src/seed.js', 'merge resolution');
+
+    expect(run('pre-push', push(commit(), base))).toEqual({args: ['run', 'test:e2e'], status: 0});
+  });
+
+  test('uses the default fork for new branches and fails closed on unreadable history', () => {
+    git('update-ref', 'refs/remotes/origin/main', 'HEAD');
+    write('docs/new.md');
+    const head = commit();
+
+    expect(run('pre-push', push(head, zero))).toEqual({args: [], status: 0});
+    expect(run('pre-push', push(head, 'f'.repeat(40)))).toEqual({args: ['run', 'test:e2e'], status: 0});
+  });
+
+  test.each(['src/雪.ts', 'src/quote".ts', 'src/line\nbreak.ts'])('preserves literal pushed filename %s', (name) => {
+    const base = git('rev-parse', 'HEAD');
+    write(name);
+
+    expect(run('pre-push', push(commit(), base))).toEqual({args: ['run', 'test:e2e'], status: 0});
+  });
+
+  test('ignores branch deletion', () => {
+    const base = git('rev-parse', 'HEAD');
+
+    expect(run('pre-push', push(zero, base))).toEqual({args: [], status: 0});
+  });
+
+  test('propagates E2E failure', () => {
+    const base = git('rev-parse', 'HEAD');
+    write('src/seed.js', 'changed');
+
+    expect(run('pre-push', push(commit(), base), 23)).toEqual({args: ['run', 'test:e2e'], status: 23});
+  });
 });
