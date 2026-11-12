@@ -115,7 +115,7 @@ test('real Git commit is blocked by a failing unit command and never invokes E2E
 
     expect(f.command('git', ['commit', '-q', '-m', 'blocked']).status).not.toBe(0);
     expect(f.git('rev-parse', 'HEAD')).toBe(f.base);
-    expect(f.calls()).toEqual(['run test:precommit']);
+    expect(f.calls()).toEqual(['run test:precommit -- --onlyChanged --passWithNoTests']);
   } finally {
     f.cleanup();
   }
@@ -129,13 +129,13 @@ test('real staged deletion and rename both run the unit gate', () => {
     f.git('mv', 'src/a.ts', 'src/b.ts');
     f.git('commit', '-q', '-m', 'rename');
 
-    expect(f.calls()).toEqual(['run test:precommit']);
+    expect(f.calls()).toEqual(['run test:precommit -- --onlyChanged --passWithNoTests']);
 
     f.reset();
     f.git('rm', 'src/b.ts');
     f.git('commit', '-q', '-m', 'delete');
 
-    expect(f.calls()).toEqual(['run test:precommit']);
+    expect(f.calls()).toEqual(['run test:precommit -- --onlyChanged --passWithNoTests']);
   } finally {
     f.cleanup();
   }
@@ -253,7 +253,7 @@ test('a staged regular JavaScript to symlink type change cannot bypass the unit 
     f.env.HOOK_TEST_STATUS = '7';
 
     expect(f.command('git', ['commit', '-q', '-m', 'type change']).status).not.toBe(0);
-    expect(f.calls()).toEqual(['run test:precommit']);
+    expect(f.calls()).toEqual(['run test:precommit -- --onlyChanged --passWithNoTests']);
   } finally {
     f.cleanup();
   }
