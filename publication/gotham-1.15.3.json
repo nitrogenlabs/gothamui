@@ -1,0 +1,18 @@
+{
+  "access": "public",
+  "archive": "publication/nlabs-gothamui-1.15.3.tgz",
+  "baselineAccess": "public",
+  "baselineTags": {
+    "reactorbox": "1.11.3-architecture.1",
+    "latest": "1.15.0",
+    "vault-cutover": "1.15.2"
+  },
+  "name": "@nlabs/gothamui",
+  "producerSource": "e41baa6bc900ced8e6cc70e03487440431a1c473",
+  "sha256": "264851056cb10cbf808064b9be9f12f262fe720f0f6e558d4788cc51c6ee12cf",
+  "sourceCustodySha256": "2b56ea10da9ea966fbf0b0bdc31f1e56dfcbf0a1bbf5c0bcf33805bd0c8f6bce",
+  "tag": "vault-cutover",
+  "verifierSha256": "33ef64669d69b4359c9f4cb025f829018a0f6c836840136a81d1ca6ec6427f69",
+  "version": "1.15.3",
+  "workflowSha256": "7ecf9a8a2febb263ef0cf7be2d1c56e5027f830ce4a7b2fa311328e0013a12af"
+}

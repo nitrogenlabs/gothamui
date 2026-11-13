@@ -1,0 +1,255 @@
+name: Publish reviewed GothamUI writing-prefix routing
+
+# Preparation does not dispatch. Root's separately reviewed approval-marker push activates this exact archive.
+on:
+  push:
+    branches: [codex/gotham-chat-type-packaging]
+    paths: [publication/gotham-1.15.3.approved.json]
+
+permissions:
+  contents: read
+
+concurrency:
+  cancel-in-progress: false
+  group: gothamui-publish
+
+jobs:
+  publish:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v7
+        with:
+          cache: npm
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - name: Verify reviewed intent, approval and committed immutable bytes
+        id: archive
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/codex/gotham-chat-type-packaging
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          mkdir -p "$RUNNER_TEMP/gotham-release"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          import {copyFileSync, existsSync, readFileSync, writeFileSync} from 'node:fs';
+          const intentBytes = readFileSync('publication/gotham-1.15.3.json');
+          const intent = JSON.parse(intentBytes);
+          const approval = JSON.parse(readFileSync('publication/gotham-1.15.3.approved.json'));
+          assert.equal(existsSync('publication/gotham-1.15.3.acknowledged.json'), false, 'Acknowledged release: do not publish again.');
+          assert.deepEqual(Object.keys(intent).sort(), ['access', 'archive', 'baselineAccess', 'baselineTags', 'name',
+            'producerSource', 'sha256', 'sourceCustodySha256', 'tag', 'verifierSha256', 'version', 'workflowSha256']);
+          assert.deepEqual(Object.keys(approval).sort(), ['archiveSha256', 'intentSha256', 'producerSource']);
+          assert.equal(intent.name, '@nlabs/gothamui');
+          assert.equal(intent.version, '1.15.3');
+          assert.equal(intent.access, 'public');
+          assert.equal(intent.baselineAccess, 'public');
+          assert.equal(intent.tag, 'vault-cutover');
+          assert.equal(intent.archive, 'publication/nlabs-gothamui-1.15.3.tgz');
+          assert.equal(intent.producerSource, 'e41baa6bc900ced8e6cc70e03487440431a1c473');
+          assert.equal(intent.sha256, '264851056cb10cbf808064b9be9f12f262fe720f0f6e558d4788cc51c6ee12cf');
+          assert.deepEqual(intent.baselineTags, {reactorbox: '1.11.3-architecture.1', latest: '1.15.0', 'vault-cutover': '1.15.2'});
+          const hash = (bytes, algorithm = 'sha256') => createHash(algorithm).update(bytes).digest('hex');
+          assert.equal(approval.intentSha256, hash(intentBytes));
+          assert.equal(approval.archiveSha256, intent.sha256);
+          assert.equal(approval.producerSource, intent.producerSource);
+          assert.equal(hash(readFileSync('.github/workflows/release-gotham-writing-prefix.yml')), intent.workflowSha256);
+          execFileSync('git', ['merge-base', '--is-ancestor', intent.producerSource, 'HEAD']);
+          const changes = execFileSync('git', ['diff', '--name-only', intent.producerSource, 'HEAD'], {encoding: 'utf8'});
+          assert.ok(changes.trim().split('\n').filter(Boolean).every((path) => path.startsWith('publication/')
+            || path.startsWith('docs/architecture-audit/') || path === 'AGENTS.md'
+            || path === '.github/workflows/release-gotham-writing-prefix.yml'
+            || path === 'scripts/verify-release-source.mjs' || path === 'scripts/verify-release-source.test.mjs'), 'Qualified source changed.');
+          assert.equal(hash(readFileSync('scripts/verify-release-source.mjs')), intent.verifierSha256);
+          const {verifyRepositorySource} = await import('./scripts/verify-release-source.mjs');
+          verifyRepositorySource({archivePath: intent.archive, custodyPath: 'publication/gotham-1.15.3.source.json',
+            intent: {...intent, sourceSha: intent.producerSource}});
+          const archive = readFileSync(intent.archive);
+          assert.equal(hash(archive), intent.sha256);
+          const manifest = JSON.parse(execFileSync('tar', ['-xzOf', intent.archive, 'package/package.json'], {encoding: 'utf8'}));
+          assert.equal(manifest.name, intent.name);
+          assert.equal(manifest.version, intent.version);
+          assert.equal(manifest.publishConfig.access, intent.access);
+          assert.equal(manifest.devDependencies['@nlabs/lex'], '2.1.5');
+          assert.equal(manifest.dependencies['@floating-ui/react-dom'], '2.1.9');
+          assert.equal(JSON.parse(readFileSync('package.json')).devDependencies['@nlabs/lex'], '2.1.5');
+          const directory = `${process.env.RUNNER_TEMP}/gotham-release`;
+          copyFileSync(intent.archive, `${directory}/nlabs-gothamui-1.15.3.tgz`);
+          copyFileSync('publication/gotham-1.15.3.json', `${directory}/intent.json`);
+          copyFileSync('publication/gotham-1.15.3.source.json', `${directory}/source-custody.json`);
+          copyFileSync('publication/gotham-1.15.3.approved.json', `${directory}/approval.json`);
+          writeFileSync(`${directory}/source-sha.txt`, `${process.env.GITHUB_SHA}\n`);
+          NODE
+          sha256sum "$RUNNER_TEMP/gotham-release/nlabs-gothamui-1.15.3.tgz" > "$RUNNER_TEMP/gotham-release/SHA256SUMS"
+          printf 'path=%s\n' "$RUNNER_TEMP/gotham-release/nlabs-gothamui-1.15.3.tgz" >> "$GITHUB_OUTPUT"
+      - name: Verify authenticated public registry baseline and exact version absence
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          set -euo pipefail
+          npm whoami > /dev/null
+          npm access get status @nlabs/gothamui --json > "$RUNNER_TEMP/gotham-release/access-before.json"
+          npm view @nlabs/gothamui dist-tags --json --prefer-online > "$RUNNER_TEMP/gotham-release/tags-before.json"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import {spawnSync} from 'node:child_process';
+          import {readFileSync} from 'node:fs';
+          const directory = `${process.env.RUNNER_TEMP}/gotham-release`;
+          const read = (file) => JSON.parse(readFileSync(`${directory}/${file}`));
+          const intent = read('intent.json');
+          assert.equal(read('access-before.json')[intent.name], intent.baselineAccess);
+          assert.deepEqual(read('tags-before.json'), intent.baselineTags);
+          const absent = spawnSync('npm', ['view', '@nlabs/gothamui@1.15.3', 'version', '--json', '--prefer-online'], {encoding: 'utf8'});
+          assert.notEqual(absent.status, 0, 'Version already exists; do not repeat publication.');
+          assert.equal(JSON.parse(absent.stdout).error.code, 'E404', 'Only confirmed version absence permits publication.');
+          NODE
+      - name: Install exact tooling without lifecycle scripts or rebuilding the archive
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm ci --ignore-scripts
+          node -e "require('node:assert/strict').equal(require('./node_modules/@nlabs/lex/package.json').version, '2.1.5')"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import {readFileSync} from 'node:fs';
+          import * as lex from '@nlabs/lex/eslint.config.mjs';
+          import {config, typescriptConfig} from 'eslint-config-styleguidejs';
+          const manifest = JSON.parse(readFileSync('package.json'));
+          assert.equal(manifest.devDependencies['eslint-config-styleguidejs'], '5.0.10');
+          assert.equal(manifest.overrides['eslint-config-styleguidejs'], '$eslint-config-styleguidejs');
+          assert.equal(lex.config, config);
+          assert.equal(lex.typescriptConfig, typescriptConfig);
+          NODE
+          test -z "$(git status --porcelain)"
+      - name: Qualify the frozen archive in a disposable public consumer
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GOTHAM_ARCHIVE: ${{ steps.archive.outputs.path }}
+          npm_config_ignore_scripts: true
+        run: |
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/gotham-consumer"
+          cp tests/chat-declarations/* "$RUNNER_TEMP/gotham-consumer/"
+          cd "$RUNNER_TEMP/gotham-consumer"
+          node --input-type=module <<'NODE'
+          import {writeFileSync} from 'node:fs';
+          writeFileSync('package.json', JSON.stringify({name: 'gotham-reviewed-consumer', private: true, type: 'module',
+            version: '1.0.0', dependencies: {'@nlabs/gothamui': process.env.GOTHAM_ARCHIVE, react: '19.3.0', 'react-dom': '19.3.0'},
+            devDependencies: {'@nlabs/lex': '2.1.5', '@types/node': '26.6.4', '@types/react': '19.3.0', '@types/react-dom': '19.3.0'}}));
+          NODE
+          npm install --ignore-scripts --install-strategy=nested --no-audit --no-fund
+          node --input-type=module <<'NODE'
+          import {resolveBinaryPath} from '@nlabs/lex';
+          import {spawnSync} from 'node:child_process';
+          import {copyFileSync, mkdirSync, writeFileSync} from 'node:fs';
+          const compiler = resolveBinaryPath('tsc', 'typescript');
+          if(typeof compiler !== 'string' || !compiler.trim()) throw new Error('Public Lex TypeScript compiler is unavailable.');
+          const directory = `${process.env.RUNNER_TEMP}/gotham-release/consumer`;
+          mkdirSync(directory);
+          for(const file of ['package.json', 'package-lock.json', 'consumer.tsx', 'assets.d.ts', 'tsconfig.json', 'tsconfig.nodenext.json']) {
+            copyFileSync(file, `${directory}/${file}`);
+          }
+          const peers = spawnSync('npm', ['ls', '--all', '--json'], {encoding: 'utf8'});
+          const sanitize = (node) => {
+            const value = {};
+            for(const key of ['name', 'version']) if(typeof node[key] === 'string') value[key] = node[key];
+            for(const key of ['invalid', 'extraneous', 'missing', 'peerMissing', 'peerInvalid']) if(node[key]) value[key] = true;
+            if(Array.isArray(node.problems)) value.problems = node.problems.map((problem) => String(problem).split(':')[0]);
+            if(node.dependencies) value.dependencies = Object.fromEntries(Object.entries(node.dependencies)
+              .map(([name, dependency]) => [name, sanitize(dependency)]));
+            return value;
+          };
+          writeFileSync(`${directory}/peer-graph.json`, JSON.stringify({exitCode: peers.status,
+            graph: sanitize(JSON.parse(peers.stdout))}, null, 2));
+          if(peers.status !== 0) throw new Error('Clean consumer peer graph qualification failed.');
+          for(const config of ['tsconfig.json', 'tsconfig.nodenext.json']) {
+            const result = spawnSync(process.execPath, [compiler, '-p', config], {stdio: 'inherit'});
+            if(result.status !== 0) process.exit(result.status ?? 1);
+          }
+          NODE
+          sha256sum --check "$RUNNER_TEMP/gotham-release/SHA256SUMS"
+      - name: Retain exact reviewed archive before publication
+        uses: actions/upload-artifact@v7
+        with:
+          compression-level: 0
+          if-no-files-found: error
+          name: gotham-writing-publication
+          path: ${{ runner.temp }}/gotham-release/
+      - name: Publish once through public Lex immutable packagePath
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GOTHAM_ARCHIVE: ${{ steps.archive.outputs.path }}
+          npm_config_access: public
+          npm_config_ignore_scripts: true
+        run: |
+          set -euo pipefail
+          sha256sum --check "$RUNNER_TEMP/gotham-release/SHA256SUMS"
+          npm exec -- lex publish --packagePath "$GOTHAM_ARCHIVE" --package-manager npm --tag vault-cutover
+          node --input-type=module <<'NODE'
+          import {readFileSync, writeFileSync} from 'node:fs';
+          const directory = `${process.env.RUNNER_TEMP}/gotham-release`;
+          const intent = JSON.parse(readFileSync(`${directory}/intent.json`));
+          writeFileSync(`${directory}/acknowledged.json`, JSON.stringify({name: intent.name, version: intent.version,
+            sha256: intent.sha256, sourceSha: intent.producerSource, tag: intent.tag,
+            acknowledgedAt: new Date().toISOString(), registryReadback: 'pending'}, null, 2) + '\n', {flag: 'wx'});
+          NODE
+          sha256sum --check "$RUNNER_TEMP/gotham-release/SHA256SUMS"
+      - name: Verify registry bytes, integrity, public access and unchanged other tags
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GOTHAM_ARCHIVE: ${{ steps.archive.outputs.path }}
+          npm_config_ignore_scripts: true
+        run: |
+          set -euo pipefail
+          deadline=$((SECONDS + 600))
+          until npm view @nlabs/gothamui@1.15.3 version dist.integrity --json --prefer-online --fetch-retries=0 --fetch-timeout=20000 > "$RUNNER_TEMP/gotham-release/registry.json" 2>/dev/null; do
+            if ((SECONDS >= deadline)); then echo 'Publication visibility unresolved; do not repeat publication.' >&2; exit 1; fi
+            sleep 20
+          done
+          mkdir "$RUNNER_TEMP/gotham-release/registry"
+          npm pack @nlabs/gothamui@1.15.3 --ignore-scripts --pack-destination "$RUNNER_TEMP/gotham-release/registry"
+          cmp "$GOTHAM_ARCHIVE" "$RUNNER_TEMP/gotham-release/registry/nlabs-gothamui-1.15.3.tgz"
+          npm access get status @nlabs/gothamui --json > "$RUNNER_TEMP/gotham-release/access-after.json"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {readFileSync} from 'node:fs';
+          const directory = `${process.env.RUNNER_TEMP}/gotham-release`;
+          const read = (file) => JSON.parse(readFileSync(`${directory}/${file}`));
+          assert.equal(read('registry.json').version, '1.15.3');
+          assert.equal(read('registry.json')['dist.integrity'], 'sha512-' + createHash('sha512').update(readFileSync(process.env.GOTHAM_ARCHIVE)).digest('base64'));
+          assert.equal(read('access-after.json')['@nlabs/gothamui'], 'public');
+          NODE
+          # Wait only for unchanged stale read visibility. Any unrelated tag mutation fails immediately.
+          while true; do
+            npm view @nlabs/gothamui dist-tags --json --prefer-online --fetch-retries=0 --fetch-timeout=20000 > "$RUNNER_TEMP/gotham-release/tags-after.json"
+            if node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          import {isDeepStrictEqual} from 'node:util';
+          const directory = `${process.env.RUNNER_TEMP}/gotham-release`;
+          const read = (file) => JSON.parse(readFileSync(`${directory}/${file}`));
+          const before = read('tags-before.json');
+          const after = read('tags-after.json');
+          if(isDeepStrictEqual(after, {...before, 'vault-cutover': '1.15.3'})) process.exit(0);
+          if(isDeepStrictEqual(after, before)) process.exit(75);
+          process.stderr.write('Registry tags conflict with the reviewed publication intent.\n');
+          process.exit(1);
+          NODE
+            then break; else status=$?; fi
+            if ((status != 75)); then exit "$status"; fi
+            if ((SECONDS >= deadline)); then echo 'Intended tag visibility unresolved; do not repeat publication.' >&2; exit 1; fi
+            sleep 20
+          done
+      - if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          compression-level: 0
+          if-no-files-found: warn
+          name: gotham-writing-release-evidence
+          path: ${{ runner.temp }}/gotham-release/
