@@ -50,6 +50,8 @@ export interface GothamConfiguration {
   };
   readonly authRoute?: string;
   readonly awsRum?: AwsRum;
+  /** Browser route prefix; absolute Link and navigation targets remain inside this microsite. */
+  readonly basename?: string;
   readonly baseUrl?: string;
   readonly config?: FluxOptions;
   readonly displayMode?: ThemeDisplayMode;
@@ -103,7 +105,6 @@ export const signOut = (flux: FluxFramework) => async () => {
   GothamActions.navGoto(authRoute);
 };
 
-/* eslint-disable react-hooks/rules-of-hooks -- The compatibility rule does not recognize arrow-function components. */
 export const GothamProvider: FC<GothamProviderProps> = ({config: appConfig}) => {
   const flux = useFlux();
   const config: GothamConfiguration = useMemo(() => merge({
@@ -114,6 +115,7 @@ export const GothamProvider: FC<GothamProviderProps> = ({config: appConfig}) => 
     translations: {translation: {}}
   }, appConfig), [appConfig]);
   const {
+    basename,
     isAuth,
     middleware,
     storageType,
@@ -138,11 +140,11 @@ export const GothamProvider: FC<GothamProviderProps> = ({config: appConfig}) => 
         index: false,
         path: '/'
       }
-    ]);
+    ], basename === undefined ? undefined : {basename});
     setRouter(nextRouter);
     setRouterVersion((version) => version + 1);
     return () => nextRouter.dispose();
-  }, [routes]);
+  }, [basename, routes]);
 
   // Initialize i18next if translations are provided but no i18n instance is given
   const i18nInstance = useMemo(() => {
@@ -268,4 +270,3 @@ export const GothamProvider: FC<GothamProviderProps> = ({config: appConfig}) => 
     </GothamContext.Provider>
   );
 };
-/* eslint-enable react-hooks/rules-of-hooks */

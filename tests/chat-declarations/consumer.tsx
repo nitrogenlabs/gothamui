@@ -1,7 +1,14 @@
 import {Avatar, ChatItem, MessageBox} from '@nlabs/gothamui/chat';
 import {Button} from '@nlabs/gothamui/components';
+import {Gotham} from '@nlabs/gothamui/views';
 
+import type {GothamConfiguration} from '@nlabs/gothamui';
 import type {ComponentProps, MouseEvent} from 'react';
+
+export const micrositeConfiguration: GothamConfiguration = {basename: '/writing', routes: []};
+export const microsite = <Gotham config={micrositeConfiguration} />;
+// @ts-expect-error The public basename is a string, not a numeric routing flag.
+export const invalidMicrosite = <Gotham config={{basename: 1}} />;
 
 export const chat = (props: ComponentProps<typeof ChatItem>) => <ChatItem {...props} onClick={(event) => {
   const pointer: MouseEvent = event;

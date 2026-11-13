@@ -762,6 +762,8 @@ const config = {
     titleBarSeparator: '|'
   },
   baseUrl: '',
+  // Optional browser route prefix. Absolute Link/useNavigate destinations remain under /writing.
+  // basename: '/writing',
   storageType: 'local', // 'local' or 'session'
   middleware: [customMiddleware],
   stores: [customStore],
