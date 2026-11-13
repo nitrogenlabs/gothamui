@@ -1,0 +1,9 @@
+{
+  "name": "@nlabs/gothamui",
+  "version": "1.15.3",
+  "sha256": "264851056cb10cbf808064b9be9f12f262fe720f0f6e558d4788cc51c6ee12cf",
+  "sourceSha": "e41baa6bc900ced8e6cc70e03487440431a1c473",
+  "tag": "vault-cutover",
+  "acknowledgedAt": "2026-11-13T06:06:49.892Z",
+  "registryReadback": "pending"
+}

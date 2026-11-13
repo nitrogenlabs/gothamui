@@ -1,0 +1,14 @@
+{
+  "name": "@nlabs/gothamui",
+  "version": "1.15.3",
+  "sha256": "264851056cb10cbf808064b9be9f12f262fe720f0f6e558d4788cc51c6ee12cf",
+  "bytes": 2009241,
+  "integrity": "sha512-4yqOuKSPVgdbm+cCX89R/8uw36nZGGcb939Ro/lShgLsqxXcmHRumWbv3vclHf8ghMOYgAyXG8+ZjXzz2Ik4ow==",
+  "tags": {
+    "reactorbox": "1.11.3-architecture.1",
+    "latest": "1.15.0",
+    "vault-cutover": "1.15.3"
+  },
+  "exactFrozenArchiveBytes": true,
+  "publicationRepeated": false
+}
